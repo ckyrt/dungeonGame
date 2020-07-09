@@ -1,0 +1,36 @@
+{
+  "ver": "2.3.4",
+  "uuid": "13bf278f-23b9-4da9-99ba-affccdbc5f2b",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 256,
+  "height": 256,
+  "platformSettings": {},
+  "subMetas": {
+    "Mobs_chicken_01": {
+      "ver": "1.0.4",
+      "uuid": "fc07e32d-0ac1-49de-82db-95ec0012e8b3",
+      "rawTextureUuid": "13bf278f-23b9-4da9-99ba-affccdbc5f2b",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": -19.5,
+      "offsetY": -2.5,
+      "trimX": 0,
+      "trimY": 5,
+      "width": 217,
+      "height": 251,
+      "rawWidth": 256,
+      "rawHeight": 256,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

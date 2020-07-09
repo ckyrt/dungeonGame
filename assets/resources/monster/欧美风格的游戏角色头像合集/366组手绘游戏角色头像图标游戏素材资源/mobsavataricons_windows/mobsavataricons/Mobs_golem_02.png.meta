@@ -1,0 +1,36 @@
+{
+  "ver": "2.3.4",
+  "uuid": "ac9ca990-6e19-4cc9-a60a-fc3c8cb0a735",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 256,
+  "height": 256,
+  "platformSettings": {},
+  "subMetas": {
+    "Mobs_golem_02": {
+      "ver": "1.0.4",
+      "uuid": "5e69ba00-6e73-4260-9ad5-5d9f9b2764e5",
+      "rawTextureUuid": "ac9ca990-6e19-4cc9-a60a-fc3c8cb0a735",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 256,
+      "height": 256,
+      "rawWidth": 256,
+      "rawHeight": 256,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

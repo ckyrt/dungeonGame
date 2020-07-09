@@ -1,0 +1,36 @@
+{
+  "ver": "2.3.4",
+  "uuid": "5ea6a46e-4ae8-443e-bcb4-1792b0d0d778",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 256,
+  "height": 256,
+  "platformSettings": {},
+  "subMetas": {
+    "Mobs_addons_097": {
+      "ver": "1.0.4",
+      "uuid": "fa991c67-80ae-425f-ad58-4d61f6960cff",
+      "rawTextureUuid": "5ea6a46e-4ae8-443e-bcb4-1792b0d0d778",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": -2.5,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 251,
+      "height": 256,
+      "rawWidth": 256,
+      "rawHeight": 256,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "ver": "2.3.4",
+  "uuid": "f681d52e-ed1a-485f-aac7-e1af92bad876",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 256,
+  "height": 256,
+  "platformSettings": {},
+  "subMetas": {
+    "Mobs_beest_03": {
+      "ver": "1.0.4",
+      "uuid": "34473d8b-e123-4979-91fd-a4f870d7d1cb",
+      "rawTextureUuid": "f681d52e-ed1a-485f-aac7-e1af92bad876",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": -20,
+      "offsetY": 5.5,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 216,
+      "height": 245,
+      "rawWidth": 256,
+      "rawHeight": 256,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

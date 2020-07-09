@@ -1,0 +1,36 @@
+{
+  "ver": "2.3.4",
+  "uuid": "5e1ccb3c-2bb3-450c-9b68-2ec2494a6c0a",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 256,
+  "height": 256,
+  "platformSettings": {},
+  "subMetas": {
+    "Mobs_yeti_01": {
+      "ver": "1.0.4",
+      "uuid": "2a62b392-6a84-46ba-a080-4bea07e2b1d2",
+      "rawTextureUuid": "5e1ccb3c-2bb3-450c-9b68-2ec2494a6c0a",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": -3,
+      "trimX": 0,
+      "trimY": 6,
+      "width": 256,
+      "height": 250,
+      "rawWidth": 256,
+      "rawHeight": 256,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

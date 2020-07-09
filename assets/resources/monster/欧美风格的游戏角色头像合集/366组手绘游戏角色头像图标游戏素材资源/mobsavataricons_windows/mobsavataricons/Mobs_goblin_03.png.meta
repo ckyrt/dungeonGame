@@ -1,0 +1,36 @@
+{
+  "ver": "2.3.4",
+  "uuid": "528fb7df-0a54-465d-929d-2bb2f1e530a1",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 256,
+  "height": 256,
+  "platformSettings": {},
+  "subMetas": {
+    "Mobs_goblin_03": {
+      "ver": "1.0.4",
+      "uuid": "f5c5474c-bb71-4bcb-ba4b-39737edea7f2",
+      "rawTextureUuid": "528fb7df-0a54-465d-929d-2bb2f1e530a1",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": -8,
+      "trimX": 0,
+      "trimY": 16,
+      "width": 256,
+      "height": 240,
+      "rawWidth": 256,
+      "rawHeight": 256,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

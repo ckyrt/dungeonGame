@@ -1,0 +1,36 @@
+{
+  "ver": "2.3.4",
+  "uuid": "abde7f35-7525-4d0c-95df-65d102c29c45",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 256,
+  "height": 256,
+  "platformSettings": {},
+  "subMetas": {
+    "Mobs_zombie_02": {
+      "ver": "1.0.4",
+      "uuid": "07531783-a552-44b3-8583-602299cb4e08",
+      "rawTextureUuid": "abde7f35-7525-4d0c-95df-65d102c29c45",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 15,
+      "offsetY": -5,
+      "trimX": 30,
+      "trimY": 10,
+      "width": 226,
+      "height": 246,
+      "rawWidth": 256,
+      "rawHeight": 256,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

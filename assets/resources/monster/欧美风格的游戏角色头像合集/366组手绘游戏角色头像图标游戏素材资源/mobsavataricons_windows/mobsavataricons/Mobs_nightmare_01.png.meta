@@ -1,0 +1,36 @@
+{
+  "ver": "2.3.4",
+  "uuid": "d42a7441-ad25-49c2-9efb-35442a65c464",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 256,
+  "height": 256,
+  "platformSettings": {},
+  "subMetas": {
+    "Mobs_nightmare_01": {
+      "ver": "1.0.4",
+      "uuid": "bd6283bd-0a29-4de1-9962-211b420eebba",
+      "rawTextureUuid": "d42a7441-ad25-49c2-9efb-35442a65c464",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": -7,
+      "offsetY": 4,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 242,
+      "height": 248,
+      "rawWidth": 256,
+      "rawHeight": 256,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

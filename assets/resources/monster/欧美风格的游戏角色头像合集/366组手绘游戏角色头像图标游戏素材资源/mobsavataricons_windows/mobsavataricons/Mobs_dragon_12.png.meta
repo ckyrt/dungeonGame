@@ -1,0 +1,36 @@
+{
+  "ver": "2.3.4",
+  "uuid": "45e912ac-0ca3-4dc7-8d5f-0cea393219fb",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 256,
+  "height": 256,
+  "platformSettings": {},
+  "subMetas": {
+    "Mobs_dragon_12": {
+      "ver": "1.0.4",
+      "uuid": "a3ee3b54-5993-4c20-b98f-0245ee58bbf8",
+      "rawTextureUuid": "45e912ac-0ca3-4dc7-8d5f-0cea393219fb",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": -7,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 242,
+      "height": 256,
+      "rawWidth": 256,
+      "rawHeight": 256,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

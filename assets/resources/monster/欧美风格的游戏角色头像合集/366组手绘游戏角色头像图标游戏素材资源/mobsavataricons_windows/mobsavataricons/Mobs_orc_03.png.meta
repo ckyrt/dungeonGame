@@ -1,0 +1,36 @@
+{
+  "ver": "2.3.4",
+  "uuid": "5828b549-4539-44f0-8ef3-7f847ec6dae1",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 256,
+  "height": 256,
+  "platformSettings": {},
+  "subMetas": {
+    "Mobs_orc_03": {
+      "ver": "1.0.4",
+      "uuid": "7fb35dc9-c83c-4752-bd05-b75b212d8635",
+      "rawTextureUuid": "5828b549-4539-44f0-8ef3-7f847ec6dae1",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": -5,
+      "trimX": 0,
+      "trimY": 10,
+      "width": 256,
+      "height": 246,
+      "rawWidth": 256,
+      "rawHeight": 256,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}
