@@ -57,7 +57,7 @@ cc.Class({
                 shadowScript.openZone(this.x, this.y)
 
                 //增加能量点
-                backScript.role_.addEnergy(1)
+                backScript.role_.addAttr('energy', 1)
             }
         }, this)
     },

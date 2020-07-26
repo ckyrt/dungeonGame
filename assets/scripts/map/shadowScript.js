@@ -153,7 +153,7 @@ cc.Class({
 
             //格子是地刺
             if (mapGrid != null && mapGrid.getGridType() == 'dici') {
-                backScript.role_.addHp(-2)
+                backScript.role_.addAttr('hp', -2)
             }
         }
 

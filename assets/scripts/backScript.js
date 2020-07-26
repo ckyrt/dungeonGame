@@ -45,6 +45,15 @@ cc.Class({
     // },
 
     start() {
+
+        //背包
+        let shopBtn = cc.find("Canvas/shopBtn")
+        shopBtn.on(cc.Node.EventType.TOUCH_START,
+            function (t) {
+                let shop = cc.find("Canvas/shop")
+                shop.getComponent('shopPanelScript').openShopPanel(['铁树枝干','阔剑','回复戒指'])
+            }, this)
+
         this._initAll()
     },
     // update (dt) {},
@@ -79,8 +88,7 @@ cc.Class({
         this._initAll()
     },
 
-    jumpToDungeon:function(dungeonName)
-    {
+    jumpToDungeon: function (dungeonName) {
         this._clearScene()
         this._initGrids()
         this._initDungeon(dungeonName)
@@ -95,8 +103,7 @@ cc.Class({
         this._initDungeon('第一关')
     },
 
-    _initGrids:function()
-    {
+    _initGrids: function () {
         for (var i = -3; i < 4; ++i) {
             for (var j = -3; j < 4; ++j) {
                 let prefab = cc.instantiate(this.gridPrefab)
@@ -109,16 +116,14 @@ cc.Class({
         }
     },
 
-    _initRole:function()
-    {
+    _initRole: function () {
         this.role_ = cc.find("Canvas/role").getComponent('roleScript')
-        this.role_.initConfig('战士')
+        this.role_.initConfig('大地之灵')
     },
 
-    _initDungeon:function(dungeonName)
-    {
+    _initDungeon: function (dungeonName) {
         let cfg = dungeonConfig[dungeonName]
-        for (var m of cfg.monsters) { 
+        for (var m of cfg.monsters) {
             let grid = this.getRandomEmptyGrid()
             this.addMonsterToMap(m, grid.x, grid.y)
         }
@@ -132,8 +137,7 @@ cc.Class({
         }
     },
 
-    _getCanOpenGrid:function(x, y)
-    {
+    _getCanOpenGrid: function (x, y) {
         var getit = this.canOpenGrids.find(function (ele) {
             return ele.x == x && ele.y == y
         })
@@ -148,9 +152,9 @@ cc.Class({
             return
         let getit = this._getCanOpenGrid(x, y)
         //已存在
-        if(getit != null)
+        if (getit != null)
             return
-        
+
         let prefab = cc.instantiate(this.gridPrefab)
         this.node.addChild(prefab)
         let grid = prefab.getComponent('mapGridScript')
@@ -160,9 +164,9 @@ cc.Class({
     },
 
     deleteCanOpenGrid: function (x, y) {
-        
+
         let getit = this._getCanOpenGrid(x, y)
-        if(getit == null)
+        if (getit == null)
             return
 
         var index = this.canOpenGrids.indexOf(getit)
@@ -233,6 +237,12 @@ cc.Class({
         else {
             //使用带装备的总属性
             damage = attacker.getAttr('attack') - defender.getAttr('defend')
+
+            damage = Math.floor(damage)
+
+            console.log('attack', attacker.getAttr('attack'))
+            console.log('defend', defender.getAttr('defend'))
+
             if (damage < 1) {
                 damage = 1
             }

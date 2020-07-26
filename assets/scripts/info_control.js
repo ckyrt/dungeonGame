@@ -36,7 +36,7 @@ cc.Class({
         
         this.scroll_view.scrollToBottom(0.1)
         
-        console.log(item.y)
+        //console.log(item.y)
         //this.update_show()
     },
 

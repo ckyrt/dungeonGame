@@ -136,7 +136,7 @@ cc.Class({
         backScript.role_.addExp(cfg.exp)
 
         //给玩家加金币
-        backScript.role_.addCoin(cfg.coin)
+        backScript.role_.addAttr('coin', cfg.coin)
 
         //去掉X
         let shadowScript = cc.find("Canvas/shadowRoot").getComponent('shadowScript')

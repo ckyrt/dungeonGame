@@ -19,6 +19,12 @@ var global = {
         // 找不到返回 null
         return null;
     },
+
+    //随机数
+    random:function(lower, upper) 
+    {
+        return Math.round(Math.random()*(upper-lower)+lower)         
+    },
 }
 
 module.exports = global;
