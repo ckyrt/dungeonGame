@@ -81,6 +81,19 @@ cc.Class({
         return discardItemName
     },
 
+    //是否有空闲格子
+    isFull:function()
+    {
+        var full = true
+        for (var i = 1; i <= 3; ++i) {
+            if (this._getItemFromPos(i) == '') {
+                full = false
+                break
+            }
+        }
+        return full
+    },
+
     _addItemToPos: function (name, pos) {
         this.items[pos] = name
 

@@ -35,25 +35,46 @@ cc.Class({
     start() {
         let closeBtn = global.getChildByName(this.node, "closeBtn")
         closeBtn.on(cc.Node.EventType.TOUCH_START, this.closeShopPanel, this)
+
+        let buyButton = global.getChildByName(this.node, "buyButton")
+        buyButton.on(cc.Node.EventType.TOUCH_START, this.butShopItem, this)
     },
 
     // update (dt) {},
 
-    openShopPanel: function (itemNames) {
+    _init:function(itemNames)
+    {
         let j = 0
+        this.itemAllNodes = []
         for (var n of itemNames) {
-            
-            let config = itemConfig[n]
-            console.log('openShopPanel ' + n, config, itemConfig)
-            var prefab = cc.instantiate(this.bag_item_prefab)
-            this.node.addChild(prefab)
-            prefab.setPosition(-250 + (j % 7) * 83, 80 - (Math.floor(j / 7)) * 83)
-
-            var item = prefab.getComponent("bagItemScript")
-            item.initBagItem(config)
-
-            j++
+            this._addSellItem(itemConfig[n])
         }
+
+        //默认选中第一个
+        this.setChooseItem(itemConfig[itemNames[0]])
+    },
+
+    _addSellItem:function(config)
+    {
+        let len = this.itemAllNodes.length
+        var prefab = cc.instantiate(this.bag_item_prefab)
+        this.node.addChild(prefab)
+        prefab.setPosition(-297 + (len % 4) * 83, 156 - (Math.floor(len / 3)) * 83)
+
+        var item = prefab.getComponent("bagItemScript")
+        item.initBagItem(config)
+
+        this.itemAllNodes.push(prefab)
+    },
+
+    openShopPanel: function (itemNames) {
+
+        if(this.inited_ == null)
+        {
+            this._init(itemNames)
+            this.inited_ = true
+        }
+
         this.node.x = 0
     },
 
@@ -70,12 +91,47 @@ cc.Class({
             this.gs_.addBagItem(item.allAttrs)
     },
 
-    setChooseItem: function(cfg)
-    {
+    setChooseItem: function (cfg) {
         let chooseName = global.getChildByName(this.node, "chooseName")
-        closeBtn.on(cc.Node.EventType.TOUCH_START, this.closeShopPanel, this)
+        let chooseDesc = global.getChildByName(this.node, "chooseDesc")
+        let price = global.getChildByName(this.node, "price")
 
-        let closeBtn = global.getChildByName(this.node, "closeBtn")
-        closeBtn.on(cc.Node.EventType.TOUCH_START, this.closeShopPanel, this)
+        chooseName.getComponent(cc.Label).string = cfg.name
+        chooseDesc.getComponent(cc.Label).string = cfg.descript
+        price.getComponent(cc.Label).string = cfg.price
+
+        this.curCfg_ = cfg
+        
+        console.log('释放选中事件', cfg.name)
+        let chooseEvent = new cc.Event.EventCustom("chooseItemSig", true)
+        chooseEvent.setUserData({cfg})
+        for(var n of this.itemAllNodes)
+        {
+            n.dispatchEvent(chooseEvent)
+        }
+        
+    },
+
+    butShopItem: function () {
+        if (this.curCfg_) {
+
+            let backScript = cc.find("Canvas/back").getComponent('backScript')
+            let hasCoin = backScript.role_.getAttr('coin')
+
+            let inventoryScript = cc.find("Canvas/inventory").getComponent('inventoryScript')
+            if(hasCoin < this.curCfg_.price)
+            {
+                backScript._addTextInfo('金币不够')
+                return
+            }
+            if(inventoryScript.isFull())
+            {
+                backScript._addTextInfo('背包已满')
+                return
+            }
+            //enouth money and inventory is not full
+            backScript.role_.setAttr('coin', hasCoin - this.curCfg_.price)
+            inventoryScript.addItem(this.curCfg_.name)
+        }
     },
 });
