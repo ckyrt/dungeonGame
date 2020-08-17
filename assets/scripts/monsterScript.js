@@ -40,10 +40,21 @@ cc.Class({
     },
 
     start() {
-        
+        let backScript = cc.find("Canvas/back").getComponent('backScript')
+        backScript.setInterval(0.1, 300000,
+            () => {
+                this._update100()
+            })
     },
 
     // update (dt) {},
+    _update100: function () {
+        let num = this.getAttr('hp_recover')
+        if (num != null && num != 0) {
+            if (this.getAttr('hp') < this.getAttr('max_hp'))
+                this.addAttr('hp', num / 10)
+        }
+    },
 
     initConfig: function (monsterName) {
         let monsterAttr = monsterConfig[monsterName]
@@ -52,6 +63,7 @@ cc.Class({
         this.setAttr('attack', monsterAttr.attack)
         this.setAttr('defend', monsterAttr.defend)
         this.setAttr('hp', monsterAttr.hp)
+        this.setAttr('max_hp', monsterAttr.hp)
 
         let url = 'monster/'+ monsterAttr.imgSrc
         let self = this
@@ -105,6 +117,14 @@ cc.Class({
         if(!this.allAttrs.hasOwnProperty(att))
             return null
         return this.allAttrs[att]
+    },
+
+    addAttr: function (att, val) {
+        console.log(att, val)
+        let curNum = this.getAttr(att)
+        let newV = curNum + val
+        newV = Math.floor(newV * 100) / 100
+        this.setAttr(att, newV)
     },
 
     setPos: function (x, y) {

@@ -37,7 +37,7 @@ cc.Class({
         closeBtn.on(cc.Node.EventType.TOUCH_START, this.closeShopPanel, this)
 
         let buyButton = global.getChildByName(this.node, "buyButton")
-        buyButton.on(cc.Node.EventType.TOUCH_START, this.butShopItem, this)
+        buyButton.on(cc.Node.EventType.TOUCH_START, this.buyShopItem, this)
     },
 
     // update (dt) {},
@@ -59,7 +59,7 @@ cc.Class({
         let len = this.itemAllNodes.length
         var prefab = cc.instantiate(this.bag_item_prefab)
         this.node.addChild(prefab)
-        prefab.setPosition(-297 + (len % 4) * 83, 156 - (Math.floor(len / 3)) * 83)
+        prefab.setPosition(-297 + (len % 4) * 83, 156 - (Math.floor(len / 4)) * 83)
 
         var item = prefab.getComponent("bagItemScript")
         item.initBagItem(config)
@@ -112,7 +112,7 @@ cc.Class({
         
     },
 
-    butShopItem: function () {
+    buyShopItem: function () {
         if (this.curCfg_) {
 
             let backScript = cc.find("Canvas/back").getComponent('backScript')
@@ -131,7 +131,7 @@ cc.Class({
             }
             //enouth money and inventory is not full
             backScript.role_.setAttr('coin', hasCoin - this.curCfg_.price)
-            inventoryScript.addItem(this.curCfg_.name)
+            inventoryScript.addItem(itemConfig.createItemEntity(this.curCfg_.name))
         }
     },
 });

@@ -34,9 +34,10 @@ cc.Class({
 
     // update (dt) {},
 
-    initConfig: function (itemName) {
+    initMapItem: function (entity) {
 
-        this.itemName = itemName
+        let itemName = entity.name
+        this.entity = entity
         let cfg = itemConfig[itemName]
 
         var url = 'grid_item_icons/' + cfg['imgSrc']

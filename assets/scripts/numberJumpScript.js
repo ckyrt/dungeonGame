@@ -44,11 +44,13 @@ cc.Class({
         }
     },
 
-    playJump(txt, color)
+    playJump(txt, color, fontSize)
     {
         this.node.color = color//new cc.color(255,0,0)
         this.node.getComponent(cc.Label).string = txt
         this.startY = this.node.y
+
+        this.node.getComponent(cc.Label).fontSize = fontSize
 
         var interval = 1
         // 重复次数

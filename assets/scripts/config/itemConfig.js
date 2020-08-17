@@ -2,54 +2,6 @@
 
 var itemConfig = {
 
-    '斧头': {
-        'name': '斧头',
-        'imgSrc': '003-Weapon03',
-        'attack-min': 18,
-        'attack-max': 31,
-        'part': 'weapon',
-        'descript': '增加攻击力18-31',
-        'coin': 10,
-    },
-
-    '树叶': {
-        'name': '树叶',
-        'imgSrc': '025-Herb01',
-        'attack-min': 18,
-        'attack-max': 31,
-        'part': 'weapon',
-        'descript': '增加攻击力18-31',
-        'coin': 10,
-    },
-
-    '野草': {
-        'name': '野草',
-        'imgSrc': '026-Herb02',
-        'attack-min': 18,
-        'attack-max': 31,
-        'part': 'weapon',
-        'descript': '增加攻击力18-31',
-        'coin': 10,
-    },
-
-    '草药': {
-        'name': '草药',
-        'imgSrc': '027-Herb03',
-        'attack-min': 18,
-        'attack-max': 31,
-        'part': 'weapon',
-        'descript': '增加攻击力18-31',
-        'coin': 10,
-    },
-
-    '血': {
-        'name': '血',
-        'imgSrc': 'xue',
-        'hp': 18,
-        'type': 'consume',//消耗品
-        'descript': '增加生命2点',
-    },
-
     '铁树枝干': {
         'name': '铁树枝干',
         'imgSrc': 'shuzhi',
@@ -62,7 +14,7 @@ var itemConfig = {
         price: 50,
     },
     '治疗药膏': {
-        'name': '治疗药膏   ',
+        'name': '治疗药膏',
         'imgSrc': 'dayao',
         'descript': '“一个神奇的药膏，能够迅速补最深的伤口。”不可共享但能作用于友军单位。\n使用之后在8秒内回复400点生命值\n受到攻击后效果消失',
         attrs: {
@@ -70,9 +22,19 @@ var itemConfig = {
         },
         price: 110,
         use_func: (target) => {
-            target.addAttr('hp', 100)
+
+            console.log('大药效果开启')
+            target.addAttr('hp_recover', 10)
+
+            let backScript = cc.find("Canvas/back").getComponent('backScript')
+            backScript.setInterval(10, 1,
+                () => {
+                    console.log('大药效果消失')
+                    target.addAttr('hp_recover', -10)
+                })
         },
-        use_type:'one_time',    //使用类型 一次性
+        use_times: 1,    //可使用次数
+        has_target: true,           //目标
     },
     '敏捷便鞋': {
         'name': '敏捷便鞋',
@@ -264,11 +226,53 @@ var itemConfig = {
             add_attack: 18,
         },
     },
+    '水晶剑': {
+        'name': '水晶剑',
+        'imgSrc': 'shuijingjian',
+        'descript': '用稀有水晶锻造的剑刃，会寻找敌人护甲的脆弱处\n+30攻击力\n致命一击：在攻击中有20%的几率造成1.75倍伤害的致命一击。',
+        price: 2120,
+        attrs: {
+            add_attack: 30,
+            crit_rate: 20,
+            crit_multi: 1.75,
+        },
+    },
+    '大炮': {
+        'name': '大炮',
+        'imgSrc': 'dapao',
+        'descript': '这件武器有着惊人的力量，即使是最强的战士也难以掌控它。\n+76攻击力\n致命一击：在攻击中有25%的几率造成2.3倍伤害的致命一击。',
+        price: 5520,
+        attrs: {
+            add_attack: 76,
+            crit_rate: 25,
+            crit_multi: 2.3,
+        },
+    },
+
+    '圆盾': {
+        'name': '圆盾',
+        'imgSrc': 'yuandun',
+        'descript': '一个人的酒桶底盖，在另一个人手里就成了圆盾。\n伤害格挡（被动）：让近战持有者拥有60%机会抵挡掉20点伤害，远程持有者则是60%抵挡掉10伤害。',
+        price: 200,
+        attrs: {
+            //伤害格挡概率 伤害格挡数值
+            gedang_rate: 50,
+            gedang_value: 20,
+        },
+    },
+
     '先锋盾': {
         'name': '先锋盾',
         'imgSrc': 'xianfengdun',
         'descript': '能够让持有者躲过最致命攻击的强力盾牌。\n+250生命值\n+6生命回复\n被动：伤害格挡\n伤害格挡：受到普通攻击有50%概率抵挡70/35(近战/远程)点的伤害。',
         price: 2150,
+        attrs: {
+            hp_recover: 6,
+            max_hp: 250,
+
+            gedang_rate: 50,
+            gedang_value: 70,
+        },
     },
     '希梅斯特的掠夺': {
         'name': '希梅斯特的掠夺',
@@ -284,6 +288,76 @@ var itemConfig = {
         'imgSrc': 'longxin',
         'descript': '已经绝种的怪物的心脏，能提升携带者的耐久力。\n+40 力量\n+300 生命值\n被动：生命回复\n生命回复：提高最大生命值7%的生命值回复速率；受到攻击的玩家会失去回复效果，摆脱攻击6秒（近战英雄4秒）后开始生命回复，不可叠加。',
         price: 5500,
+    },
+
+    '闪避护符': {
+        'name': '闪避护符',
+        'imgSrc': 'shanbihufu',
+        'descript': '让你可以提前闪躲敌人攻击的护符。\n有20%几率闪避敌人攻击。',
+        price: 1450,
+        attrs: {
+            avoid_rate: 20,
+            avoid_value: 1,
+        },
+    },
+
+    '达贡之神力1级': {
+        'name': '达贡之神力1级',
+        'imgSrc': 'hongzhang',
+        'descript': '越用威力就越大的次级法杖，让持有者的魔法从指尖喷涌而出。\n能量冲击（主动）:造成400点伤害，释放距离600。施法间隔：35秒。施法消耗：180。',
+        price: 2720,
+        attrs: {
+
+        },
+        use_func: (target) => {
+            //400点魔法伤害
+            let backScript = cc.find("Canvas/back").getComponent('backScript')
+            backScript._executeDamage(backScript.role_, target, 400, 'mofa')
+
+            //特效
+            let shandianScript = cc.find("Canvas/shandian").getComponent('shandianEffectScript')
+            //shandianScript.testShandian(backScript.role_.getXY(), { x: target.node.x, y: target.node.y })
+            shandianScript.testShandian({ x: 0, y: 0 }, { x: 100, y: 100 }, )
+        },
+        use_times: -1,              //可使用次数
+        has_target: true,           //目标
+        cd_time: 35,                 //秒
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //创建一个item实体
+    createItemEntity: function (name, use_times = 0, cd_time = -1) {
+        let cfg = this[name]
+        if (use_times == 0) {
+            use_times = cfg.use_times
+        }
+        if (cd_time == -1) {
+            cd_time = 0
+        }
+        return { name, use_times, cd_time }
+    },
+
+    //拷贝一个item实体
+    copyItemEntity: function (entity) {
+        let new_entity = {}
+        new_entity.name = entity.name
+        new_entity.use_times = entity.use_times
+        new_entity.cd_time = entity.cd_time
+        return new_entity
     },
 }
 module.exports = itemConfig

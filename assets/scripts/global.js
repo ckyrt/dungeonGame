@@ -1,3 +1,4 @@
+var itemConfig = require('itemConfig')
 var global = {
     startX:1,
     startY:1,
@@ -24,6 +25,12 @@ var global = {
     random:function(lower, upper) 
     {
         return Math.round(Math.random()*(upper-lower)+lower)         
+    },
+
+    getNowTimeStamp:function()
+    {
+        var testDate = new Date()
+        return testDate.getTime()
     },
 }
 

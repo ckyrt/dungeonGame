@@ -28,7 +28,7 @@ cc.Class({
 
     start() {
         this.itemPos = 0
-        this.itemCfg = null
+        this.itemEntity = null
         let closeButton = global.getChildByName(this.node, "closeButton")
         closeButton.on(cc.Node.EventType.TOUCH_START, () => {
             this.closePanel()
@@ -37,16 +37,19 @@ cc.Class({
         sellButton.on(cc.Node.EventType.TOUCH_START, () => {
 
             let backScript = cc.find("Canvas/back").getComponent('backScript')
-            backScript.role_.addAttr('coin', Math.ceil(this.itemCfg.price / 2))
+            backScript.role_.addAttr('coin', Math.ceil(itemConfig[this.itemEntity.name].price / 2))
             this.closePanel()
-            this.deleteItemFromInventory(this.itemPos)
+
+            let inventoryScript = cc.find("Canvas/inventory").getComponent('inventoryScript')
+            inventoryScript._discardItemByPos(this.itemPos)
+            inventoryScript._refreshShow()
         }, this)
     },
 
     // update (dt) {},
 
-    openPanel: function ({name, pos}) {
-        let cfg = itemConfig[name]
+    openPanel: function ({ entity, pos }) {
+        let cfg = itemConfig[entity.name]
         let itemName = global.getChildByName(this.node, "itemName")
         let itemImage = global.getChildByName(this.node, "itemImage")
         let description = global.getChildByName(this.node, "description")
@@ -67,8 +70,8 @@ cc.Class({
         })
 
         this.node.x = 0
-        this.setUseFunc(cfg)
         this.itemPos = pos
+        this.setUseFunc(entity)
     },
 
     closePanel: function (t) {
@@ -78,9 +81,9 @@ cc.Class({
         useword.off(cc.Node.EventType.TOUCH_START, this.execClickFunc, this)
     },
 
-    setUseFunc: function (cfg) {
-        this.itemCfg = cfg
-
+    setUseFunc: function (entity) {
+        this.itemEntity = itemConfig.copyItemEntity(entity)
+        let cfg = itemConfig[entity.name]
         let str = '关闭'
         if (cfg.use_func != null) {
             str = '使用'
@@ -91,22 +94,45 @@ cc.Class({
     },
 
     execClickFunc: function () {
-        if (this.itemCfg.use_func != null) {
-            let backScript = cc.find("Canvas/back").getComponent('backScript')
-            this.itemCfg.use_func(backScript.role_)
 
-            //一次性
-            if(this.itemCfg.use_type == 'one_time')
-                this.deleteItemFromInventory()
+        let itemCfg = itemConfig[this.itemEntity.name]
+        let times = this.itemEntity.use_times
+        let cd = this.itemEntity.cd_time
+        let backScript = cc.find("Canvas/back").getComponent('backScript')
+        if (cd > 0) {
+            //还没有冷却好
+            backScript._addTextInfo('冷却中: ' + cd.toFixed(1) + 's')
+            return
+        }
+
+        if (itemCfg.use_func != null) {
+            if (itemCfg.has_target == true) {
+                //有目标，需要再点击一下目标
+                backScript._addTextInfo('请选择目标单位')
+                backScript.setChooseTargetFunc(
+                    (target) => {
+                        this.useItemOver(target)
+                    })
+            }
         }
 
         this.closePanel()
     },
 
-    deleteItemFromInventory:function()
-    {
+    useItemOver: function (target) {
+        console.log('this.itemEntity', this.itemEntity)
+        let itemCfg = itemConfig[this.itemEntity.name]
+        itemCfg.use_func(target)
+
+        if (this.itemEntity.use_times > 0) {
+            //有限次
+            this.itemEntity.use_times -= 1
+        }
+        //计算下次cd
+        this.itemEntity.cd_time = itemCfg.cd_time
+
         let inventoryScript = cc.find("Canvas/inventory").getComponent('inventoryScript')
-        inventoryScript._discardItemByPos(this.itemPos)
-        inventoryScript._refreshShow()
-    }
+        inventoryScript.updateItemCDAndUseTimesByPos(this.itemPos, this.itemEntity.cd_time, this.itemEntity.use_times)
+    },
+
 });

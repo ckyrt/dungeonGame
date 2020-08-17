@@ -82,6 +82,7 @@ var roleConfig = {
 
         hp: 549,
         mp: 234,
+        energy: 80,
 
         str: 21,
         int: 18,
@@ -101,11 +102,6 @@ var roleConfig = {
         attack_sp_ratio: 0,//增加x%攻击速度
         mp_recover_ratio: 0, //x% 法力恢复
 
-
-        'hp': 100,
-        'energy': 80,
-        'mp': 10,
-
         'crit_rate': 1,
         'crit_multi': 1,
         'fanshang_rate': 1,
@@ -113,6 +109,38 @@ var roleConfig = {
         'accurate_rate': 1,
         'suck_rate': 1,
         'suck_percent': 1,
+    },
+
+    '尤涅若': {
+        job: '尤涅若',
+        imgSrc: 'jiansheng',
+
+        main_attr: 'int',
+
+        hp: 530,
+        max_hp: 530,
+        mp: 182,
+        max_mp: 182,
+        energy: 0,
+        max_energy: 80,
+
+        str: 20,
+        int: 26,
+        agi: 14,
+
+        str_lv: 1.9,
+        int_lv: 2.85,
+        agi_lv: 1.4,
+
+        min_attack: 44,
+        max_attack: 48,
+
+        defend: 3.8,
+
+        hp_recover: 0,   //每秒的生命恢复
+        mp_recover: 0,
+        attack_sp_ratio: 0,//增加x%攻击速度
+        mp_recover_ratio: 0, //x% 法力恢复
     },
 }
 module.exports = roleConfig

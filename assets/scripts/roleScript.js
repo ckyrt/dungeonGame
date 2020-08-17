@@ -33,6 +33,24 @@ cc.Class({
 
     start() {
 
+        let backScript = cc.find("Canvas/back").getComponent('backScript')
+        backScript.setInterval(0.1, 300000,
+            () => {
+                this._update100()
+            })
+
+        let head = global.getChildByName(this.node, 'job')
+        head.on(cc.Node.EventType.TOUCH_START, (t) => {
+            console.log('role clicked')
+            let clickCreatureEvent = new cc.Event.EventCustom("clickCreatureSig", true)
+            clickCreatureEvent.setUserData({ creature: this })
+            backScript.node.dispatchEvent(clickCreatureEvent)
+        }, this)
+    },
+
+    getXY: function () {
+        let head = global.getChildByName(this.node, 'job')
+        return { x: head.x, y: head.y }
     },
 
     initConfig: function (job) {
@@ -44,20 +62,31 @@ cc.Class({
         this.setAttr('max_attack', roleAttr.max_attack)
         this.setAttr('defend', roleAttr.defend)
 
-        this.setAttr('max_hp', roleAttr.hp)
+        this.setAttr('max_hp', roleAttr.max_hp)
         this.setAttr('hp', roleAttr.hp)
-        this.setAttr('max_mp', roleAttr.mp)
+        this.setAttr('max_mp', roleAttr.max_mp)
         this.setAttr('mp', roleAttr.mp)
-        this.setAttr('max_energy', roleAttr.energy)
-        this.setAttr('energy', 0)
+        this.setAttr('max_energy', roleAttr.max_energy)
+        this.setAttr('energy', roleAttr.energy)
 
         this.setAttr('level', 1)
         this.setAttr('exp', 0)
-        this.setAttr('coin', 0)
+        this.setAttr('coin', 10000)
+    },
+
+    isRole: function () {
+        return true
     },
 
     update(dt) {
-        //hp_recover
+    },
+
+    _update100: function () {
+        let num = this.getAttr('hp_recover')
+        if (num != null && num != 0) {
+            if (this.getAttr('hp') < this.getAttr('max_hp'))
+                this.addAttr('hp', num / 10)
+        }
     },
 
     setAttr: function (att, v) {
@@ -84,30 +113,30 @@ cc.Class({
         if (att == 'min_attack') {
             let max_attack = this.getAttr('max_attack') == null ? 0 : this.getAttr('max_attack')
             let attack_node = global.getChildByName(this.node, 'base_attack')
-            attack_node.getComponent(cc.Label).string = v + '-' + max_attack
+            attack_node.getComponent(cc.Label).string = Math.floor(v) + '-' + max_attack
         }
         if (att == 'max_attack') {
             let min_attack = this.getAttr('min_attack') == null ? 0 : this.getAttr('min_attack')
             let attack_node = global.getChildByName(this.node, 'base_attack')
-            attack_node.getComponent(cc.Label).string = min_attack + '-' + v
+            attack_node.getComponent(cc.Label).string = min_attack + '-' + Math.floor(v)
         }
         if (att == 'add_attack') {
             let add_node = global.getChildByName(this.node, 'add_attack')
             if (v == 0)
                 add_node.getComponent(cc.Label).string = ''
             else
-                add_node.getComponent(cc.Label).string = ' +' + v
+                add_node.getComponent(cc.Label).string = ' +' + Math.floor(v)
         }
         if (att == 'defend') {
             let defend_node = global.getChildByName(this.node, 'defend')
-            defend_node.getComponent(cc.Label).string = v
+            defend_node.getComponent(cc.Label).string = Math.floor(v)
         }
         if (att == 'add_defend') {
             let add_node = global.getChildByName(this.node, 'add_defend')
             if (v == 0)
                 add_node.getComponent(cc.Label).string = ''
             else
-                add_node.getComponent(cc.Label).string = ' +' + v
+                add_node.getComponent(cc.Label).string = ' +' + Math.floor(v)
         }
         if (att == 'coin') {
             let coin_node = global.getChildByName(this.node, 'coin')
@@ -125,17 +154,29 @@ cc.Class({
                 this.onRoleDead()
                 return
             }
+            if (v >= this.getAttr('max_hp')) {
+                v = this.getAttr('max_hp')
+                this.allAttrs[att] = v
+            }
+
 
             global.getChildByName(this.node, 'hp').getChildByName('cur').getComponent(cc.Sprite).fillRange = v / this.getAttr('max_hp')
-            global.getChildByName(this.node, 'hpNum').getComponent(cc.Label).string = v
+            global.getChildByName(this.node, 'hpNum').getComponent(cc.Label).string = Math.floor(v)
+        }
+        if (att == 'max_hp') {
+            if (v < v1) {
+                //血量上限变小 把血也变小
+                this.setAttr('hp', v)
+            }
+            global.getChildByName(this.node, 'hp').getChildByName('cur').getComponent(cc.Sprite).fillRange = this.getAttr('hp') / v
         }
         if (att == 'mp') {
             global.getChildByName(this.node, 'mp').getChildByName('cur').getComponent(cc.Sprite).fillRange = v / this.getAttr('max_mp')
-            global.getChildByName(this.node, 'mpNum').getComponent(cc.Label).string = v
+            global.getChildByName(this.node, 'mpNum').getComponent(cc.Label).string = Math.floor(v)
         }
         if (att == 'energy') {
             global.getChildByName(this.node, 'energy').getChildByName('cur').getComponent(cc.Sprite).fillRange = v / this.getAttr('max_energy')
-            global.getChildByName(this.node, 'energyNum').getComponent(cc.Label).string = v
+            global.getChildByName(this.node, 'energyNum').getComponent(cc.Label).string = Math.floor(v)
         }
         if (att == 'exp') {
             let maxExp = expConfig.getLevelExp(this.getAttr('level'))
@@ -182,7 +223,6 @@ cc.Class({
         let newV = curNum + val
         newV = Math.floor(newV * 100) / 100
         this.setAttr(att, newV)
-        this._printAttr(att)
     },
 
     _printAttr: function (att) {
@@ -219,35 +259,42 @@ cc.Class({
         console.log('min_attack', min_attack)
         console.log('max_attack', max_attack)
 
-        min_attack += main_attr_attack
-        max_attack += main_attr_attack
+        min_attack += Math.floor(main_attr_attack)
+        max_attack += Math.floor(main_attr_attack)
 
         let attack_node = global.getChildByName(this.node, 'base_attack')
         attack_node.getComponent(cc.Label).string = min_attack + '-' + max_attack
     },
 
     //添加item属性
-    addItemAttr: function (itemName) {
+    addItemAttr: function (entity) {
+
+        let itemName = entity.name
         let cfg = itemConfig[itemName]
         if (cfg == null)
             return
 
         for (let k in cfg.attrs) {
-            //k, cfg.attrs[k]
+            if (k == 'gedang_rate' || k == 'gedang_value'
+                || k == 'crit_rate' || k == 'crit_multi')
+                continue
             this.addAttr(k, cfg.attrs[k])
         }
 
     },
 
     //删除item属性
-    removeItemAttr: function (itemName) {
+    removeItemAttr: function (entity) {
+
+        let itemName = entity.name
         let cfg = itemConfig[itemName]
         if (cfg == null)
             return
 
-        console.log('_removeItemAttr ', cfg.name, cfg.attrs)
         for (let k in cfg.attrs) {
-            //k, cfg.attrs[k]
+            if (k == 'gedang_rate' || k == 'gedang_value'
+                || k == 'crit_rate' || k == 'crit_multi')
+                continue
             this.addAttr(k, -1 * cfg.attrs[k])
         }
 

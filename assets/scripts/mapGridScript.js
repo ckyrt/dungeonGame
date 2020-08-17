@@ -42,14 +42,16 @@ cc.Class({
                 }
                 //有怪物
                 if (monsterScript) {
-                    backScript._computeDamage(backScript.role_, monsterScript)
-                    backScript._computeDamage(monsterScript, backScript.role_)
+
+                    let clickCreatureEvent = new cc.Event.EventCustom("clickCreatureSig", true)
+                    clickCreatureEvent.setUserData({creature:monsterScript})
+                    backScript.node.dispatchEvent(clickCreatureEvent)
                     return
                 }
 
                 if(this.getGridType() == 'chukou')
                 {
-                    backScript.jumpToDungeon('第二关')
+                    backScript.jumpToNextDungeon()
                 }
             }
             else {
@@ -93,8 +95,14 @@ cc.Class({
             url = 'grid_type/chukou'
             console.log('------------------------------------------',this.x, this.y)
         }
-        else if (t == 'dici') {
-            url = 'grid_type/dici'
+        else if (t == 'dici_1') {
+            url = 'grid_type/dici_1'
+        }
+        else if (t == 'dici_2') {
+            url = 'grid_type/dici_2'
+        }
+        else if (t == 'dici_3') {
+            url = 'grid_type/dici_3'
         }
         else if (t == 'luoshi') {
             url = 'grid_type/luoshi'

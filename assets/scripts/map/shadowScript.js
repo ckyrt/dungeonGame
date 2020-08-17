@@ -58,8 +58,6 @@ cc.Class({
                 this._setShadowNumber(i, j, 0)
             }
         }
-
-        this.openZone(2, 2, true)
     },
 
     _getShadowNumber: function (x, y) {
@@ -95,10 +93,10 @@ cc.Class({
         if (status == 'open' || status == 'can_open')
             return
 
-        g1 = { x: x, y: y }
-        g2 = { x: x + 1, y: y }
-        g3 = { x: x, y: y + 1 }
-        g4 = { x: x + 1, y: y + 1 }
+        let g1 = { x: x, y: y }
+        let g2 = { x: x + 1, y: y }
+        let g3 = { x: x, y: y + 1 }
+        let g4 = { x: x + 1, y: y + 1 }
 
 
         this._setShadowNumber(g1.x, g1.y, this._getShadowNumber(g1.x, g1.y) + 1)
@@ -144,7 +142,7 @@ cc.Class({
                 return
             if (mapGrid != null && mapGrid.getGridType() == '')
                 mapGrid.setGridType('normal')
-            
+
             this._setCanOpen(x - 1, y)
             this._setCanOpen(x + 1, y)
             this._setCanOpen(x, y - 1)
@@ -152,8 +150,13 @@ cc.Class({
 
 
             //格子是地刺
-            if (mapGrid != null && mapGrid.getGridType() == 'dici') {
-                backScript.role_.addAttr('hp', -2)
+            if (mapGrid != null && mapGrid.getGridType().indexOf('dici') != -1 ) {
+                if(mapGrid.getGridType() == 'dici_1')
+                    backScript._executeDamage(mapGrid, backScript.role_, 10, 'dici')
+                if(mapGrid.getGridType() == 'dici_2')
+                    backScript._executeDamage(mapGrid, backScript.role_, 30, 'dici')
+                if(mapGrid.getGridType() == 'dici_3')
+                    backScript._executeDamage(mapGrid, backScript.role_, 90, 'dici')
             }
         }
 
@@ -168,7 +171,6 @@ cc.Class({
 
     _addXtoMap: function (monsterScript, x, y) {
         if (this._getGridStatus(x, y) != 'open') {
-            let backScript = cc.find("Canvas/back").getComponent('backScript')
             monsterScript.addXToMap(x, y)
         }
     },
@@ -177,7 +179,7 @@ cc.Class({
         let backScript = cc.find("Canvas/back").getComponent('backScript')
         let thingNode = backScript.getMapThingInXY(x, y)
         let monsterScript = thingNode == null ? null : thingNode.getComponent('monsterScript')
-        
+
         monsterScript.removeXFromMap(x - 1, y)
         monsterScript.removeXFromMap(x + 1, y)
         monsterScript.removeXFromMap(x, y - 1)
