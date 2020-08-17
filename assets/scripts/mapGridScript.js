@@ -21,7 +21,7 @@ cc.Class({
         // },
         x: 0,
         y: 0,
-        gridType:'',
+        gridType: '',
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -34,6 +34,8 @@ cc.Class({
             let mapItemScript = thingNode == null ? null : thingNode.getComponent('mapItemScript')
             let monsterScript = thingNode == null ? null : thingNode.getComponent('monsterScript')
 
+            console.log('8888888888888888888', this.node.x, this.node.y, event.getLocation())
+
             if (shadowScript._getGridStatus(this.x, this.y) == 'open') {
                 //有道具
                 if (mapItemScript) {
@@ -44,13 +46,12 @@ cc.Class({
                 if (monsterScript) {
 
                     let clickCreatureEvent = new cc.Event.EventCustom("clickCreatureSig", true)
-                    clickCreatureEvent.setUserData({creature:monsterScript})
+                    clickCreatureEvent.setUserData({ creature: monsterScript })
                     backScript.node.dispatchEvent(clickCreatureEvent)
                     return
                 }
 
-                if(this.getGridType() == 'chukou')
-                {
+                if (this.getGridType() == 'chukou') {
                     backScript.jumpToNextDungeon()
                 }
             }
@@ -82,6 +83,10 @@ cc.Class({
         return { x, y }
     },
 
+    getSwyXY: function () {
+        return { x: this.x * 100, y: this.y * 100 }
+    },
+
     setGridType: function (t) {
         //需要钥匙的门
         //落石
@@ -93,7 +98,7 @@ cc.Class({
         var url = ''
         if (t == 'chukou') {
             url = 'grid_type/chukou'
-            console.log('------------------------------------------',this.x, this.y)
+            console.log('------------------------------------------', this.x, this.y)
         }
         else if (t == 'dici_1') {
             url = 'grid_type/dici_1'
@@ -137,8 +142,7 @@ cc.Class({
             console.log(self.x, self.y, t)
         })
 
-        if(this.gridType != '')
-        {
+        if (this.gridType != '') {
             console.log('want to override the grid type..', this.gridType, t)
         }
         this.gridType = t

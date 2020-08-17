@@ -69,7 +69,7 @@ cc.Class({
         // 先清空Graphics已绘制的所有东西，不然会和上一帧的叠加在一起。
         this.draw.clear();
         // 画个闪电
-        this.drawLighting(this.from.x, this.from.y, this.to.x, this.to.y, 10);
+        this.drawLighting(this.from.x, this.from.y, this.to.x, this.to.y, 150);
         // 如果觉得不过瘾，可以每帧多调用几次drawLighting，多生成几条闪电。
     },
 

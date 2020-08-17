@@ -316,8 +316,8 @@ var itemConfig = {
 
             //特效
             let shandianScript = cc.find("Canvas/shandian").getComponent('shandianEffectScript')
-            //shandianScript.testShandian(backScript.role_.getXY(), { x: target.node.x, y: target.node.y })
-            shandianScript.testShandian({ x: 0, y: 0 }, { x: 100, y: 100 }, )
+            shandianScript.testShandian(backScript.role_.getSwyXY(), target.getSwyXY())
+            //shandianScript.testShandian({ x: -300, y: -300 }, { x: 300, y: 300 }, )
         },
         use_times: -1,              //可使用次数
         has_target: true,           //目标

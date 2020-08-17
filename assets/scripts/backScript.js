@@ -271,7 +271,8 @@ cc.Class({
 
     getGridByXY: function (x, y) {
         var it = this.allGrids.find(function (ele) {
-            return ele.getXY().x == x && ele.getXY().y == y
+            let xy = ele.getXY()
+            return xy.x == x && xy.y == y
         })
         return it
     },
@@ -377,16 +378,18 @@ cc.Class({
         curHp += hp
         unit.setAttr('hp', curHp)
 
-        let y = unit.isRole != null ? unit.node.y - 120 : unit.node.y
-        this._playNumberJump(hp, unit.node.x, y, new cc.color(255, 0, 0))
+        let xy = unit.getSwyXY()
+        this._playNumberJump(hp, xy.x, xy.y, new cc.color(255, 0, 0))
     },
 
     //执行伤害
     _executeDamage: function (attacker, unit, damage, reason) {
-        let x = unit.node.x
-        let y = unit.node.y + unit.node.height
-        let attackX = attacker.node.x
-        let attackY = attacker.node.y + attacker.node.height
+        let xy = unit.getSwyXY()
+        let x = xy.x
+        let y = xy.y
+        let at_xy = attacker.getSwyXY()
+        let attackX = at_xy.x
+        let attackY = at_xy.y
         if (reason == 'dici') {
             this._addUnitHp(unit, -damage)
         }
@@ -424,8 +427,10 @@ cc.Class({
     },
     //跳数字
     _playNumberJump: function (txt, x, y, color, fontSize = 40) {
+
+        console.log('_playNumberJump', x, y)
         var numberJump = cc.instantiate(this.numberJump_prefab)
-        let xLayer = cc.find("Canvas/xLayer")
+        let xLayer = cc.find("Canvas/effect")
         xLayer.addChild(numberJump)
         numberJump.setPosition(x, y)
         numberJump.getComponent('numberJumpScript').playJump(txt, color, fontSize)

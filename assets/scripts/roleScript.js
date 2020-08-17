@@ -48,8 +48,9 @@ cc.Class({
         }, this)
     },
 
-    getXY: function () {
+    getSwyXY: function () {
         let head = global.getChildByName(this.node, 'job')
+        console.log('rolepos', head.x, head.y)
         return { x: head.x, y: head.y }
     },
 

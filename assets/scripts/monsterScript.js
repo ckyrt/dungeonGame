@@ -22,7 +22,7 @@ cc.Class({
         //     }
         // },
 
-        
+
         allXNodes: {
             default: {},
         },
@@ -30,7 +30,7 @@ cc.Class({
 
     // LIFE-CYCLE CALLBACKS:
 
-    onLoad () {
+    onLoad() {
         this.name_node = global.getChildByName(this.node, 'monster_name')
         this.attack_node = global.getChildByName(this.node, 'attack')
         this.defend_node = global.getChildByName(this.node, 'defend')
@@ -65,7 +65,7 @@ cc.Class({
         this.setAttr('hp', monsterAttr.hp)
         this.setAttr('max_hp', monsterAttr.hp)
 
-        let url = 'monster/'+ monsterAttr.imgSrc
+        let url = 'monster/' + monsterAttr.imgSrc
         let self = this
         cc.loader.loadRes(url, cc.SpriteFrame, function (err, spriteFrame) {
             if (err) {
@@ -75,46 +75,39 @@ cc.Class({
 
             global.getChildByName(self.node, 'head').getComponent(cc.Sprite).spriteFrame = spriteFrame
         })
-        
-        
+
+
     },
 
 
-    setAttr: function(att, v)
-    {
+    setAttr: function (att, v) {
         let v1 = this.getAttr(att)
-        if(v == v1)
+        if (v == v1)
             return
-        
-        
-        if(att == 'name')
-        {
+
+
+        if (att == 'name') {
             this.name_node.getComponent(cc.Label).string = v
         }
-        if(att == 'attack')
-        {
+        if (att == 'attack') {
             this.attack_node.getComponent(cc.Label).string = v
         }
-        if(att == 'defend')
-        {
+        if (att == 'defend') {
             this.defend_node.getComponent(cc.Label).string = v
         }
-        if(att == 'hp')
-        {
+        if (att == 'hp') {
             this.hp_node.getComponent(cc.Label).string = v
-            if(v <= 0)
-            {
+            if (v <= 0) {
                 this.beforeDie()
             }
         }
         this.allAttrs[att] = v
     },
 
-    getAttr: function(att)
-    {
-        if(!this.allAttrs)
+    getAttr: function (att) {
+        if (!this.allAttrs)
             return null
-        if(!this.allAttrs.hasOwnProperty(att))
+        if (!this.allAttrs.hasOwnProperty(att))
             return null
         return this.allAttrs[att]
     },
@@ -140,15 +133,19 @@ cc.Class({
         return { x: this.x, y: this.y }
     },
 
-    deleteFromMap:function()
-    {
+    getSwyXY: function () {
+
+        console.log('monsterpos', this.node.x, this.node.y)
+        return { x: this.node.x, y: this.node.y + 200 }
+    },
+
+    deleteFromMap: function () {
         this.node.destroy()
         let backScript = cc.find("Canvas/back").getComponent('backScript')
         backScript.setMapThingInXY(this.x, this.y, null)
     },
 
-    beforeDie:function()
-    {
+    beforeDie: function () {
         let cfg = monsterConfig[this.getAttr('name')]
 
         //給玩家经验
@@ -201,8 +198,7 @@ cc.Class({
         }
     },
 
-    clearXFromMap:function()
-    {
+    clearXFromMap: function () {
         for (var i = 0; i < this.allXNodes.length; ++i) {
             let g = this.allXNodes[i]
             g.node.destroy()
