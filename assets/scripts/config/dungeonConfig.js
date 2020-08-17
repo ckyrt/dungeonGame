@@ -1,7 +1,8 @@
 
 var dungeonConfig = {
     '第一关、奎尔丹纳斯岛':{
-        //哪些格子有哪些怪物 道具 格子类型
+        
+        npcs:['阿尔萨斯·米奈希尔'],
         monsters:['兽人','野猪','兽人','野猪','兽人','野猪','兽人'],
         items:['攻击之爪', '阔剑', '锁子甲', '治疗药膏'],
         gridTypes:['luoshi', 'luoshi', 'luoshi', 'chukou', 'dici_1', 'dici_1', 'dici_1', 'nu_canfire', 'nu_canfire'],
@@ -9,7 +10,8 @@ var dungeonConfig = {
     },
 
     '第二关、永歌森林':{
-        //哪些格子有哪些怪物 道具 格子类型
+        
+        npcs:['提里奥·弗丁'],
         monsters:['野猪','蜥蜴人','野猪','蜥蜴人','野猪','蜥蜴人','野猪'],
         items:['攻击之爪', '阔剑', '锁子甲', '治疗药膏'],
         gridTypes:['luoshi', 'luoshi', 'luoshi', 'chukou', 'dici_1', 'dici_1', 'dici_1'],
@@ -17,7 +19,8 @@ var dungeonConfig = {
     },
 
     '第三关、幽魂之地':{
-        //哪些格子有哪些怪物 道具 格子类型
+        
+        npcs:['雷克萨'],
         monsters:['蜥蜴人','僵尸','蜥蜴人','僵尸','蜥蜴人','僵尸','蜥蜴人'],
         items:['攻击之爪', '阔剑', '锁子甲', '治疗药膏'],
         gridTypes:['luoshi', 'luoshi', 'luoshi', 'chukou', 'dici_1', 'dici_2', 'dici_1'],
@@ -25,7 +28,8 @@ var dungeonConfig = {
     },
 
     '第四关、东瘟疫之地':{
-        //哪些格子有哪些怪物 道具 格子类型
+        
+        npcs:['萨尔'],
         monsters:['骷髅兵','僵尸','骷髅兵','僵尸','骷髅兵','僵尸','骷髅兵'],
         items:['攻击之爪', '阔剑', '锁子甲', '治疗药膏'],
         gridTypes:['luoshi', 'luoshi', 'luoshi', 'chukou', 'dici_1', 'dici_2', 'dici_2'],
@@ -33,7 +37,8 @@ var dungeonConfig = {
     },
 
     '第五关、西瘟疫之地':{
-        //哪些格子有哪些怪物 道具 格子类型
+        
+        npcs:['玛法里奥·怒风'],
         monsters:['骷髅兵','烈火鸟','骷髅兵','烈火鸟','骷髅兵','烈火鸟','骷髅兵'],
         items:['攻击之爪', '阔剑', '锁子甲', '治疗药膏'],
         gridTypes:['luoshi', 'luoshi', 'luoshi', 'chukou', 'dici_2', 'dici_2', 'dici_2'],
@@ -41,6 +46,8 @@ var dungeonConfig = {
     },
 
     '第六关、辛特兰':{
+
+        npcs:['耐奥祖'],
         monsters:['食人魔','烈火鸟','食人魔','烈火鸟','食人魔','烈火鸟','食人魔'],
         items:['攻击之爪', '阔剑', '锁子甲', '治疗药膏'],
         gridTypes:['luoshi', 'luoshi', 'luoshi', 'chukou', 'dici_2', 'dici_2', 'dici_3'],
@@ -48,6 +55,8 @@ var dungeonConfig = {
     },
 
     '第七关、费伍德森林':{
+
+        npcs:['奥格瑞姆'],
         monsters:['食人魔','泰山','食人魔','泰山','食人魔','泰山','食人魔'],
         items:['攻击之爪', '阔剑', '锁子甲', '治疗药膏'],
         gridTypes:['luoshi', 'luoshi', 'luoshi', 'chukou', 'dici_2', 'dici_2', 'dici_3'],
@@ -55,6 +64,8 @@ var dungeonConfig = {
     },
 
     '第九关、凄凉之地':{
+
+        npcs:['泰兰德'],
         monsters:['路西法','泰山','路西法','泰山','路西法','泰山','路西法'],
         items:['阔剑', '阔剑', '锁子甲', '治疗药膏'],
         gridTypes:['luoshi', 'luoshi', 'luoshi', 'chukou', 'dici_2', 'dici_3', 'dici_3'],
@@ -62,6 +73,8 @@ var dungeonConfig = {
     },
 
     '第十关、黑海岸':{
+
+        npcs:['欺诈者基尔加丹'],
         monsters:['路西法','路西法','路西法','路西法','路西法','路西法','路西法'],
         items:['阔剑', '阔剑', '锁子甲', '治疗药膏'],
         gridTypes:['luoshi', 'luoshi', 'luoshi', 'chukou', 'dici_3', 'dici_3', 'dici_3'],

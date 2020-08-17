@@ -324,7 +324,27 @@ var itemConfig = {
         cd_time: 35,                 //秒
     },
 
+    '达贡之神力2级': {
+        'name': '达贡之神力2级',
+        'imgSrc': 'hongzhang',
+        'descript': '越用威力就越大的次级法杖，让持有者的魔法从指尖喷涌而出。\n能量冲击（主动）:造成500点伤害，释放距离600。施法间隔：35秒。施法消耗：180。',
+        price: 3970,
+        attrs: {
 
+        },
+        use_func: (target) => {
+            //400点魔法伤害
+            let backScript = cc.find("Canvas/back").getComponent('backScript')
+            backScript._executeDamage(backScript.role_, target, 500, 'mofa')
+
+            //特效
+            let shandianScript = cc.find("Canvas/shandian").getComponent('shandianEffectScript')
+            shandianScript.testShandian(backScript.role_.getSwyXY(), target.getSwyXY())
+        },
+        use_times: -1,              //可使用次数
+        has_target: true,           //目标
+        cd_time: 35,                 //秒
+    },
 
 
 

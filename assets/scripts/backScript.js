@@ -1,6 +1,7 @@
 var global = require('global')
 var dungeonConfig = require('dungeonConfig')
 var itemConfig = require('itemConfig')
+var npcConfig = require('npcConfig')
 
 cc.Class({
     extends: cc.Component,
@@ -12,6 +13,10 @@ cc.Class({
             default: null,
         },
         monsterPrefab: {
+            type: cc.Prefab,
+            default: null,
+        },
+        npcPrefab: {
             type: cc.Prefab,
             default: null,
         },
@@ -62,12 +67,12 @@ cc.Class({
     start() {
 
         //背包
-        let shopBtn = cc.find("Canvas/shopBtn")
-        shopBtn.on(cc.Node.EventType.TOUCH_START,
-            function (t) {
-                let shop = cc.find("Canvas/shop")
-                shop.getComponent('shopPanelScript').openShopPanel(['达贡之神力1级', '闪避护符', '圆盾', '治疗药膏', '水晶剑', '回复戒指', '治疗指环', '大炮', '灵魂之戒', '恐鳌之心', '先锋盾', '希梅斯特的掠夺'])
-            }, this)
+        // let shopBtn = cc.find("Canvas/shopBtn")
+        // shopBtn.on(cc.Node.EventType.TOUCH_START,
+        //     function (t) {
+        //         let shop = cc.find("Canvas/shop")
+        //         shop.getComponent('shopPanelScript').openShopPanel(['达贡之神力1级', '闪避护符', '圆盾', '治疗药膏', '水晶剑', '回复戒指', '治疗指环', '大炮', '灵魂之戒', '恐鳌之心', '先锋盾', '希梅斯特的掠夺'])
+        //     }, this)
 
         this._initAll()
 
@@ -170,6 +175,11 @@ cc.Class({
             let grid = this.getRandomEmptyGrid()
             this.addMonsterToMap(m, grid.x, grid.y)
         }
+        for (var m of cfg.npcs) {
+            let grid = this.getRandomEmptyGrid()
+            this.addNpcToMap(m, grid.x, grid.y)
+        }
+        
         for (var m of cfg.items) {
             let grid = this.getRandomEmptyGrid()
             this.addItemToMap(itemConfig.createItemEntity(m), grid.x, grid.y)
@@ -236,6 +246,19 @@ cc.Class({
         let monsterScript = prefab.getComponent('monsterScript')
         monsterScript.initConfig(name)
         monsterScript.setPos(i, j)
+    },
+
+    addNpcToMap: function (name, i, j) {
+        let grid = this.getGridByXY(i, j)
+        if (null == grid)
+            return
+
+
+        var prefab = cc.instantiate(this.npcPrefab)
+        this.node.addChild(prefab)
+        let npcScript = prefab.getComponent('npcScript')
+        npcScript.initConfig(name)
+        npcScript.setPos(i, j)
     },
 
     addItemToMap: function (entityItem, i, j) {
