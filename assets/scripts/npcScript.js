@@ -70,4 +70,15 @@ cc.Class({
         backScript.setMapThingInXY(x, y, this.node)
     },
 
+    getPos: function () {
+        return { x: this.x, y: this.y }
+    },
+
+    deleteFromMap:function()
+    {
+        this.node.destroy()
+        let backScript = cc.find("Canvas/back").getComponent('backScript')
+        backScript.setMapThingInXY(this.x, this.y, null)
+    }
+
 });

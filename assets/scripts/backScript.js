@@ -286,8 +286,9 @@ cc.Class({
             let thingNode = this.getMapThingInXY(grid.x, grid.y)
             let mapItemScript = thingNode == null ? null : thingNode.getComponent('mapItemScript')
             let monsterScript = thingNode == null ? null : thingNode.getComponent('monsterScript')
+            let npcScript = thingNode == null ? null : thingNode.getComponent('npcScript')
 
-            if (grid.getGridType() == '' && mapItemScript == null && monsterScript == null)
+            if (grid.getGridType() == '' && mapItemScript == null && monsterScript == null && npcScript == null)
                 return grid
         }
     },
