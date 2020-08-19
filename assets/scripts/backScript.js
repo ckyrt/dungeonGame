@@ -2,6 +2,8 @@ var global = require('global')
 var dungeonConfig = require('dungeonConfig')
 var itemConfig = require('itemConfig')
 var npcConfig = require('npcConfig')
+var jsClientScript = require('jsClientScript')
+var MsgID = require('MsgID')
 
 cc.Class({
     extends: cc.Component,
@@ -66,15 +68,29 @@ cc.Class({
 
     start() {
 
-        //背包
-        // let shopBtn = cc.find("Canvas/shopBtn")
-        // shopBtn.on(cc.Node.EventType.TOUCH_START,
-        //     function (t) {
-        //         let shop = cc.find("Canvas/shop")
-        //         shop.getComponent('shopPanelScript').openShopPanel(['达贡之神力1级', '闪避护符', '圆盾', '治疗药膏', '水晶剑', '回复戒指', '治疗指环', '大炮', '灵魂之戒', '恐鳌之心', '先锋盾', '希梅斯特的掠夺'])
-        //     }, this)
+        this.parseLoginData()
 
-        this._initAll()
+        //存档
+        let saveBtn = cc.find("Canvas/saveBtn")
+        saveBtn.on(cc.Node.EventType.TOUCH_START,
+            function (t) {
+                this.saveDataToServer()
+            }, this)
+        //排行榜
+        let rankBtn = cc.find("Canvas/rankBtn")
+        rankBtn.on(cc.Node.EventType.TOUCH_START,
+            function (t) {
+                let rankPanelScript = cc.find("Canvas/rankPanel").getComponent('rankPanelScript')
+                rankPanelScript.openPanel()
+            }, this)
+
+        this._initRole(global.loginData)
+        this._initInventory(global.loginData == null ? [] : global.loginData.items)
+
+        if (this.curDungeonName == null)
+            this._initDungeon('第一关、奎尔丹纳斯岛')
+        else
+            this._initDungeon(this.curDungeonName)
 
         //监听 生物点击 事件
         this.node.on("clickCreatureSig", function (event) {
@@ -128,7 +144,9 @@ cc.Class({
     restart: function () {
 
         this._clearScene()
-        this._initAll()
+        this._initRole()
+        this._initInventory()
+        this._initDungeon('第一关、奎尔丹纳斯岛')
     },
 
     jumpToNextDungeon: function () {
@@ -141,18 +159,20 @@ cc.Class({
         this._initDungeon(dungeonName)
     },
 
-    _initAll: function () {
-
-        this._initRole()
+    _initInventory: function (items = []) {
+        console.log(items)
         //清除inventory道具
-        cc.find("Canvas/inventory").getComponent('inventoryScript').clearAll()
-
-        this._initDungeon('第一关、奎尔丹纳斯岛')
+        let inventoryScript = cc.find("Canvas/inventory").getComponent('inventoryScript')
+        inventoryScript.clearAll()
+        for (var i = 0; i < items.length; ++i) {
+            inventoryScript._addItemToPos(items[i], i + 1)
+        }
+        inventoryScript._refreshShow()
     },
 
-    _initRole: function () {
+    _initRole: function (roleData = null) {
         this.role_ = cc.find("Canvas/role").getComponent('roleScript')
-        this.role_.initConfig('尤涅若')
+        this.role_.initConfig('尤涅若', roleData)
     },
 
     _initDungeon: function (dungeonName) {
@@ -179,7 +199,7 @@ cc.Class({
             let grid = this.getRandomEmptyGrid()
             this.addNpcToMap(m, grid.x, grid.y)
         }
-        
+
         for (var m of cfg.items) {
             let grid = this.getRandomEmptyGrid()
             this.addItemToMap(itemConfig.createItemEntity(m), grid.x, grid.y)
@@ -276,7 +296,7 @@ cc.Class({
 
     getRandomGrid: function () {
         let i = Math.floor(Math.random() * this.allGrids.length)
-        console.log(i, this.allGrids.length, this.allGrids[i])
+        //console.log(i, this.allGrids.length, this.allGrids[i])
         return this.allGrids[i]
     },
 
@@ -403,7 +423,7 @@ cc.Class({
         unit.setAttr('hp', curHp)
 
         let xy = unit.getSwyXY()
-        this._playNumberJump(hp, xy.x, xy.y, new cc.color(255, 0, 0))
+        this._playNumberJump(hp, xy.x, xy.y, new cc.color(255, 255, 255))
     },
 
     //执行伤害
@@ -465,7 +485,7 @@ cc.Class({
     },
 
     setMapThingInXY: function (x, y, thingNode) {
-        console.log('setMapThingInXY:', x, y, thingNode)
+        //console.log('setMapThingInXY:', x, y, thingNode)
         this.gridThings[x * 10 + y] = thingNode
     },
 
@@ -490,4 +510,39 @@ cc.Class({
             this.addItemToMap(itemConfig.copyItemEntity(discardItem), pos.x, pos.y)
         }
     },
+
+    saveDataToServer: function () {
+
+        console.log(global.roleName, global.loginData)
+
+
+        var msg = {}
+        msg.msg_id = MsgID.SAVE_DATA
+        //名字
+        msg.name = global.roleName
+        //第几关
+        msg.guanka = this.curDungeonName
+        //玩家等级
+        msg.level = this.role_.getAttr('level')
+        //玩家经验
+        msg.exp = this.role_.getAttr('exp')
+        //玩家道具
+        msg.items = cc.find("Canvas/inventory").getComponent('inventoryScript').getAllItems()
+        //玩家金钱
+        msg.coin = this.role_.getAttr('coin')
+        jsClientScript.send(JSON.stringify(msg))
+    },
+
+    parseLoginData: function () {
+        if (global.loginData != null) {
+            this.curDungeonName = global.loginData.guanka
+            let level = global.loginData.level
+            let exp = global.loginData.exp
+            let items = global.loginData.items
+            let coin = global.loginData.coin
+        }
+
+        console.log('loginData:', global.loginData)
+    },
+
 });

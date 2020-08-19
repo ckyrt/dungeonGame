@@ -54,11 +54,12 @@ cc.Class({
         return { x: head.x, y: head.y }
     },
 
-    initConfig: function (job) {
+    initConfig: function (job, roleData) {
         this.cfg_ = roleConfig[job]
         let roleAttr = roleConfig[job]
 
-        this.setAttr('name', roleAttr.job)
+        this.setAttr('job', job)
+        this.setAttr('name', global.roleName)
         this.setAttr('min_attack', roleAttr.min_attack)
         this.setAttr('max_attack', roleAttr.max_attack)
         this.setAttr('defend', roleAttr.defend)
@@ -70,9 +71,12 @@ cc.Class({
         this.setAttr('max_energy', roleAttr.max_energy)
         this.setAttr('energy', roleAttr.energy)
 
-        this.setAttr('level', 1)
-        this.setAttr('exp', 0)
-        this.setAttr('coin', 10000)
+        let level = roleData != null ? roleData.level : 1
+        let exp = roleData != null ? roleData.exp : 0
+        let coin = roleData != null ? roleData.coin : 10000
+        this.setAttr('level', level)
+        this.setAttr('exp', exp)
+        this.setAttr('coin', coin)
     },
 
     isRole: function () {
@@ -97,7 +101,7 @@ cc.Class({
 
         this.allAttrs[att] = v
 
-        if (att == 'name') {
+        if (att == 'job') {
             let job_node = global.getChildByName(this.node, 'job')
 
             let roleAttr = roleConfig[v]
@@ -242,19 +246,9 @@ cc.Class({
 
     updateAttackShow: function () {
 
-        let main_attr_attack = 0
-        if (this.cfg_.main_attr == 'str') {
-            main_attr_attack = this.cfg_.str_lv * (this.getAttr('level') - 1)
-        }
-        else if (this.cfg_.main_attr == 'int') {
-            main_attr_attack = this.cfg_.int_lv * (this.getAttr('level') - 1)
-        }
-        else if (this.cfg_.main_attr == 'agi') {
-            main_attr_attack = this.cfg_.agi_lv * (this.getAttr('level') - 1)
-        }
-
-        let min_attack = this.getAttr('min_attack') == null ? 0 : this.getAttr('min_attack')
-        let max_attack = this.getAttr('max_attack') == null ? 0 : this.getAttr('max_attack')
+        let min_attack = this.getAttr('min_attack')
+        let max_attack = this.getAttr('max_attack')
+        let main_attr_attack = this._getGrowAttack()
 
         console.log('main_attr_attack', main_attr_attack)
         console.log('min_attack', min_attack)
@@ -265,6 +259,21 @@ cc.Class({
 
         let attack_node = global.getChildByName(this.node, 'base_attack')
         attack_node.getComponent(cc.Label).string = min_attack + '-' + max_attack
+    },
+
+    _getGrowAttack:function()
+    {
+        let main_attr_attack = 0
+        if (this.cfg_.main_attr == 'str') {
+            main_attr_attack = this.cfg_.str_lv * (this.getAttr('level') - 1)
+        }
+        else if (this.cfg_.main_attr == 'int') {
+            main_attr_attack = this.cfg_.int_lv * (this.getAttr('level') - 1)
+        }
+        else if (this.cfg_.main_attr == 'agi') {
+            main_attr_attack = this.cfg_.agi_lv * (this.getAttr('level') - 1)
+        }
+        return main_attr_attack
     },
 
     //添加item属性

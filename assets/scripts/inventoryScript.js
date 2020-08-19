@@ -245,6 +245,14 @@ cc.Class({
         console.log(this._getItemFromPos(1) + ',' + this._getItemFromPos(2) + ',' + this._getItemFromPos(3))
     },
 
+    getAllItems: function () {
+        let ret = []
+        ret.push(this._getItemFromPos(1))
+        ret.push(this._getItemFromPos(2))
+        ret.push(this._getItemFromPos(3))
+        return ret
+    },
+
     _useItemByPos: function (pos) {
         let entity = this._getItemFromPos(pos)
         console.log('use item:' + entity)
