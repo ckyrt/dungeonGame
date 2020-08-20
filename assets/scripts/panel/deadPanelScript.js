@@ -45,6 +45,6 @@ cc.Class({
 
     closeDeadPanel:function(t)
     {
-        this.node.x = -2000
+        this.node.x = -10000
     },
 });

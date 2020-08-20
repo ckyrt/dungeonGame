@@ -118,7 +118,7 @@ cc.Class({
         global.roleName = name
         global.loginData = params
         console.log('loadGameScene:', name, params)
-        this.node.x = -2000
+        this.node.x = -10000
         cc.director.loadScene("dungeon", () => {
 
         })

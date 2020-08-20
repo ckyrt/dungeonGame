@@ -51,7 +51,7 @@ cc.Class({
     },
 
     closePanel() {
-        this.node.x = 2000
+        this.node.x = 10000
     },
 
     onRankDataAck: function (msg) {
