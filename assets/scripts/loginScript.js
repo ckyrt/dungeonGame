@@ -57,17 +57,30 @@ cc.Class({
         })
 
         this.btRegister.node.on('click', function (e) {
+
+            let nameStr = this.inputName.string
+            let pwdStr = this.inputPassword.string
+            if (nameStr.trim() == '' || pwdStr.trim() == '') {
+                this.errorTip.string = '不能为空'
+                return
+            }
             var msg = {}
             msg.msg_id = MsgID.REGISTER
-            msg.name = this.inputName.string;
-            msg.password = this.inputPassword.string;
+            msg.name = nameStr
+            msg.password = pwdStr
             jsClientScript.send(JSON.stringify(msg))
         }, this);
         this.btLogin.node.on('click', function (e) {
+            let nameStr = this.inputName.string
+            let pwdStr = this.inputPassword.string
+            if (nameStr.trim() == '' || pwdStr.trim() == '') {
+                this.errorTip.string = '不能为空'
+                return
+            }
             var msg = {}
             msg.msg_id = MsgID.LOGIN
-            msg.name = this.inputName.string;
-            msg.password = this.inputPassword.string;
+            msg.name = nameStr
+            msg.password = pwdStr
             jsClientScript.send(JSON.stringify(msg))
         }, this);
 
