@@ -44,6 +44,26 @@ cc.Class({
             inventoryScript._discardItemByPos(this.itemPos)
             inventoryScript._refreshShow()
         }, this)
+
+        let discardButton = global.getChildByName(this.node, "discardButton")
+        discardButton.on(cc.Node.EventType.TOUCH_START, () => {
+
+            let backScript = cc.find("Canvas/back").getComponent('backScript')
+            let inventoryScript = cc.find("Canvas/inventory").getComponent('inventoryScript')
+            //随机一个空地
+            let grid = backScript.getRandomEmptyGrid('normal')
+            if (grid == null) {
+                //没地方
+                console.log('no place to throw')
+                return
+            }
+            //丢到地上
+            let discardItem = inventoryScript._discardItemByPos(this.itemPos)
+            inventoryScript._refreshShow()
+            backScript.addItemToMap(itemConfig.copyItemEntity(discardItem), grid.x, grid.y)
+
+            this.closePanel()
+        }, this)
     },
 
     // update (dt) {},

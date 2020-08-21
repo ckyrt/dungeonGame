@@ -301,22 +301,32 @@ cc.Class({
     },
 
     getRandomGrid: function () {
-        let i = Math.floor(Math.random() * this.allGrids.length)
-        //console.log(i, this.allGrids.length, this.allGrids[i])
+        let i = global.random(0, this.allGrids.length - 1)
         return this.allGrids[i]
     },
 
-    getRandomEmptyGrid: function () {
-        while (true) {
-            let grid = this.getRandomGrid()
+    getRandomEmptyGrid: function (gridType = '') {
+        //''        表示未开发的空的格子
+        //'normal'  表示已开发的空的格子
+        let emttyGrids = []
+        for (var i = 0; i < this.allGrids.length; ++i) {
+            let grid = this.allGrids[i]
+
             let thingNode = this.getMapThingInXY(grid.x, grid.y)
             let mapItemScript = thingNode == null ? null : thingNode.getComponent('mapItemScript')
             let monsterScript = thingNode == null ? null : thingNode.getComponent('monsterScript')
             let npcScript = thingNode == null ? null : thingNode.getComponent('npcScript')
 
-            if (grid.getGridType() == '' && mapItemScript == null && monsterScript == null && npcScript == null)
-                return grid
+            if (grid.getGridType() == gridType && mapItemScript == null && monsterScript == null && npcScript == null) {
+                emttyGrids.push(grid)
+            }
         }
+        if (emttyGrids.length < 1) {
+            console.log('not found an empty grid')
+            return null
+        }
+        let k = global.random(0, emttyGrids.length - 1)
+        return emttyGrids[k]
     },
 
     getGridByXY: function (x, y) {
