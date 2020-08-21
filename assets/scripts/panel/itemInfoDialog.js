@@ -75,7 +75,7 @@ cc.Class({
     },
 
     closePanel: function (t) {
-        this.node.x = 800
+        this.node.x = 10000
 
         let useword = global.getChildByName(this.node, "useword")
         useword.off(cc.Node.EventType.TOUCH_START, this.execClickFunc, this)

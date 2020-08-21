@@ -92,7 +92,7 @@ cc.Class({
     },
 
     closeShopPanel: function () {
-        this.node.x = 800
+        this.node.x = 10000
     },
 
     buyShopItemToBag: function (item) {
