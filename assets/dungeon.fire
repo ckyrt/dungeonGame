@@ -986,22 +986,19 @@
     "_id": "b4VQzEwRZNj7nIeAjNiVZT"
   },
   {
-    "__type__": "cc.AudioSource",
+    "__type__": "7b445yFQfRP+rKlU6WBCU9+",
     "_name": "",
     "_objFlags": 0,
     "node": {
       "__id__": 5
     },
     "_enabled": true,
-    "_clip": {
-      "__uuid__": "20226a10-d481-48f2-ab1a-c8b3067d48da"
-    },
-    "_volume": 1,
-    "_mute": false,
-    "_loop": true,
-    "playOnLoad": true,
-    "preload": false,
-    "_id": "d4FHIfpUZFv7usVCae3abZ"
+    "audio1": null,
+    "audio2": null,
+    "audio3": null,
+    "audio4": null,
+    "audio5": null,
+    "_id": "d666Lft4pGf43eiGSanuFN"
   },
   {
     "__type__": "cc.Node",

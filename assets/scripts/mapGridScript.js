@@ -34,8 +34,6 @@ cc.Class({
             let mapItemScript = thingNode == null ? null : thingNode.getComponent('mapItemScript')
             let monsterScript = thingNode == null ? null : thingNode.getComponent('monsterScript')
 
-            console.log('8888888888888888888', this.node.x, this.node.y, event.getLocation())
-
             if (shadowScript._getGridStatus(this.x, this.y) == 'open') {
                 //有道具
                 if (mapItemScript) {
@@ -80,6 +78,10 @@ cc.Class({
 
                 //增加能量点
                 backScript.role_.addAttr('energy', 1)
+
+                //播放音效
+                let musicScript = cc.find("Canvas/back").getComponent('musicScript')
+                musicScript.playEffect('seek')
             }
         }, this)
     },

@@ -85,7 +85,7 @@ cc.Class({
         }, this);
 
         //常驻节点
-        cc.game.addPersistRootNode(this.node);
+        //cc.game.addPersistRootNode(this.node);
     },
 
     // update (dt) {},

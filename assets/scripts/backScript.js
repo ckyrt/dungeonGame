@@ -107,6 +107,10 @@ cc.Class({
                 }
                 else {
                     if (creature.isRole == null) {
+
+                        let musicScript = this.node.getComponent('musicScript')
+                        musicScript.playEffect('hit')
+
                         this._computeDamage(this.role_, creature)
                         this._computeDamage(creature, this.role_)
                     }
@@ -216,6 +220,8 @@ cc.Class({
                 let grid = this.getRandomEmptyGrid()
                 shadowScript.openZone(grid.x, grid.y, true)
             })
+
+        this.getComponent('musicScript').onEnterNewDungeon()
     },
 
     _getCanOpenGrid: function (x, y) {
