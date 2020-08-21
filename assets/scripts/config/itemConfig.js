@@ -346,8 +346,12 @@ var itemConfig = {
         cd_time: 35,                 //秒
     },
 
-
-
+    '钥匙': {
+        'name': '钥匙',
+        'imgSrc': 'yaoshi',
+        'descript': '使用它可以打开通向下一层的大门',
+        price: 10,
+    },
 
 
 

@@ -253,6 +253,18 @@ cc.Class({
         return ret
     },
 
+    //是否存在某名字的道具
+    getPosByItemName: function (name) {
+        for (var i = 1; i <= 3; ++i) {
+            let item = this._getItemFromPos(i)
+            if (item.name == name) {
+                return i
+            }
+        }
+
+        return -1
+    },
+
     _useItemByPos: function (pos) {
         let entity = this._getItemFromPos(pos)
         console.log('use item:' + entity)

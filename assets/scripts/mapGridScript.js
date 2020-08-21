@@ -54,6 +54,25 @@ cc.Class({
                 if (this.getGridType() == 'chukou') {
                     backScript.jumpToNextDungeon()
                 }
+                if (this.getGridType() == 'locked_door') {
+                    
+
+                    let inventoryScript = cc.find("Canvas/inventory").getComponent('inventoryScript')
+                    let pos = inventoryScript.getPosByItemName('钥匙')
+                    if(pos > 0)
+                    {
+                        //如果有 扣掉钥匙 进入下一层
+                        inventoryScript._discardItemByPos(pos)
+                        inventoryScript._refreshShow()
+
+                        backScript.jumpToNextDungeon()
+                    }
+                    else
+                    {
+                        //如果没有钥匙 则提示
+                        backScript._addTextInfo('你没有钥匙，无法打开此门')
+                    }
+                }
             }
             else {
                 //event.getLocation()
@@ -99,6 +118,9 @@ cc.Class({
         if (t == 'chukou') {
             url = 'grid_type/chukou'
             console.log('------------------------------------------', this.x, this.y)
+        }
+        else if (t == 'locked_door') {
+            url = 'grid_type/locked_door'
         }
         else if (t == 'dici_1') {
             url = 'grid_type/dici_1'
