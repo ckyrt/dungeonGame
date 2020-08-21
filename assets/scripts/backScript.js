@@ -118,6 +118,12 @@ cc.Class({
             }
 
         }, this)
+
+        //三秒后给用户自动存一下
+        this.setInterval(3, 1,
+            () => {
+                this.saveDataToServer()
+            })
     },
     // update (dt) {},
 
@@ -529,7 +535,7 @@ cc.Class({
 
     saveDataToServer: function () {
 
-        console.log(global.roleName, global.loginData)
+        console.log('存数据', global.roleName, global.loginData)
 
 
         var msg = {}
