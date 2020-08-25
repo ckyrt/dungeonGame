@@ -350,6 +350,8 @@ var itemConfig = {
         'name': '钥匙',
         'imgSrc': 'yaoshi',
         'descript': '使用它可以打开通向下一层的大门',
+        attrs: {
+        },
         price: 10,
     },
 

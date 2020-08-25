@@ -84,6 +84,14 @@ cc.Class({
                 rankPanelScript.openPanel()
             }, this)
 
+        //竞技场
+        let arenaBtn = cc.find("Canvas/arenaBtn")
+        arenaBtn.on(cc.Node.EventType.TOUCH_START,
+            function (t) {
+                let arenaPanelScript = cc.find("Canvas/arenaPanel").getComponent('arenaPanelScript')
+                arenaPanelScript.openPanel()
+            }, this)
+
         this._initRole(global.loginData)
         this._initInventory(global.loginData == null ? [] : global.loginData.items)
 
