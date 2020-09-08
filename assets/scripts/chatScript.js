@@ -38,6 +38,12 @@ cc.Class({
             jsClientScript.send(JSON.stringify(msg))
             this.chat_input.string = ''
         }, this)
+
+
+        //获取最新10个历史聊天
+        var msg = {}
+        msg.msg_id = MsgID.GetLast10ChatReq
+        jsClientScript.send(JSON.stringify(msg))
     },
 
     // update (dt) {},
