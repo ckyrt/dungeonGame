@@ -1,5 +1,7 @@
 var itemConfig = require('itemConfig')
 var global = {
+
+    connectStatus:'connected',
     startX:1,
     startY:1,
 
@@ -32,6 +34,7 @@ var global = {
         var testDate = new Date()
         return testDate.getTime()
     },
+    
 }
 
 module.exports = global;

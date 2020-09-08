@@ -24,10 +24,11 @@ cc.Class({
         },
     },
 
-    add_tip_item(str)
+    add_tip_item(str, color)
     {
         var item = cc.instantiate(this.item_prefab)
         item.getChildByName('context').getComponent(cc.Label).string = str
+        item.getChildByName('context').color = color
         
         //this.opt_item_set.push(item);
         //this.value_set.push(str)

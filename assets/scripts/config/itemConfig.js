@@ -23,15 +23,16 @@ var itemConfig = {
         price: 110,
         use_func: (target) => {
 
-            console.log('大药效果开启')
-            target.addAttr('hp_recover', 10)
+            target.addAttr('hp', 100)
+            // console.log('大药效果开启')
+            // target.addAttr('hp_recover', 10)
 
-            let backScript = cc.find("Canvas/back").getComponent('backScript')
-            backScript.setInterval(10, 1,
-                () => {
-                    console.log('大药效果消失')
-                    target.addAttr('hp_recover', -10)
-                })
+            // let backScript = cc.find("Canvas/back").getComponent('backScript')
+            // backScript.setInterval(10, 1,
+            //     () => {
+            //         console.log('大药效果消失')
+            //         target.addAttr('hp_recover', -10)
+            //     })
         },
         use_times: 1,    //可使用次数
         has_target: true,           //目标
@@ -360,6 +361,85 @@ var itemConfig = {
 
 
 
+    '直刀': {
+        'name': '直刀',
+        'imgSrc': 'kuojian',
+        'descript': '增加攻击力8-12',
+        price: 100,
+        attrs: {
+            add_attack: 10,
+        },
+    },
+
+    '铁刀': {
+        'name': '铁刀',
+        'imgSrc': 'kuojian',
+        'descript': '增加攻击力12-20',
+        price: 100,
+        attrs: {
+            add_attack: 16,
+        },
+    },
+
+    '钢刀': {
+        'name': '钢刀',
+        'imgSrc': 'kuojian',
+        'descript': '增加攻击力18-31',
+        price: 100,
+        attrs: {
+            add_attack: 25,
+        },
+    },
+
+    '半月刀': {
+        'name': '半月刀',
+        'imgSrc': 'kuojian',
+        'descript': '增加攻击力24-37',
+        price: 100,
+        attrs: {
+            add_attack: 31,
+        },
+    },
+
+    '精钢刀': {
+        'name': '精钢刀',
+        'imgSrc': 'kuojian',
+        'descript': '增加攻击力32-53',
+        price: 100,
+        attrs: {
+            add_attack: 42,
+        },
+    },
+
+    '雁月刀': {
+        'name': '雁月刀',
+        'imgSrc': 'kuojian',
+        'descript': '增加攻击力40-61',
+        price: 100,
+        attrs: {
+            add_attack: 50,
+        },
+    },
+
+    '赤血刀': {
+        'name': '赤血刀',
+        'imgSrc': 'kuojian',
+        'descript': '增加攻击力50-75',
+        price: 100,
+        attrs: {
+            add_attack: 62,
+        },
+    },
+
+    '重曲刀': {
+        'name': '重曲刀',
+        'imgSrc': 'kuojian',
+        'descript': '增加攻击力62-83',
+        price: 100,
+        attrs: {
+            add_attack: 72,
+        },
+    },
 
 
 

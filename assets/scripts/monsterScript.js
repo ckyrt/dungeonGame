@@ -58,14 +58,18 @@ cc.Class({
 
     initConfig: function (monsterName) {
         let monsterAttr = monsterConfig[monsterName]
+        this.setConfig(monsterAttr)
+    },
 
-        this.setAttr('name', monsterAttr.name)
-        this.setAttr('attack', monsterAttr.attack)
-        this.setAttr('defend', monsterAttr.defend)
-        this.setAttr('hp', monsterAttr.hp)
-        this.setAttr('max_hp', monsterAttr.hp)
+    setConfig:function(cfg)
+    {
+        this.setAttr('name', cfg.name)
+        this.setAttr('attack', cfg.attack)
+        this.setAttr('defend', cfg.defend)
+        this.setAttr('hp', cfg.hp)
+        this.setAttr('max_hp', cfg.hp)
 
-        let url = 'monster/' + monsterAttr.imgSrc
+        let url = cfg.imgSrc
         let self = this
         cc.loader.loadRes(url, cc.SpriteFrame, function (err, spriteFrame) {
             if (err) {
@@ -75,10 +79,7 @@ cc.Class({
 
             global.getChildByName(self.node, 'head').getComponent(cc.Sprite).spriteFrame = spriteFrame
         })
-
-
     },
-
 
     setAttr: function (att, v) {
         let v1 = this.getAttr(att)
@@ -151,9 +152,11 @@ cc.Class({
         //給玩家经验
         let backScript = cc.find("Canvas/back").getComponent('backScript')
         backScript.role_.addExp(cfg.exp)
+        backScript._addTextInfo('获得经验 ' + cfg.exp)
 
         //给玩家加金币
         backScript.role_.addAttr('coin', cfg.coin)
+        backScript._addTextInfo('获得金币 ' + cfg.coin)
 
         //去掉X
         let shadowScript = cc.find("Canvas/shadowRoot").getComponent('shadowScript')

@@ -70,13 +70,13 @@ cc.Class({
         var joinOrExitLabel = global.getChildByName(joinOrExit, "Label")
 
         roomName.getComponent(cc.Label).string = c.name
-        user1.getComponent(cc.Label).string = c.user1 == '' ? '空' : c.user1
-        user2.getComponent(cc.Label).string = c.user2 == '' ? '空' : c.user2
+        user1.getComponent(cc.Label).string = c.user1 == '' ? 'nobody' : c.user1
+        user2.getComponent(cc.Label).string = c.user2 == '' ? 'nobody' : c.user2
         status.getComponent(cc.Label).string = c.status == 'waiting' ? '准备中' : '战斗中'
 
         let notIn = c.user1 != global.roleName && c.user2 != global.roleName
         let full = c.user1 != '' && c.user2 != ''
-        
+
         if (c.status == 'ongoing') {
             startBt.active = false
             if(notIn)

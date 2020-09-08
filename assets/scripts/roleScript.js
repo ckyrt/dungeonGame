@@ -54,29 +54,53 @@ cc.Class({
         return { x: head.x, y: head.y }
     },
 
-    initConfig: function (job, roleData) {
+    initConfig: function (roleData) {
+
+        let job = roleData != null ? roleData.job : '尤涅若'
         this.cfg_ = roleConfig[job]
-        let roleAttr = roleConfig[job]
+        let configAttr = roleConfig[job]
 
         this.setAttr('job', job)
         this.setAttr('name', global.roleName)
-        this.setAttr('min_attack', roleAttr.min_attack)
-        this.setAttr('max_attack', roleAttr.max_attack)
-        this.setAttr('defend', roleAttr.defend)
+        this.setAttr('min_attack', roleData != null ? roleData.min_attack : configAttr.min_attack)
+        this.setAttr('max_attack', roleData != null ? roleData.max_attack : configAttr.max_attack)
+        this.setAttr('defend', roleData != null ? roleData.defend : configAttr.defend)
 
-        this.setAttr('max_hp', roleAttr.max_hp)
-        this.setAttr('hp', roleAttr.hp)
-        this.setAttr('max_mp', roleAttr.max_mp)
-        this.setAttr('mp', roleAttr.mp)
-        this.setAttr('max_energy', roleAttr.max_energy)
-        this.setAttr('energy', roleAttr.energy)
+        this.setAttr('max_hp', roleData != null ? roleData.max_hp : configAttr.max_hp)
+        this.setAttr('hp', roleData != null ? roleData.hp : configAttr.hp)
+        this.setAttr('max_mp', roleData != null ? roleData.max_mp : configAttr.max_mp)
+        this.setAttr('mp', roleData != null ? roleData.mp : configAttr.mp)
+        this.setAttr('max_energy', roleData != null ? roleData.max_energy : configAttr.max_energy)
+        this.setAttr('energy', roleData != null ? roleData.energy : configAttr.energy)
 
-        let level = roleData != null ? roleData.level : 1
-        let exp = roleData != null ? roleData.exp : 0
-        let coin = roleData != null ? roleData.coin : 10000
-        this.setAttr('level', level)
-        this.setAttr('exp', exp)
-        this.setAttr('coin', coin)
+        this.setAttr('level', roleData != null ? roleData.level : 1)
+        this.setAttr('exp', roleData != null ? roleData.exp : 0)
+        this.setAttr('coin', roleData != null ? roleData.coin : 10000)
+    },
+
+    getRoleSaveData: function (msg) {
+
+        //等级
+        msg.level = this.getAttr('level')
+        //经验
+        msg.exp = this.getAttr('exp')
+        //金钱
+        msg.coin = this.getAttr('coin')
+        //血量
+        msg.hp = this.getAttr('hp')
+        msg.max_hp = this.getAttr('max_hp')
+        //蓝量
+        msg.mp = this.getAttr('mp')
+        msg.max_mp = this.getAttr('max_mp')
+        //能量
+        msg.energy = this.getAttr('energy')
+        msg.max_energy = this.getAttr('max_energy')
+        //职业
+        msg.job = this.getAttr('job')
+
+        msg.min_attack = this.getAttr('min_attack')
+        msg.max_attack = this.getAttr('max_attack')
+        msg.defend = this.getAttr('defend')
     },
 
     isRole: function () {
@@ -105,7 +129,7 @@ cc.Class({
             let job_node = global.getChildByName(this.node, 'job')
 
             let roleAttr = roleConfig[v]
-            let url = 'hero/' + roleAttr['imgSrc']
+            let url = roleAttr['imgSrc']
             cc.loader.loadRes(url, cc.SpriteFrame, function (err, spriteFrame) {
                 if (err) {
                     cc.error(err.message || err);
@@ -261,8 +285,7 @@ cc.Class({
         attack_node.getComponent(cc.Label).string = min_attack + '-' + max_attack
     },
 
-    _getGrowAttack:function()
-    {
+    _getGrowAttack: function () {
         let main_attr_attack = 0
         if (this.cfg_.main_attr == 'str') {
             main_attr_attack = this.cfg_.str_lv * (this.getAttr('level') - 1)

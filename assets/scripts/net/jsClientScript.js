@@ -3,7 +3,7 @@ let SERVER_ADDRESS = '139.155.80.3:8001'
 
 var jsClientScript = {
 
-    msgFuncs:{},
+    msgFuncs: {},
     ws_: new WebSocket('ws://' + SERVER_ADDRESS),
 
     start() {
@@ -15,13 +15,15 @@ var jsClientScript = {
         }
         ws.onclose = function (e) {
             console.log('服务器关闭')
+            global.connectStatus = 'closed'
         }
         ws.onerror = function () {
             console.log('连接出错')
+            global.connectStatus = 'closed'
         }
 
         ws.onmessage = function (e) {
-            console.log('got message: '+e.data)
+            console.log('got message: ' + e.data)
             var msg = JSON.parse(e.data);
             that.msgFuncs[msg.msg_id](msg)
         }
@@ -32,8 +34,7 @@ var jsClientScript = {
         this.ws_.send(str)
     },
 
-    registerMsg:function(msg_id, func)
-    {
+    registerMsg: function (msg_id, func) {
         this.msgFuncs[msg_id] = func
     },
 }

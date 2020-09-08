@@ -91,6 +91,16 @@ cc.Class({
                 let arenaPanelScript = cc.find("Canvas/arenaPanel").getComponent('arenaPanelScript')
                 arenaPanelScript.openPanel()
             }, this)
+        //vip商店
+        let vipShopBtn = cc.find("Canvas/vipShopBtn")
+        vipShopBtn.on(cc.Node.EventType.TOUCH_START,
+            function (t) {
+                let name = 'VIP商店'
+                let cfg = npcConfig[name]
+                let url = 'npc/' + cfg.imgSrc
+                let shop = cc.find("Canvas/shop")
+                shop.getComponent('shopPanelScript').openShopPanel(cfg.items, name, cfg.words, url)
+            }, this)
 
         this._initRole(global.loginData)
         this._initInventory(global.loginData == null ? [] : global.loginData.items)
@@ -101,11 +111,17 @@ cc.Class({
             this._initDungeon(this.curDungeonName)
 
         //监听 生物点击 事件
-        this.node.on("clickCreatureSig", function (event) {
+        this.node.on("clickCreatureSig", (event) => {
             let data = event.getUserData()
             let creature = data.creature
 
             console.log('点击了生物', data)
+            if (this.curDungeonName == '1v1竞技场') {
+                //发给服务器
+                let arena1v1 = cc.find("Canvas/arena").getComponent('Arena1v1')
+                arena1v1.sendUserCmd('attack', creature.getAttr('name'))
+                return
+            }
 
             if (creature.getAttr != null && creature.getAttr('hp') != null) {
                 if (this.chooseTargetFunc != null) {
@@ -125,12 +141,24 @@ cc.Class({
                 }
             }
 
-        }, this)
+        })
 
         //三秒后给用户自动存一下
         this.setInterval(3, 1,
             () => {
                 this.saveDataToServer()
+            })
+
+        jsClientScript.registerMsg(MsgID.SAVE_DATA_ACK, (msg) => {
+            this.onSaveDataAck(msg)
+        })
+
+        //检测连接状况
+        this.setInterval(3, 9999,
+            () => {
+                if (global.connectStatus != 'connected') {
+                    this._addTextInfo('与服务器断开连接..请刷新')
+                }
             })
     },
     // update (dt) {},
@@ -190,7 +218,7 @@ cc.Class({
 
     _initRole: function (roleData = null) {
         this.role_ = cc.find("Canvas/role").getComponent('roleScript')
-        this.role_.initConfig('尤涅若', roleData)
+        this.role_.initConfig(roleData)
     },
 
     _initDungeon: function (dungeonName) {
@@ -286,6 +314,7 @@ cc.Class({
         let monsterScript = prefab.getComponent('monsterScript')
         monsterScript.initConfig(name)
         monsterScript.setPos(i, j)
+        return monsterScript
     },
 
     addNpcToMap: function (name, i, j) {
@@ -353,9 +382,14 @@ cc.Class({
 
     _computeDamage: function (attacker, defender) {
         if (attacker == null || defender == null) {
-            comnsole.log('one fighter is null')
+            console.log('one fighter is null')
             return
         }
+        if (attacker.getAttr('hp') < 1 || defender.getAttr('hp') < 1) {
+            console.log('one fighter hp less than 1')
+            return
+        }
+
         let damage = 0
         let damageType = 'normal'
         //闪避 命中
@@ -386,12 +420,16 @@ cc.Class({
             //护甲减掉的伤害
             let defend = defender.getAttr('defend')
 
-            let hujia_defend = 0
-            if (defend >= 0)
-                hujia_defend = defend * 0.06 / (1 + 0.06 * defend)
-            else
-                hujia_defend = Math.pow(0.94, -1 * defend) - 1
-            damage = attacker.getAttr('attack') * (1 - hujia_defend)
+            // DOTA 计算
+            // let hujia_defend = 0
+            // if (defend >= 0)
+            //     hujia_defend = defend * 0.06 / (1 + 0.06 * defend)
+            // else
+            //     hujia_defend = Math.pow(0.94, -1 * defend) - 1
+            // damage = attacker.getAttr('attack') * (1 - hujia_defend)
+
+            //普通 计算
+            damage = attacker.getAttr('attack') - defender.getAttr('defend')
 
             damage = Math.floor(damage)
 
@@ -443,8 +481,8 @@ cc.Class({
             }
         }
 
-        this._executeDamage(attacker, defender, damage, damageType)
         this._addTextInfo(attacker.getAttr('name') + ' 对 ' + defender.getAttr('name') + ' 造成 ' + damage + ' 点伤害')
+        this._executeDamage(attacker, defender, damage, damageType)
     },
 
     _addUnitHp: function (unit, hp) {
@@ -510,8 +548,8 @@ cc.Class({
         numberJump.getComponent('numberJumpScript').playJump(txt, color, fontSize)
     },
 
-    _addTextInfo: function (str) {
-        this.node.getComponent('info_control').add_tip_item(">" + str)
+    _addTextInfo: function (str, color = new cc.color(171, 157, 226)) {
+        this.node.getComponent('info_control').add_tip_item(">" + str, color)
     },
 
     setMapThingInXY: function (x, y, thingNode) {
@@ -542,25 +580,24 @@ cc.Class({
     },
 
     saveDataToServer: function () {
-
-        console.log('存数据', global.roleName, global.loginData)
-
-
         var msg = {}
         msg.msg_id = MsgID.SAVE_DATA
         //名字
         msg.name = global.roleName
         //第几关
         msg.guanka = this.curDungeonName
-        //玩家等级
-        msg.level = this.role_.getAttr('level')
-        //玩家经验
-        msg.exp = this.role_.getAttr('exp')
         //玩家道具
         msg.items = cc.find("Canvas/inventory").getComponent('inventoryScript').getAllItems()
-        //玩家金钱
-        msg.coin = this.role_.getAttr('coin')
+        this.role_.getRoleSaveData(msg)
         jsClientScript.send(JSON.stringify(msg))
+
+        console.log('存数据', msg)
+    },
+
+    onSaveDataAck: function (msg) {
+        if (msg.error_code == 0) {
+            this._addTextInfo('保存数据成功')
+        }
     },
 
     parseLoginData: function () {

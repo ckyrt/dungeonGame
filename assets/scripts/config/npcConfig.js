@@ -52,5 +52,11 @@ var npcConfig = {
         'imgSrc': 'f_04',
         words: '我有生意要做',
     },
+
+    'VIP商店': {
+        items: ['直刀','铁刀','钢刀','半月刀','精钢刀','雁月刀','赤血刀','重曲刀'],
+        'imgSrc': 'f_01',
+        words: '这些道具可是极品中的极品',
+    },
 }
 module.exports = npcConfig

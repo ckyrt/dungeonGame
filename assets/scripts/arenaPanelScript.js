@@ -123,6 +123,18 @@ cc.Class({
             if (item.room_id == msg.roomInfo.id) {
 
                 item.setContent(msg.roomInfo)
+
+                //如果自己在这个里面，而且状态是ongoing，那么就进入战斗吧
+                if (global.roleName == msg.roomInfo.user1 || global.roleName == msg.roomInfo.user2) {
+                    if (msg.roomInfo.status == 'ongoing') {
+
+                        let arena1v1 = cc.find("Canvas/arena").getComponent('Arena1v1')
+                        arena1v1.init(msg.roomInfo)
+                        this.closePanel()
+                    }
+                }
+
+                break
             }
         }
     },

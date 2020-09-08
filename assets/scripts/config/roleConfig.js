@@ -3,7 +3,7 @@ var roleConfig = {
 
     '战士': {
         'job': '战士',
-        'imgSrc': 'zhanshi',
+        'imgSrc': 'hero/zhanshi',
         'attack': 100,
         'defend': 3,
 
@@ -21,7 +21,7 @@ var roleConfig = {
     },
     '法师': {
         'job': '法师',
-        'imgSrc': '054-Undead04',
+        'imgSrc': 'hero/054-Undead04',
         'attack': 220,
         'defend': 130,
 
@@ -39,7 +39,7 @@ var roleConfig = {
     },
     '道士': {
         'job': '道士',
-        'imgSrc': '055-Snake01',
+        'imgSrc': 'hero/055-Snake01',
         'attack': 220,
         'defend': 130,
 
@@ -57,7 +57,7 @@ var roleConfig = {
     },
     '盗贼': {
         'job': '盗贼',
-        'imgSrc': '055-Snake01',
+        'imgSrc': 'hero/055-Snake01',
         'attack': 220,
         'defend': 130,
 
@@ -76,7 +76,7 @@ var roleConfig = {
 
     '大地之灵': {
         'job': '大地之灵',
-        'imgSrc': 'tumao',
+        'imgSrc': 'hero/tumao',
 
         main_attr: 'str',
 
@@ -113,7 +113,7 @@ var roleConfig = {
 
     '尤涅若': {
         job: '尤涅若',
-        imgSrc: 'jiansheng',
+        imgSrc: 'hero/jiansheng',
 
         main_attr: 'int',
 
