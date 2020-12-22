@@ -100,6 +100,10 @@ cc.Class({
             type: cc.Button,
             default: null,
         },
+        bt_start: {
+            type: cc.Button,
+            default: null,
+        },
 
         node_2_1_prefab: {
             type: cc.Prefab,
@@ -225,6 +229,10 @@ cc.Class({
             function (t) {
                 this._create_2_1_node('timer')
             }, this)
+            this.bt_start.node.on(cc.Node.EventType.TOUCH_START,
+                function (t) {
+                    this._create_2_1_node('start')
+                }, this)
 
         //返回大场景
         let gobackWorldBtn = global.getChildByName(this.node, 'gobackWorld')
@@ -247,13 +255,10 @@ cc.Class({
         this.lines = []
         this.data_lines = []
 
-        //start_node
-        this.start_node = this._create_2_1_node('start')
-        
         //rpc
         rpc.addRpcFunc('load_user_script_c', (args) => {
             let str = args[0]
-            this._deserialize(str)
+            this._deserialize_str(str)
         })
         rpc._call('get_user_script_s', [global.roleName])
     },
@@ -293,7 +298,23 @@ cc.Class({
         this.nodes.splice(index, 1)
     },
 
-    _create_2_1_node: function (nn, var_name = null) {
+    _get_node_by_uuid: function (uuid) {
+        for (var i = 0; i < this.nodes.length; i++) {
+            if (this.nodes[i].getComponent("node_2_1_script").get_node_uuid() == uuid) {
+                return this.nodes[i]
+            }
+        }
+        return null
+    },
+
+    _generate_node_uuid: function () {
+        
+        var timestamp = (new Date()).valueOf()
+        return parseInt((timestamp - 1608638883586) / 100)
+    },
+
+    _create_2_1_node: function (nn, var_name = null, uuid = 0) {
+
         var prefab = cc.instantiate(this.node_2_1_prefab)
         prefab.on(cc.Node.EventType.TOUCH_START, function (t) {
             if (this.wait_del_) {
@@ -308,6 +329,7 @@ cc.Class({
         var node_2_1_sc = prefab.getComponent("node_2_1_script")
         node_2_1_sc.set_node_name(nn, var_name)
         node_2_1_sc.set_user_script(this)
+        node_2_1_sc.set_node_uuid(uuid > 0 ? uuid : this._generate_node_uuid())
 
         //设置位置 屏幕正中间
         let windowSize = cc.view.getVisibleSize()
@@ -478,7 +500,8 @@ cc.Class({
     /////////////////////////////////////////////////////////////数据流模块/////////////////////////////////////////////////////////////
 
 
-    connectDataNodeUsingLine: function (node1, node2, input) {
+    connectDataNodeUsingLine: function (node1, node2, index) {
+        let input = node2.getComponent('node_2_1_script').get_in_node_by_index(index)
         if (!this._is_data_line_connected(node1, input)) {
 
             var prefab = cc.instantiate(this.data_line_prefab)
@@ -570,9 +593,20 @@ cc.Class({
         }
     },
 
+    //起始节点
+    _get_start_node: function () {
+        for (var i = 0; i < this.nodes.length; i++) {
+            let n = this.nodes[i]
+            if (n.getComponent('node_2_1_script').get_node_name() == 'start')
+                return n
+        }
+        return null
+    },
+
     _compute: function () {
-        let cur_node = this._get_next_procedure_node(this.start_node)
+        let cur_node = this._get_start_node()
         while (cur_node) {
+            console.log('cur_node:' + cur_node)
             this._compute_procedure_node(cur_node)
             cur_node = this._get_next_procedure_node(cur_node)
         }
@@ -726,66 +760,70 @@ cc.Class({
 
     /////////////////////////////////////////////////////////////////////数据序列化/////////////////////////////////////////////////////////////////////
 
-    _save:function()
-    {
-        let str = this._serialize()
+    _save: function () {
+        let str = this._serialize_str()
         rpc._call('save_user_script_s', [global.roleName, str])
     },
 
-    _serialize: function () {
-        // this.start_node
-        // this.nodes = []
-        // this.lines = []
-        // this.data_lines = []
+    _serialize_str: function () {
 
         let nodes_data = []
         for (var i = 0; i < this.nodes.length; i++) {
             let n = this.nodes[i]
             let ns = n.getComponent("node_2_1_script")
-            nodes_data.push(ns._serialize())
+            nodes_data.push(ns._serialize_str())
         }
         let lines_data = []
-        // for (var i = 0; i < this.lines.length; i++) {
-        //     let n = this.lines[i]
-        //     let ns = n.getComponent("node_2_1_script")
-        //     lines_data.push(ns._serialize())
-        // }
+        for (var i = 0; i < this.lines.length; i++) {
+            let n = this.lines[i]
+            let data = { 'node1': n.node1.getComponent("node_2_1_script").get_node_uuid(), 'node2': n.node2.getComponent("node_2_1_script").get_node_uuid(), 'is_son': n.is_son }
+            lines_data.push(data)
+        }
         let data_lines_data = []
-        // for (var i = 0; i < this.data_lines.length; i++) {
-        //     let n = this.data_lines[i]
-        //     let ns = n.getComponent("node_2_1_script")
-        //     data_lines_data.push(ns._serialize())
-        // }
+        for (var i = 0; i < this.data_lines.length; i++) {
+            let n = this.data_lines[i]
+            let data = { 'node1': n.node1.getComponent("node_2_1_script").get_node_uuid(), 'node2': n.node2.getComponent("node_2_1_script").get_node_uuid(), 'index': n.node2.getComponent("node_2_1_script").get_index_by_in_node(n.in_node) }
+            data_lines_data.push(data)
+        }
 
         let all_data = { 'nodes': nodes_data, 'lines': lines_data, 'data_lines': data_lines_data, }
         return JSON.stringify(all_data)
     },
 
-    _deserialize: function (str) {
+    _deserialize_str: function (str) {
+        console.log(str)
+        if (str == '')
+            return
         let all_data = JSON.parse(str)
-        let nodes_data = JSON.parse(all_data.nodes)
-        let lines_data = JSON.parse(all_data.lines)
-        let data_lines_data = JSON.parse(all_data.data_lines)
+        console.log(all_data)
+        let nodes_data = all_data.nodes
+        let lines_data = all_data.lines
+        let data_lines_data = all_data.data_lines
 
 
         for (var i = 0; i < nodes_data.length; i++) {
             let n = nodes_data[i]
 
-            let var_name = (n.name == 'var_def' || n.name == 'var_ref') ? n.var_name : ''
-            let prefab = this._create_2_1_node(n.name, var_name)
+            let prefab = this._create_2_1_node(n.name, n.var_name, n.uuid)
             prefab.setPosition(n.pos)
+
+            if (n.name == 'input') {
+                prefab.getComponent("node_2_1_script")._set_edit_num(n.input)
+            }
         }
 
-        // for (var i = 0; i < lines_data.length; i++) {
-        //     let n = lines_data[i]
-        //     let ns = n.getComponent("node_2_1_script")
-        //     this.lines.push(ns._deserialize())
-        // }
+        for (var i = 0; i < lines_data.length; i++) {
+            let n = lines_data[i]
+            let node1 = this._get_node_by_uuid(n.node1)
+            let node2 = this._get_node_by_uuid(n.node2)
+            this.connectNodeUsingLine(node1, node2, n.is_son)
+        }
 
-        // for (var i = 0; i < data_lines_data.length; i++) {
-        //     let n = data_lines_data[i]
-        //     let ns = n.getComponent("node_2_1_script")
-        //     this.data_lines.push(ns._deserialize())
-        // }
+        for (var i = 0; i < data_lines_data.length; i++) {
+            let n = data_lines_data[i]
+            let node1 = this._get_node_by_uuid(n.node1)
+            let node2 = this._get_node_by_uuid(n.node2)
+            this.connectDataNodeUsingLine(node1, node2, n.index)
+        }
     }
 });

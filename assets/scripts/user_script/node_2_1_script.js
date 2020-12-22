@@ -62,6 +62,20 @@ cc.Class({
 
     // onLoad () {},
 
+    get_in_node_by_index: function (index) {
+        if (index == 1)
+            return this.in_node_1.node
+        if (index == 2)
+            return this.in_node_2.node
+    },
+
+    get_index_by_in_node: function (in_node) {
+        if (in_node == this.in_node_1.node)
+            return 1
+        if (in_node == this.in_node_2.node)
+            return 2
+    },
+
     start() {
 
         //监听
@@ -78,7 +92,7 @@ cc.Class({
         this.in_node_1.node.on(cc.Node.EventType.TOUCH_START,
             function (t) {
                 if (this.user_script_.tmp_data_start_node != null) {
-                    this.user_script_.connectDataNodeUsingLine(this.user_script_.tmp_data_start_node, this.node, this.in_node_1.node)
+                    this.user_script_.connectDataNodeUsingLine(this.user_script_.tmp_data_start_node, this.node, 1)
                     this.user_script_.tmp_data_start_node = null
                 }
             }, this)
@@ -86,7 +100,7 @@ cc.Class({
         this.in_node_2.node.on(cc.Node.EventType.TOUCH_START,
             function (t) {
                 if (this.user_script_.tmp_data_start_node != null) {
-                    this.user_script_.connectDataNodeUsingLine(this.user_script_.tmp_data_start_node, this.node, this.in_node_2.node)
+                    this.user_script_.connectDataNodeUsingLine(this.user_script_.tmp_data_start_node, this.node, 2)
                     this.user_script_.tmp_data_start_node = null
                 }
             }, this)
@@ -130,11 +144,11 @@ cc.Class({
     },
 
     onDestroy: function () {
-        //去掉变量
-        if (this.node_name_ == 'var_def') {
-            let var_name = this.node_name.getComponent(cc.Label).string
-            this.user_script_._remove_var_def(var_name)
-        }
+        // //去掉变量
+        // if (this.node_name_ == 'var_def') {
+        //     let var_name = this.node_name.getComponent(cc.Label).string
+        //     this.user_script_._remove_var_def(var_name)
+        // }
     },
 
     on_touch_move(t) {
@@ -261,6 +275,13 @@ cc.Class({
         this.user_script_ = us
     },
 
+    set_node_uuid: function (uuid) {
+        this.node_uuid_ = uuid
+    },
+    get_node_uuid: function (uuid) {
+        return this.node_uuid_
+    },
+
     _compute: function () {
         let nn = this.get_node_name()
 
@@ -358,20 +379,21 @@ cc.Class({
     },
 
 
-    //_serialize
-    _serialize: function () {
+    //_serialize_str
+    _serialize_str: function () {
         let nn = this.get_node_name()
-        let data = { 'name': nn, 'pos': this.node.position }
+        let data = { 'name': nn, 'pos': { 'x': parseInt(this.node.position.x), 'y': parseInt(this.node.position.y), 'z': parseInt(this.node.position.z) }, 'uuid': this.get_node_uuid() }
 
         if (nn == 'input') {
             data.input = this.input.getComponent(cc.EditBox).string
         }
-        else if (nn == 'var_ref') {
-            data.var_name = this.input.getComponent(cc.EditBox).string
-        }
-        else if (nn == 'var_def') {
+        else if (nn == 'var_ref' || nn == 'var_def') {
             data.var_name = this.node_name.getComponent(cc.Label).string
         }
         return data
+    },
+
+    _set_edit_num: function (v) {
+        this.input.getComponent(cc.EditBox).string = v
     },
 });
