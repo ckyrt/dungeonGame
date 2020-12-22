@@ -34,15 +34,16 @@ cc.Class({
             let mapItemScript = thingNode == null ? null : thingNode.getComponent('mapItemScript')
             let monsterScript = thingNode == null ? null : thingNode.getComponent('monsterScript')
 
-            if (shadowScript._getGridStatus(this.x, this.y) == 'open') {
+            if (shadowScript._getGridStatus(this.x, this.y) == 'open') 
+            {
                 //有道具
                 if (mapItemScript) {
-                    backScript._addMapItemToRole(backScript.role_, mapItemScript)
+                    backScript._addMapItemToRole(global.role_, mapItemScript)
                     return
                 }
                 //有怪物
                 if (monsterScript) {
-
+                    console.log('xxxxxxxxxxx')
                     let clickCreatureEvent = new cc.Event.EventCustom("clickCreatureSig", true)
                     clickCreatureEvent.setUserData({ creature: monsterScript })
                     backScript.node.dispatchEvent(clickCreatureEvent)
@@ -53,22 +54,23 @@ cc.Class({
                     backScript.jumpToNextDungeon()
                 }
                 if (this.getGridType() == 'locked_door') {
-                    
 
-                    let inventoryScript = cc.find("Canvas/inventory").getComponent('inventoryScript')
-                    let pos = inventoryScript.getPosByItemName('钥匙')
-                    if(pos > 0)
-                    {
+
+                    let bagScript = cc.find("Canvas/UI/bag").getComponent('bagScript')
+                    //let inventoryScript = cc.find("Canvas/UI/inventory").getComponent('inventoryScript')
+                    let pos = bagScript.getPosByItemName('钥匙')
+                    if (pos > 0) {
+                        cc.find("Canvas/UI").getComponent('UIRootScript')._addTextInfo('失去 钥匙')
+
                         //如果有 扣掉钥匙 进入下一层
-                        inventoryScript._discardItemByPos(pos)
-                        inventoryScript._refreshShow()
+                        bagScript._discardItemByPos(pos)
+                        bagScript._refreshShow()
 
                         backScript.jumpToNextDungeon()
                     }
-                    else
-                    {
+                    else {
                         //如果没有钥匙 则提示
-                        backScript._addTextInfo('你没有钥匙，无法打开此门')
+                        cc.find("Canvas/UI").getComponent('UIRootScript')._addTextInfo('你没有钥匙，无法打开此门')
                     }
                 }
             }
@@ -77,7 +79,7 @@ cc.Class({
                 shadowScript.openZone(this.x, this.y)
 
                 //增加能量点
-                backScript.role_.addAttr('energy', 1)
+                global.role_.addAttr('energy', 1)
 
                 //播放音效
                 let musicScript = cc.find("Canvas/back").getComponent('musicScript')

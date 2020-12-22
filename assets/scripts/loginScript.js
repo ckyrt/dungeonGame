@@ -94,8 +94,15 @@ cc.Class({
         if (msg.error == null) {
             console.log('注册成功')
             this.errorTip.string = '注册成功'
-            //jump scene
-            this.loadGameScene(this.inputName.string, null)
+
+            //发请求 登录
+            let nameStr = this.inputName.string
+            let pwdStr = this.inputPassword.string
+            var msg = {}
+            msg.msg_id = MsgID.LOGIN
+            msg.name = nameStr
+            msg.password = pwdStr
+            jsClientScript.send(JSON.stringify(msg))
         }
         else {
             console.error('error:' + msg.error)
@@ -107,19 +114,22 @@ cc.Class({
         let result = msg.results[0]
         this.errorTip.string = msg.tip
         if (msg.tip == 'login ok') {
-            this.loadGameScene(result.name, JSON.parse(result.datas))
+            this.loadGameScene(result.name, JSON.parse(result.datas), result.map_id, result.pos_x, result.pos_y)
         }
         else {
             //login error
         }
     },
 
-    loadGameScene: function (name, params) {
+    loadGameScene: function (name, params, map_id, x, y) {
         global.roleName = name
         global.loginData = params
-        console.log('loadGameScene:', name, params)
+        global.map_id = map_id
+        global.pos_x = x
+        global.pos_y = y
         this.node.x = -10000
-        cc.director.loadScene("dungeon", () => {
+        //dungeon bigmap
+        cc.director.loadScene("bigmap", () => {
 
         })
     },

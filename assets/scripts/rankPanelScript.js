@@ -66,7 +66,7 @@ cc.Class({
     openPanel() {
 
         this.node.x = 0
-
+        this.node.zIndex = global.getBigZIndex()
         var msg = {}
         msg.msg_id = MsgID.GET_RANK_DATA
         jsClientScript.send(JSON.stringify(msg))
@@ -74,6 +74,7 @@ cc.Class({
 
     closePanel() {
         this.node.x = 10000
+        this.node.zIndex = 0
     },
 
     onRankDataAck: function (msg) {

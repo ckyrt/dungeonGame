@@ -2,7 +2,7 @@ var global = require('global')
 var dungeonConfig = require('dungeonConfig')
 var itemConfig = require('itemConfig')
 var npcConfig = require('npcConfig')
-var jsClientScript = require('jsClientScript')
+
 var MsgID = require('MsgID')
 
 cc.Class({
@@ -34,6 +34,10 @@ cc.Class({
             type: cc.Prefab,
             default: null,
         },
+        ui_root_prefab: {
+            type: cc.Prefab,
+            default: null,
+        },
         allGrids: {
             default: [],
         },
@@ -59,56 +63,21 @@ cc.Class({
     // onLoad() {
     // },
 
-    setInterval: function (interval/*秒*/, repeat, func) {
-        var delay = 0
-        this.schedule(function () {
-            func()
-        }, interval, repeat - 1, delay)
-    },
-
     start() {
 
-        this.parseLoginData()
+        //ui
+        var prefab = cc.instantiate(this.ui_root_prefab)
+        cc.find("Canvas").addChild(prefab)
 
-        //存档
-        let saveBtn = cc.find("Canvas/saveBtn")
-        saveBtn.on(cc.Node.EventType.TOUCH_START,
-            function (t) {
-                this.saveDataToServer()
-            }, this)
-        //排行榜
-        let rankBtn = cc.find("Canvas/rankBtn")
-        rankBtn.on(cc.Node.EventType.TOUCH_START,
-            function (t) {
-                let rankPanelScript = cc.find("Canvas/rankPanel").getComponent('rankPanelScript')
-                rankPanelScript.openPanel()
-            }, this)
+        cc.find("Canvas/UI").getComponent('UIRootScript').setInterval(2, 1,
+            () => {
 
-        //竞技场
-        let arenaBtn = cc.find("Canvas/arenaBtn")
-        arenaBtn.on(cc.Node.EventType.TOUCH_START,
-            function (t) {
-                let arenaPanelScript = cc.find("Canvas/arenaPanel").getComponent('arenaPanelScript')
-                arenaPanelScript.openPanel()
-            }, this)
-        //vip商店
-        let vipShopBtn = cc.find("Canvas/vipShopBtn")
-        vipShopBtn.on(cc.Node.EventType.TOUCH_START,
-            function (t) {
-                let name = 'VIP商店'
-                let cfg = npcConfig[name]
-                let url = 'npc/' + cfg.imgSrc
-                let shop = cc.find("Canvas/shop")
-                shop.getComponent('shopPanelScript').openShopPanel(cfg.items, name, cfg.words, url)
-            }, this)
-
-        this._initRole(global.loginData)
-        this._initInventory(global.loginData == null ? [] : global.loginData.items)
-
-        if (this.curDungeonName == null)
-            this._initDungeon('第一关、奎尔丹纳斯岛')
-        else
-            this._initDungeon(this.curDungeonName)
+                let dungeonName = cc.find("Canvas/UI").getComponent('UIRootScript').curDungeonName
+                if (dungeonName == null)
+                    this._initDungeon('第一关、奎尔丹纳斯岛')
+                else
+                    this._initDungeon(dungeonName)
+            })
 
         //监听 生物点击 事件
         this.node.on("clickCreatureSig", (event) => {
@@ -116,16 +85,18 @@ cc.Class({
             let creature = data.creature
 
             console.log('点击了生物', data)
-            if (this.curDungeonName == '1v1竞技场') {
+
+            let dungeonName = cc.find("Canvas/UI").getComponent('UIRootScript').curDungeonName
+            if (dungeonName == '1v1竞技场') {
                 //发给服务器
-                let arena1v1 = cc.find("Canvas/arena").getComponent('Arena1v1')
+                let arena1v1 = global.getChildByName(this.node, 'arena').getComponent('Arena1v1')
                 arena1v1.sendUserCmd('attack', creature.getAttr('name'))
                 return
             }
 
             if (creature.getAttr != null && creature.getAttr('hp') != null) {
                 if (this.chooseTargetFunc != null) {
-                    this._addTextInfo('选择了 ' + creature.getAttr('name'))
+                    cc.find("Canvas/UI").getComponent('UIRootScript')._addTextInfo('选择了 ' + creature.getAttr('name'))
                     this.chooseTargetFunc(creature)
                     this.setChooseTargetFunc(null)
                 }
@@ -135,31 +106,13 @@ cc.Class({
                         let musicScript = this.node.getComponent('musicScript')
                         musicScript.playEffect('hit')
 
-                        this._computeDamage(this.role_, creature)
-                        this._computeDamage(creature, this.role_)
+                        this._computeDamage(global.role_, creature)
+                        this._computeDamage(creature, global.role_)
                     }
                 }
             }
 
         })
-
-        //三秒后给用户自动存一下
-        this.setInterval(3, 1,
-            () => {
-                this.saveDataToServer()
-            })
-
-        jsClientScript.registerMsg(MsgID.SAVE_DATA_ACK, (msg) => {
-            this.onSaveDataAck(msg)
-        })
-
-        //检测连接状况
-        this.setInterval(3, 9999,
-            () => {
-                if (global.connectStatus != 'connected') {
-                    this._addTextInfo('与服务器断开连接..请刷新')
-                }
-            })
     },
     // update (dt) {},
 
@@ -190,13 +143,14 @@ cc.Class({
     restart: function () {
 
         this._clearScene()
-        this._initRole()
-        this._initInventory()
+        cc.find("Canvas/UI").getComponent('UIRootScript')._initRole()
+        //this._initInventory()
         this._initDungeon('第一关、奎尔丹纳斯岛')
     },
 
     jumpToNextDungeon: function () {
-        let curCfg = dungeonConfig[this.curDungeonName]
+        let dungeonName = cc.find("Canvas/UI").getComponent('UIRootScript').curDungeonName
+        let curCfg = dungeonConfig[dungeonName]
         this.jumpToDungeon(curCfg.next)
     },
 
@@ -208,17 +162,12 @@ cc.Class({
     _initInventory: function (items = []) {
         console.log(items)
         //清除inventory道具
-        let inventoryScript = cc.find("Canvas/inventory").getComponent('inventoryScript')
+        let inventoryScript = cc.find("Canvas/UI/inventory").getComponent('inventoryScript')
         inventoryScript.clearAll()
         for (var i = 0; i < items.length; ++i) {
             inventoryScript._addItemToPos(items[i], i + 1)
         }
         inventoryScript._refreshShow()
-    },
-
-    _initRole: function (roleData = null) {
-        this.role_ = cc.find("Canvas/role").getComponent('roleScript')
-        this.role_.initConfig(roleData)
     },
 
     _initDungeon: function (dungeonName) {
@@ -233,8 +182,8 @@ cc.Class({
             }
         }
 
-        this.curDungeonName = dungeonName
-        cc.find("Canvas/title/dungeonName").getComponent(cc.Label).string = dungeonName
+        cc.find("Canvas/UI").getComponent('UIRootScript').curDungeonName = dungeonName
+        cc.find("Canvas/UI/title/dungeonName").getComponent(cc.Label).string = dungeonName
 
         let cfg = dungeonConfig[dungeonName]
         for (var m of cfg.monsters) {
@@ -256,7 +205,7 @@ cc.Class({
         }
 
         //随机open一个位置
-        this.setInterval(1, 1,
+        cc.find("Canvas/UI").getComponent('UIRootScript').setInterval(1, 1,
             () => {
                 let shadowScript = cc.find("Canvas/shadowRoot").getComponent('shadowScript')
                 let grid = this.getRandomEmptyGrid()
@@ -403,7 +352,7 @@ cc.Class({
         else {
             //道具闪避
             if (defender.isRole != null && defender.isRole() == true) {
-                let inventoryScript = cc.find("Canvas/inventory").getComponent('inventoryScript')
+                let inventoryScript = cc.find("Canvas/UI/inventory").getComponent('inventoryScript')
                 let isAvoid = inventoryScript.getRatioAttr('avoid')
                 if (isAvoid > 0) {
                     damageType = 'avoid'
@@ -451,7 +400,7 @@ cc.Class({
                 //道具暴击计算
                 //如果attacker是玩家 计算装备的暴击
                 if (attacker.isRole != null && attacker.isRole() == true) {
-                    let inventoryScript = cc.find("Canvas/inventory").getComponent('inventoryScript')
+                    let inventoryScript = cc.find("Canvas/UI/inventory").getComponent('inventoryScript')
                     critMulti = inventoryScript.getRatioAttr('crit')
                     if (critMulti > 0) {
                         damage = Math.ceil(damage * critMulti)
@@ -470,7 +419,7 @@ cc.Class({
                 if (blood < 1)
                     blood = 1
                 this._executeDamage(attacker, defender, blood, 'suck')
-                this._addTextInfo(attacker.getAttr('name') + ' 吸血 ' + blood + ' 点')
+                cc.find("Canvas/UI").getComponent('UIRootScript')._addTextInfo(attacker.getAttr('name') + ' 吸血 ' + blood + ' 点')
             }
 
             //反伤计算
@@ -481,7 +430,7 @@ cc.Class({
             }
         }
 
-        this._addTextInfo(attacker.getAttr('name') + ' 对 ' + defender.getAttr('name') + ' 造成 ' + damage + ' 点伤害')
+        cc.find("Canvas/UI").getComponent('UIRootScript')._addTextInfo(attacker.getAttr('name') + ' 对 ' + defender.getAttr('name') + ' 造成 ' + damage + ' 点伤害')
         this._executeDamage(attacker, defender, damage, damageType)
     },
 
@@ -508,7 +457,7 @@ cc.Class({
         if (reason == 'normal') {
             //如果unit是玩家 计算一下伤害格挡
             if (unit.isRole != null && unit.isRole() == true) {
-                let inventoryScript = cc.find("Canvas/inventory").getComponent('inventoryScript')
+                let inventoryScript = cc.find("Canvas/UI/inventory").getComponent('inventoryScript')
                 let gedang_value = inventoryScript.getRatioAttr('gedang')
                 damage -= gedang_value
                 if (damage < 1)
@@ -542,14 +491,10 @@ cc.Class({
 
         console.log('_playNumberJump', x, y)
         var numberJump = cc.instantiate(this.numberJump_prefab)
-        let xLayer = cc.find("Canvas/effect")
-        xLayer.addChild(numberJump)
+        let effect = cc.find("Canvas/UI/effect")
+        effect.addChild(numberJump)
         numberJump.setPosition(x, y)
         numberJump.getComponent('numberJumpScript').playJump(txt, color, fontSize)
-    },
-
-    _addTextInfo: function (str, color = new cc.color(171, 157, 226)) {
-        this.node.getComponent('info_control').add_tip_item(">" + str, color)
     },
 
     setMapThingInXY: function (x, y, thingNode) {
@@ -571,45 +516,15 @@ cc.Class({
         //从地图删掉
         mapItemScript.deleteFromMap()
 
-        let inventoryScript = cc.find("Canvas/inventory").getComponent('inventoryScript')
-        let discardItem = inventoryScript.addItem(itemConfig.copyItemEntity(entity))
-        if (discardItem.name != null) {
-            //丢到地上
-            this.addItemToMap(itemConfig.copyItemEntity(discardItem), pos.x, pos.y)
-        }
-    },
-
-    saveDataToServer: function () {
-        var msg = {}
-        msg.msg_id = MsgID.SAVE_DATA
-        //名字
-        msg.name = global.roleName
-        //第几关
-        msg.guanka = this.curDungeonName
-        //玩家道具
-        msg.items = cc.find("Canvas/inventory").getComponent('inventoryScript').getAllItems()
-        this.role_.getRoleSaveData(msg)
-        jsClientScript.send(JSON.stringify(msg))
-
-        console.log('存数据', msg)
-    },
-
-    onSaveDataAck: function (msg) {
-        if (msg.error_code == 0) {
-            this._addTextInfo('保存数据成功')
-        }
-    },
-
-    parseLoginData: function () {
-        if (global.loginData != null) {
-            this.curDungeonName = global.loginData.guanka
-            let level = global.loginData.level
-            let exp = global.loginData.exp
-            let items = global.loginData.items
-            let coin = global.loginData.coin
-        }
-
-        console.log('loginData:', global.loginData)
+        // let inventoryScript = cc.find("Canvas/UI/inventory").getComponent('inventoryScript')
+        // let discardItem = inventoryScript.addItem(itemConfig.copyItemEntity(entity))
+        // if (discardItem.name != null) {
+        //     //丢到地上
+        //     this.addItemToMap(itemConfig.copyItemEntity(discardItem), pos.x, pos.y)
+        // }
+        let bagScript = cc.find("Canvas/UI/bag").getComponent('bagScript')
+        bagScript.addItem(itemConfig.copyItemEntity(entity))
+        cc.find("Canvas/UI").getComponent('UIRootScript')._addTextInfo('获得 ' + entity.name)
     },
 
 });

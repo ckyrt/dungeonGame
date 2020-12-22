@@ -89,10 +89,12 @@ cc.Class({
         this._init(itemNames)
 
         this.node.x = 0
+        this.node.zIndex = global.getBigZIndex()
     },
 
     closeShopPanel: function () {
         this.node.x = 10000
+        this.node.zIndex = 0
     },
 
     buyShopItemToBag: function (item) {
@@ -128,20 +130,23 @@ cc.Class({
         if (this.curCfg_) {
 
             let backScript = cc.find("Canvas/back").getComponent('backScript')
-            let hasCoin = backScript.role_.getAttr('coin')
+            let hasCoin = global.role_.getAttr('coin')
 
-            let inventoryScript = cc.find("Canvas/inventory").getComponent('inventoryScript')
+            let bagScript = cc.find("Canvas/UI/bag").getComponent('bagScript')
             if (hasCoin < this.curCfg_.price) {
-                backScript._addTextInfo('金币不够')
+                cc.find("Canvas/UI").getComponent('UIRootScript')._addTextInfo('金币不够')
                 return
             }
-            if (inventoryScript.isFull()) {
-                backScript._addTextInfo('背包已满')
+            if (bagScript.isFull()) {
+                cc.find("Canvas/UI").getComponent('UIRootScript')._addTextInfo('背包已满')
                 return
             }
             //enouth money and inventory is not full
-            backScript.role_.setAttr('coin', hasCoin - this.curCfg_.price)
-            inventoryScript.addItem(itemConfig.createItemEntity(this.curCfg_.name))
+            global.role_.setAttr('coin', hasCoin - this.curCfg_.price)
+            bagScript.addItem(itemConfig.createItemEntity(this.curCfg_.name))
+
+            cc.find("Canvas/UI").getComponent('UIRootScript')._addTextInfo('扣除 ' + this.curCfg_.price + '金币')
+            cc.find("Canvas/UI").getComponent('UIRootScript')._addTextInfo('获得 ' + this.curCfg_.name)
         }
     },
 });

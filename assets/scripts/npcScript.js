@@ -55,7 +55,7 @@ cc.Class({
 
                 let cfg = npcConfig[name]
 
-                let shop = cc.find("Canvas/shop")
+                let shop = cc.find("Canvas/UI/shop")
                 shop.getComponent('shopPanelScript').openShopPanel(cfg.items, name, cfg.words, url)
             }, this)
 

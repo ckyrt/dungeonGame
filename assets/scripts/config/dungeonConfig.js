@@ -48,7 +48,7 @@ var dungeonConfig = {
     '第六关、辛特兰': {
 
         npcs: ['耐奥祖'],
-        monsters: ['伐木工', '伐木工', '伐木工', '伐木工', '三尾狐', '三尾狐', '三尾狐', '伐木工头'],
+        monsters: ['伐木工', '伐木工', '伐木工', '伐木工', '三尾狐', '三尾狐', '三尾狐', '伐木工'],
         items: ['攻击之爪', '阔剑', '锁子甲', '治疗药膏'],
         gridTypes: ['luoshi', 'luoshi', 'luoshi', 'chukou', 'dici_2', 'dici_2', 'dici_3'],
         next: '第七关、费伍德森林',
@@ -66,7 +66,7 @@ var dungeonConfig = {
     '第九关、凄凉之地': {
 
         npcs: ['泰兰德'],
-        monsters: ['血狼王', '血狼王', '血狼王', '血狼王', '大猿', '大猿', '大猿'],
+        monsters: ['血狼', '血狼', '花熊', '花熊', '大猿', '大猿', '大猿'],
         items: ['阔剑', '阔剑', '锁子甲', '治疗药膏'],
         gridTypes: ['luoshi', 'luoshi', 'luoshi', 'chukou', 'dici_2', 'dici_3', 'dici_3'],
         next: '第十关、黑海岸',

@@ -49,7 +49,6 @@ cc.Class({
     // update (dt) {},
 
     onChatNtf: function (msg) {
-        let backScript = cc.find("Canvas/back").getComponent('backScript')
-        backScript._addTextInfo(msg.sender + ':' + msg.text, new cc.color(0, 255, 0))
+        cc.find("Canvas/UI").getComponent('UIRootScript')._addTextInfo(msg.sender + ':' + msg.text, new cc.color(0, 255, 0))
     },
 });

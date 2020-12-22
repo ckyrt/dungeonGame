@@ -152,11 +152,11 @@ cc.Class({
             //格子是地刺
             if (mapGrid != null && mapGrid.getGridType().indexOf('dici') != -1 ) {
                 if(mapGrid.getGridType() == 'dici_1')
-                    backScript._executeDamage(mapGrid, backScript.role_, 10, 'dici')
+                    backScript._executeDamage(mapGrid, global.role_, 10, 'dici')
                 if(mapGrid.getGridType() == 'dici_2')
-                    backScript._executeDamage(mapGrid, backScript.role_, 30, 'dici')
+                    backScript._executeDamage(mapGrid, global.role_, 30, 'dici')
                 if(mapGrid.getGridType() == 'dici_3')
-                    backScript._executeDamage(mapGrid, backScript.role_, 90, 'dici')
+                    backScript._executeDamage(mapGrid, global.role_, 90, 'dici')
             }
         }
 

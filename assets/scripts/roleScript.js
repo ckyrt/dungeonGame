@@ -33,8 +33,7 @@ cc.Class({
 
     start() {
 
-        let backScript = cc.find("Canvas/back").getComponent('backScript')
-        backScript.setInterval(0.1, 300000,
+        cc.find("Canvas/UI").getComponent('UIRootScript').setInterval(0.1, 300000,
             () => {
                 this._update100()
             })
@@ -44,7 +43,13 @@ cc.Class({
             console.log('role clicked')
             let clickCreatureEvent = new cc.Event.EventCustom("clickCreatureSig", true)
             clickCreatureEvent.setUserData({ creature: this })
-            backScript.node.dispatchEvent(clickCreatureEvent)
+
+            let back = cc.find("Canvas/back")
+            if (back) {
+                let backScript = back.getComponent('backScript')
+                backScript.node.dispatchEvent(clickCreatureEvent)
+            }
+
         }, this)
     },
 
@@ -168,8 +173,9 @@ cc.Class({
                 add_node.getComponent(cc.Label).string = ' +' + Math.floor(v)
         }
         if (att == 'coin') {
-            let coin_node = global.getChildByName(this.node, 'coin')
-            coin_node.getComponent(cc.Label).string = v
+            //背包里面coin变动
+            let bagScript = cc.find("Canvas/UI/bag").getComponent('bagScript')
+            bagScript.setCoin(v)
         }
         if (att == 'level') {
             let level_node = global.getChildByName(this.node, 'level')
@@ -259,7 +265,7 @@ cc.Class({
     },
 
     onRoleDead: function () {
-        let deadPanel = cc.find("Canvas/deadPanel")
+        let deadPanel = cc.find("Canvas/UI/deadPanel")
         deadPanel.getComponent('deadPanelScript').openDeadPanel()
     },
 
@@ -311,7 +317,15 @@ cc.Class({
             if (k == 'gedang_rate' || k == 'gedang_value'
                 || k == 'crit_rate' || k == 'crit_multi')
                 continue
-            this.addAttr(k, cfg.attrs[k])
+            let va = cfg.attrs[k]
+            if (k == 'add_attack') {
+                //强化等级
+                let stren_lv = entity.stren_lv
+                if (stren_lv != null) {
+                    va += stren_lv * 5
+                }
+            }
+            this.addAttr(k, 1 * va)
         }
 
     },
@@ -328,7 +342,15 @@ cc.Class({
             if (k == 'gedang_rate' || k == 'gedang_value'
                 || k == 'crit_rate' || k == 'crit_multi')
                 continue
-            this.addAttr(k, -1 * cfg.attrs[k])
+            let va = cfg.attrs[k]
+            if (k == 'add_attack') {
+                //强化等级
+                let stren_lv = entity.stren_lv
+                if (stren_lv != null) {
+                    va += stren_lv * 5
+                }
+            }
+            this.addAttr(k, -1 * va)
         }
 
     },

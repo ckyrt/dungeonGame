@@ -54,7 +54,7 @@ cc.Class({
     clickFunc: function (t) {
         if(this.cfg_ == null)
             return
-        let shop = cc.find("Canvas/shop")
+        let shop = cc.find("Canvas/UI/shop")
         shop.getComponent('shopPanelScript').setChooseItem(this.cfg_)
     },
 });

@@ -46,7 +46,7 @@ cc.Class({
         let create = global.getChildByName(this.node, "create")
         create.on(cc.Node.EventType.TOUCH_START,
             () => {
-                let dialog = cc.find("Canvas/roomNameDialog").getComponent('roomNameDialog')
+                let dialog = cc.find("Canvas/UI/roomNameDialog").getComponent('roomNameDialog')
                 dialog.openPanel((roomName) => {
                     var msg = {}
                     msg.msg_id = MsgID.CreateRoomReq
@@ -83,6 +83,7 @@ cc.Class({
     openPanel() {
 
         this.node.x = 0
+        this.node.zIndex = global.getBigZIndex()
 
         var msg = {}
         msg.msg_id = MsgID.AllRoomInfoReq
@@ -91,6 +92,7 @@ cc.Class({
 
     closePanel() {
         this.node.x = 10000
+        this.node.zIndex = 0
     },
 
     onAllRoomInfoNtf: function (msg) {
@@ -128,7 +130,7 @@ cc.Class({
                 if (global.roleName == msg.roomInfo.user1 || global.roleName == msg.roomInfo.user2) {
                     if (msg.roomInfo.status == 'ongoing') {
 
-                        let arena1v1 = cc.find("Canvas/arena").getComponent('Arena1v1')
+                        let arena1v1 = cc.find("Canvas/UI/arena").getComponent('Arena1v1')
                         arena1v1.init(msg.roomInfo)
                         this.closePanel()
                     }

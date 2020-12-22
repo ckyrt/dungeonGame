@@ -25,6 +25,11 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
+        
+    },
+
+    start() {
+        
         this.hole1 = global.getChildByName(this.node, 'hole1')
         this.hole2 = global.getChildByName(this.node, 'hole2')
         this.hole3 = global.getChildByName(this.node, 'hole3')
@@ -43,11 +48,8 @@ cc.Class({
         this.hole3.on(cc.Node.EventType.TOUCH_START, function () {
             this._useItemByPos(3)
         }, this)
-    },
 
-    start() {
-        let backScript = cc.find("Canvas/back").getComponent('backScript')
-        backScript.setInterval(0.1, 300000,
+        cc.find("Canvas/UI").getComponent('UIRootScript').setInterval(0.1, 300000,
             () => {
                 this._update100()
             })
@@ -57,6 +59,8 @@ cc.Class({
         //更新 道具cd之类
         for (var i = 1; i <= 3; ++i) {
             let item = this._getItemFromPos(i)
+            if (item == null)
+                continue
             let hole = null
             if (i == 1)
                 hole = this.hole1
@@ -138,9 +142,7 @@ cc.Class({
         this.items[pos] = newEntity
 
         //添加item属性
-        let backScript = cc.find("Canvas/back").getComponent('backScript')
-        if (backScript.role_)
-            backScript.role_.addItemAttr(newEntity)
+        global.role_.addItemAttr(newEntity)
     },
 
     _discardItemByPos: function (pos) {
@@ -148,9 +150,7 @@ cc.Class({
         this.items[pos] = {}
 
         //删除item属性
-        let backScript = cc.find("Canvas/back").getComponent('backScript')
-        if (backScript.role_)
-            backScript.role_.removeItemAttr(oldEntity)
+        global.role_.removeItemAttr(oldEntity)
 
         return oldEntity
     },
@@ -266,13 +266,13 @@ cc.Class({
     },
 
     _useItemByPos: function (pos) {
-        let entity = this._getItemFromPos(pos)
-        console.log('use item:' + entity)
-        if (entity.name == null)
-            return
-        //弹出提示框 展示物品信息
-        let itemInfoDialog = cc.find("Canvas/itemInfoDialog").getComponent('itemInfoDialog')
-        itemInfoDialog.openPanel({ entity, pos })
+        // let entity = this._getItemFromPos(pos)
+        // console.log('use item:' + entity)
+        // if (entity.name == null)
+        //     return
+        // //弹出提示框 展示物品信息
+        // let itemInfoDialog = cc.find("Canvas/UI/itemInfoDialog").getComponent('itemInfoDialog')
+        // itemInfoDialog.openItemInfo(entity)
     },
 
     updateItemCDAndUseTimesByPos: function (pos, cd, ts) {

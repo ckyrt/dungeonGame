@@ -1,4 +1,4 @@
-
+var global = require('global')
 
 var itemConfig = {
 
@@ -27,8 +27,7 @@ var itemConfig = {
             // console.log('大药效果开启')
             // target.addAttr('hp_recover', 10)
 
-            // let backScript = cc.find("Canvas/back").getComponent('backScript')
-            // backScript.setInterval(10, 1,
+            // cc.find("Canvas/UI").getComponent('UIRootScript').setInterval(10, 1,
             //     () => {
             //         console.log('大药效果消失')
             //         target.addAttr('hp_recover', -10)
@@ -36,6 +35,7 @@ var itemConfig = {
         },
         use_times: 1,    //可使用次数
         has_target: true,           //目标
+        stackable: true,
     },
     '敏捷便鞋': {
         'name': '敏捷便鞋',
@@ -255,6 +255,7 @@ var itemConfig = {
         'imgSrc': 'yuandun',
         'descript': '一个人的酒桶底盖，在另一个人手里就成了圆盾。\n伤害格挡（被动）：让近战持有者拥有60%机会抵挡掉20点伤害，远程持有者则是60%抵挡掉10伤害。',
         price: 200,
+        part: 'shield',
         attrs: {
             //伤害格挡概率 伤害格挡数值
             gedang_rate: 50,
@@ -313,11 +314,11 @@ var itemConfig = {
         use_func: (target) => {
             //400点魔法伤害
             let backScript = cc.find("Canvas/back").getComponent('backScript')
-            backScript._executeDamage(backScript.role_, target, 400, 'mofa')
+            backScript._executeDamage(global.role_, target, 400, 'mofa')
 
             //特效
-            let shandianScript = cc.find("Canvas/shandian").getComponent('shandianEffectScript')
-            shandianScript.testShandian(backScript.role_.getSwyXY(), target.getSwyXY())
+            let shandianScript = cc.find("Canvas/UI/shandian").getComponent('shandianEffectScript')
+            shandianScript.testShandian(global.role_.getSwyXY(), target.getSwyXY())
             //shandianScript.testShandian({ x: -300, y: -300 }, { x: 300, y: 300 }, )
         },
         use_times: -1,              //可使用次数
@@ -336,11 +337,11 @@ var itemConfig = {
         use_func: (target) => {
             //400点魔法伤害
             let backScript = cc.find("Canvas/back").getComponent('backScript')
-            backScript._executeDamage(backScript.role_, target, 500, 'mofa')
+            backScript._executeDamage(global.role_, target, 500, 'mofa')
 
             //特效
             let shandianScript = cc.find("Canvas/shandian").getComponent('shandianEffectScript')
-            shandianScript.testShandian(backScript.role_.getSwyXY(), target.getSwyXY())
+            shandianScript.testShandian(global.role_.getSwyXY(), target.getSwyXY())
         },
         use_times: -1,              //可使用次数
         has_target: true,           //目标
@@ -356,6 +357,16 @@ var itemConfig = {
         price: 10,
     },
 
+    '强化石': {
+        'name': '强化石',
+        'imgSrc': '025-Herb01',
+        'descript': '增加武器的威力',
+        attrs: {
+        },
+        price: 1000,
+        stackable: true,
+    },
+
 
 
 
@@ -366,6 +377,7 @@ var itemConfig = {
         'imgSrc': 'kuojian',
         'descript': '增加攻击力8-12',
         price: 100,
+        part: 'weapon',
         attrs: {
             add_attack: 10,
         },
@@ -373,9 +385,10 @@ var itemConfig = {
 
     '铁刀': {
         'name': '铁刀',
-        'imgSrc': 'kuojian',
+        'imgSrc': '003-Weapon03',
         'descript': '增加攻击力12-20',
         price: 100,
+        part: 'weapon',
         attrs: {
             add_attack: 16,
         },
@@ -386,6 +399,7 @@ var itemConfig = {
         'imgSrc': 'kuojian',
         'descript': '增加攻击力18-31',
         price: 100,
+        part: 'weapon',
         attrs: {
             add_attack: 25,
         },
@@ -396,6 +410,7 @@ var itemConfig = {
         'imgSrc': 'kuojian',
         'descript': '增加攻击力24-37',
         price: 100,
+        part: 'weapon',
         attrs: {
             add_attack: 31,
         },
@@ -406,6 +421,7 @@ var itemConfig = {
         'imgSrc': 'kuojian',
         'descript': '增加攻击力32-53',
         price: 100,
+        part: 'weapon',
         attrs: {
             add_attack: 42,
         },
@@ -416,6 +432,7 @@ var itemConfig = {
         'imgSrc': 'kuojian',
         'descript': '增加攻击力40-61',
         price: 100,
+        part: 'weapon',
         attrs: {
             add_attack: 50,
         },
@@ -426,6 +443,7 @@ var itemConfig = {
         'imgSrc': 'kuojian',
         'descript': '增加攻击力50-75',
         price: 100,
+        part: 'weapon',
         attrs: {
             add_attack: 62,
         },
@@ -436,6 +454,7 @@ var itemConfig = {
         'imgSrc': 'kuojian',
         'descript': '增加攻击力62-83',
         price: 100,
+        part: 'weapon',
         attrs: {
             add_attack: 72,
         },
@@ -446,7 +465,7 @@ var itemConfig = {
 
 
     //创建一个item实体
-    createItemEntity: function (name, use_times = 0, cd_time = -1) {
+    createItemEntity: function (name, use_times = 0, cd_time = -1, stren_lv = -1, count = 1) {
         let cfg = this[name]
         if (use_times == 0) {
             use_times = cfg.use_times
@@ -454,16 +473,25 @@ var itemConfig = {
         if (cd_time == -1) {
             cd_time = 0
         }
-        return { name, use_times, cd_time }
+        if (stren_lv == -1) {
+            stren_lv = 0
+        }
+        return { uuid: global.generateUUID(), name, use_times, cd_time, stren_lv, count }
     },
 
     //拷贝一个item实体
     copyItemEntity: function (entity) {
         let new_entity = {}
+        new_entity.uuid = entity.uuid
         new_entity.name = entity.name
         new_entity.use_times = entity.use_times
         new_entity.cd_time = entity.cd_time
+        new_entity.stren_lv = entity.stren_lv   //装备的 强化等级 才会用到
+        new_entity.count = entity.count         //了堆叠 物品的  数目才会用到
         return new_entity
     },
+
+
+    
 }
 module.exports = itemConfig

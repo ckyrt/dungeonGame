@@ -1,4 +1,6 @@
 var global = require('global')
+var MsgID = require('MsgID')
+
 let SERVER_ADDRESS = '139.155.80.3:8001'
 
 var jsClientScript = {
@@ -8,6 +10,7 @@ var jsClientScript = {
 
     start() {
 
+        let rpc = require('rpc')
         let ws = this.ws_
         let that = this
         ws.onopen = function (e) {
@@ -23,14 +26,23 @@ var jsClientScript = {
         }
 
         ws.onmessage = function (e) {
-            console.log('got message: ' + e.data)
+            //console.log('got message: ' + e.data)
             var msg = JSON.parse(e.data);
-            that.msgFuncs[msg.msg_id](msg)
+            if (MsgID.SM_RPC_CALL == msg.msg_id) {
+                rpc._onRpcCall(msg.f_name, msg.args)
+            }
+            else {
+                let func = that.msgFuncs[msg.msg_id]
+                if (func)
+                    func(msg)
+                else
+                    console.log('msg not register: ', msg.msg_id)
+            }
         }
     },
 
     send: function (str) {
-        console.log('send ' + str)
+        //console.log('send ' + str)
         this.ws_.send(str)
     },
 

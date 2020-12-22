@@ -40,8 +40,7 @@ cc.Class({
     },
 
     start() {
-        let backScript = cc.find("Canvas/back").getComponent('backScript')
-        backScript.setInterval(0.1, 300000,
+        cc.find("Canvas/UI").getComponent('UIRootScript').setInterval(0.1, 300000,
             () => {
                 this._update100()
             })
@@ -151,12 +150,12 @@ cc.Class({
 
         //給玩家经验
         let backScript = cc.find("Canvas/back").getComponent('backScript')
-        backScript.role_.addExp(cfg.exp)
-        backScript._addTextInfo('获得经验 ' + cfg.exp)
+        global.role_.addExp(cfg.exp)
+        cc.find("Canvas/UI").getComponent('UIRootScript')._addTextInfo('获得经验 ' + cfg.exp)
 
         //给玩家加金币
-        backScript.role_.addAttr('coin', cfg.coin)
-        backScript._addTextInfo('获得金币 ' + cfg.coin)
+        global.role_.addAttr('coin', cfg.coin)
+        cc.find("Canvas/UI").getComponent('UIRootScript')._addTextInfo('获得金币 ' + cfg.coin)
 
         //去掉X
         let shadowScript = cc.find("Canvas/shadowRoot").getComponent('shadowScript')
