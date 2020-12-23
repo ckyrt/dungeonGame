@@ -1,0 +1,55 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "left_death",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 1.2,
+  "sample": 5,
+  "speed": 1,
+  "wrapMode": 1,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "fc88adff-fd8f-4a75-b116-32c3f4c29071"
+            }
+          },
+          {
+            "frame": 0.2,
+            "value": {
+              "__uuid__": "b32b285b-c056-4eb7-bcb2-6b319dacf5ec"
+            }
+          },
+          {
+            "frame": 0.4,
+            "value": {
+              "__uuid__": "960ace83-d17d-422f-8530-0bb768e347a8"
+            }
+          },
+          {
+            "frame": 0.6,
+            "value": {
+              "__uuid__": "7307c501-4874-4acf-b9df-5fb9efa6872a"
+            }
+          },
+          {
+            "frame": 0.8,
+            "value": {
+              "__uuid__": "ff7e3858-fabb-4d8c-a534-7d0934da78e1"
+            }
+          },
+          {
+            "frame": 1,
+            "value": {
+              "__uuid__": "38985a84-ff1c-48c6-8189-20924df77abc"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

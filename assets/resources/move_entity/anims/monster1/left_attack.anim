@@ -1,0 +1,55 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "left_attack",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 1.2,
+  "sample": 5,
+  "speed": 1,
+  "wrapMode": 1,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "d9953745-8470-4a92-a7dd-e3e77f2a83bc"
+            }
+          },
+          {
+            "frame": 0.2,
+            "value": {
+              "__uuid__": "a6e89606-e237-442c-b2f9-6bb4302b0acf"
+            }
+          },
+          {
+            "frame": 0.4,
+            "value": {
+              "__uuid__": "0f580e7d-2904-4405-bf4d-cdcdeebf4f43"
+            }
+          },
+          {
+            "frame": 0.6,
+            "value": {
+              "__uuid__": "c4c1613a-bb5b-4d2c-9132-46932af436ab"
+            }
+          },
+          {
+            "frame": 0.8,
+            "value": {
+              "__uuid__": "442916f0-b413-4edd-a8ff-ebe3e6bc71e3"
+            }
+          },
+          {
+            "frame": 1,
+            "value": {
+              "__uuid__": "d425effe-5a71-4550-b49b-76089f4872d9"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

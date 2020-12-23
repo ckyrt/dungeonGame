@@ -1,0 +1,55 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "down_death",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 1.2,
+  "sample": 5,
+  "speed": 1,
+  "wrapMode": 1,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "0eabbf64-1252-4faf-93f7-b64b3af9252e"
+            }
+          },
+          {
+            "frame": 0.2,
+            "value": {
+              "__uuid__": "482572a0-57c1-4276-9638-6baa83b92db1"
+            }
+          },
+          {
+            "frame": 0.4,
+            "value": {
+              "__uuid__": "ab14718e-5296-41ab-b7b7-1a0444ccf5bc"
+            }
+          },
+          {
+            "frame": 0.6,
+            "value": {
+              "__uuid__": "1a1ab606-74a7-4c2e-8805-ea1dc4ec60dc"
+            }
+          },
+          {
+            "frame": 0.8,
+            "value": {
+              "__uuid__": "8c6bdae7-6df1-4769-8e60-daba373568ae"
+            }
+          },
+          {
+            "frame": 1,
+            "value": {
+              "__uuid__": "fb599829-5771-4c2b-b0c5-39a3dc4a0cfd"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}
