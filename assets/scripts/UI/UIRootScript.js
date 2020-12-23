@@ -43,6 +43,25 @@ cc.Class({
     start() {
 
         this._initRole(global.loginData)
+
+        //attack test
+        let attackBtn = global.getChildByName(this.node, 'attackBtn')
+        attackBtn.on(cc.Node.EventType.TOUCH_START,
+            function (t) {
+                let bigmap = cc.find("Canvas/mapNode").getComponent('bigmapScript')
+                let ownRole = bigmap._get_role(global.roleName)
+                ownRole.play_attack_anim()
+            }, this)
+
+        //death test
+        let deathBtn = global.getChildByName(this.node, 'deathBtn')
+        deathBtn.on(cc.Node.EventType.TOUCH_START,
+            function (t) {
+                let bigmap = cc.find("Canvas/mapNode").getComponent('bigmapScript')
+                let ownRole = bigmap._get_role(global.roleName)
+                ownRole.play_death_anim()
+            }, this)
+
         //创建npc
         let makeNpcBtn = global.getChildByName(this.node, 'makeNpcBtn')
         makeNpcBtn.on(cc.Node.EventType.TOUCH_START,

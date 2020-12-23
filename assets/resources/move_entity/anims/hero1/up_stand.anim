@@ -1,0 +1,43 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "up_stand",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.8,
+  "sample": 5,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "ccc64cd2-b385-4475-b0c6-a9e043123941"
+            }
+          },
+          {
+            "frame": 0.2,
+            "value": {
+              "__uuid__": "2676fa66-d246-49fe-b8da-6a3bc23550ce"
+            }
+          },
+          {
+            "frame": 0.4,
+            "value": {
+              "__uuid__": "bdd28799-c802-44cd-9b82-6409e653e5f8"
+            }
+          },
+          {
+            "frame": 0.6,
+            "value": {
+              "__uuid__": "0a3c382a-1acd-47b3-b4a0-a966a3a8f10f"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

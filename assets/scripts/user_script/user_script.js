@@ -825,5 +825,8 @@ cc.Class({
             let node2 = this._get_node_by_uuid(n.node2)
             this.connectDataNodeUsingLine(node1, node2, n.index)
         }
-    }
+    },
+
+
+    //创建怪物
 });

@@ -44,40 +44,92 @@ cc.Class({
         //图片切换时间间隔
         this.spriteChangeTime_ = 0
 
-        var url = 'move_entity/001-Fighter01'
-        var self = this
-        cc.loader.loadRes(url, cc.SpriteFrame, function (err, spriteFrame) {
-            if (err) {
-                cc.error(err.message || err);
-                return;
-            }
-            self.resource_sprite = spriteFrame
+        // 图片
+        // var url = 'move_entity/001-Fighter01'
+        // var self = this
+        // cc.loader.loadRes(url, cc.SpriteFrame, function (err, spriteFrame) {
+        //     if (err) {
+        //         cc.error(err.message || err);
+        //         return;
+        //     }
+        //     self.resource_sprite = spriteFrame
 
-            //图片切换帧序号
-            self.frameNumber_ = 0
+        //     //图片切换帧序号
+        //     self.frameNumber_ = 0
 
-            var sp = self.node.getComponent(cc.Sprite);//获取组件
-            sp.spriteFrame = global._getWalkSprite(global.DIR_D, self);//更改图片
+        //     var sp = self.node.getComponent(cc.Sprite);//获取组件
+        //     sp.spriteFrame = global._getWalkSprite(global.DIR_D, self);//更改图片
 
-            //self.node.width = self.getAttr('spriteWidth')
-            //self.node.height = self.getAttr('spriteHeight')
-            console.log('role init load res')
-        })
+        //     //self.node.width = self.getAttr('spriteWidth')
+        //     //self.node.height = self.getAttr('spriteHeight')
+        //     console.log('role init load res')
+        // })
 
         let head = global.getChildByName(this.node, 'role_name').getComponent(cc.Label)
         head.string = this.uid
+
+
+        var anim_node = this.node.getChildByName("anim");
+        this.anim_com_ = anim_node.getComponent(cc.Animation);
+        this.moving_ = false
+    },
+
+    _change_move_anim: function (moving, dir) {
+        //播放动画
+        if (!moving) {
+            //stand
+            switch (dir) {
+                case global.DIR_L:
+                    this.anim_com_.play('left_stand');
+                    break;
+                case global.DIR_U:
+                    this.anim_com_.play('up_stand');
+                    break;
+                case global.DIR_R:
+                    this.anim_com_.play('right_stand');
+                    break;
+                case global.DIR_D:
+                    this.anim_com_.play('down_stand');
+                    break;
+                default:
+            }
+        }
+        else {
+            //run
+            //stand
+            switch (dir) {
+                case global.DIR_L:
+                    this.anim_com_.play('left_run');
+                    break;
+                case global.DIR_U:
+                    this.anim_com_.play('up_run');
+                    break;
+                case global.DIR_R:
+                    this.anim_com_.play('right_run');
+                    break;
+                case global.DIR_D:
+                    this.anim_com_.play('down_run');
+                    break;
+                default:
+            }
+        }
     },
 
     update(dt) {
 
         let n = this.getNextPoint()
-
-        global.updateWalAnim(this, dt)
+        //global.updateWalAnim(this, dt)
 
         if (n == null) {
             let p = this.pathPoints.pop()
-            if (p == null)
+            if (p == null) {
+                //移动变为静止
+                if (this.moving_) {
+                    this._change_move_anim(false, this.dir_)
+                    this.moving_ = false
+                }
                 return
+            }
             if (this.isPointEqualCurrent(p)) {
                 this.setNextPoint(null)
                 return
@@ -97,6 +149,17 @@ cc.Class({
                 jsClientScript.send(JSON.stringify(msg))
             }
 
+            //移动改变方向
+            var dir = global._getDir(n.x, n.y, this)
+            if (dir != this.dir_) {
+                this.dir_ = dir
+                this._change_move_anim(true, dir)
+            }
+            //静止变为移动
+            if (!this.moving_) {
+                this._change_move_anim(true, dir)
+                this.moving_ = true
+            }
             //console.log('move to:', n)
             let realPos = global.getRealMapPos(n.x, n.y)
             var action = cc.moveTo(0.5, realPos);
@@ -111,8 +174,7 @@ cc.Class({
         }
     },
 
-    getAstarSearch:function()
-    {
+    getAstarSearch: function () {
         let bigmap = cc.find("Canvas/mapNode")
         return bigmap.getComponent('AstarSearch')
     },
@@ -161,6 +223,44 @@ cc.Class({
             //更新坐标显示
             let rolePos = cc.find("Canvas/UI/others/rolePos").getComponent(cc.Label)
             rolePos.string = '[' + this.x + ',' + this.y + ']'
+        }
+    },
+
+    play_attack_anim:function()
+    {
+        switch (this.dir_) {
+            case global.DIR_L:
+                this.anim_com_.play('left_attack');
+                break;
+            case global.DIR_U:
+                this.anim_com_.play('up_attack');
+                break;
+            case global.DIR_R:
+                this.anim_com_.play('right_attack');
+                break;
+            case global.DIR_D:
+                this.anim_com_.play('down_attack');
+                break;
+            default:
+        }
+    },
+
+    play_death_anim:function()
+    {
+        switch (this.dir_) {
+            case global.DIR_L:
+                this.anim_com_.play('left_death');
+                break;
+            case global.DIR_U:
+                this.anim_com_.play('up_death');
+                break;
+            case global.DIR_R:
+                this.anim_com_.play('right_death');
+                break;
+            case global.DIR_D:
+                this.anim_com_.play('down_death');
+                break;
+            default:
         }
     },
 });
