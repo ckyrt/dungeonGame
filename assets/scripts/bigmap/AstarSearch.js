@@ -100,9 +100,9 @@ cc.Class({
         //grid.color = new cc.Color(123, 0, 123)
 
 
-        console.time("time:")
+        //console.time("time:")
         let currentNode = this.startSearch();
-        console.timeEnd("time:")
+        //console.timeEnd("time:")
         return currentNode
     },
 
@@ -158,7 +158,7 @@ cc.Class({
                 // if (this._map[row][col] == 0) {
                 //     continue;
                 // }
-                if (this._getCanNotPass(col, row)) {
+                if (this._canNotPass(col, row)) {
                     continue;
                 }
                 //如果未访问就添加到带访问列表
@@ -248,8 +248,7 @@ cc.Class({
         return this._map[y][x]
     },
 
-
-    _getCanNotPass: function (x, y) {
+    _canNotPass: function (x, y) {
         let v = this._map[y][x]
         return (v & 2) > 0 || (v & 1) == 0
     },
@@ -257,5 +256,19 @@ cc.Class({
     isGridShadow: function (x, y) {
         let v = this._map[y][x]
         return (v & 4) > 0
+    },
+
+    //得到半径内的所有可行走点
+    getPosesInRadius: function (center_x, center_y, r) {
+        let ret = []
+        for (var row = 0; row < this._map.length; ++row) {
+            for (var col = 0; col < this._map[row].length; ++col) {
+                let dis = Math.abs(center_x - col) + Math.abs(center_y - row)
+                if (dis <= r && !this._canNotPass(col, row)) {
+                    ret.push({ 'x': col, 'y': row })
+                }
+            }
+        }
+        return ret
     },
 });

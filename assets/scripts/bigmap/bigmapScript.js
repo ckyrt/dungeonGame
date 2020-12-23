@@ -27,6 +27,10 @@ cc.Class({
             type: cc.Prefab,
             default: null,
         },
+        monster_prefab: {
+            type: cc.Prefab,
+            default: null,
+        },
 
         grid: cc.Node,
     },
@@ -41,6 +45,7 @@ cc.Class({
         this.roles = {}
         this.items = {}
         this.npcs = {}
+        this.monsters = {}
 
         this.node.zIndex = 1
     },
@@ -155,6 +160,17 @@ cc.Class({
             let scene = global.mapIdToScene(map_id)
             this.setCurScene(scene)
         })
+
+
+        ////////////////////////////////////////// test add monster(20201223) //////////////////////////////////////////
+        cc.find("Canvas/UI").getComponent('UIRootScript').setInterval(5, 1,
+            () => {
+                this._add_monster_pos('土匪1', 2, 10)
+                this._add_monster_pos('土匪2', 4, 10)
+                this._add_monster_pos('土匪3', 6, 10)
+                this._add_monster_pos('土匪4', 8, 10)
+                this._add_monster_pos('土匪5', 10, 10)
+            })
     },
 
     setCurScene: function (scene_name) {
@@ -268,26 +284,12 @@ cc.Class({
         let y = Math.floor(mapPos.y / (global.GRID_WIDTH + global.spacing))
 
 
-        console.log("click: (" + x + "," + y + ")")
+        //console.log("click: (" + x + "," + y + ")")
 
         let ownRole = this._get_role(global.roleName)
         this._removeTargetGrid()
         this._addTargetGrid(x, y)
-
-        let points = global._findPath(ownRole, x, y)
-        if (points == null)
-            return
-        //等待到达然后接到后面
-        if (ownRole.pathPoints.length > 0) {
-            points.concat(ownRole.pathPoints)
-        }
-        ownRole.pathPoints = points
-
-        // console.log('ownRole.pathPoints size:', ownRole.pathPoints.length)
-
-        // for (var i = ownRole.pathPoints.length - 1; i >= 0; --i) {
-        //     console.log(ownRole.pathPoints[i])
-        // }
+        ownRole._move_to_pos(x, y)
 
         //清除一些ui
         {
@@ -436,12 +438,37 @@ cc.Class({
     },
 
     _remove_npc: function (uid) {
-        this.npc[uid].node.destroy()
-        this.npc[uid] = null
-        delete (this.npc[uid])
+        this.npcs[uid].node.destroy()
+        this.npcs[uid] = null
+        delete (this.npcs[uid])
     },
 
     _get_npc: function (uid) {
-        return this.npc[uid]
+        return this.npcs[uid]
+    },
+
+
+    //monster
+    _add_monster_pos(uid, x, y) {
+        var prefab = cc.instantiate(this.monster_prefab)
+        cc.find("Canvas").addChild(prefab)
+        prefab.zIndex = 1
+        var moveEntity = prefab.getComponent("moveEntity")
+        moveEntity.set_grid({ x, y })
+        moveEntity.uid = uid
+
+        this.monsters[uid] = moveEntity
+
+        return moveEntity
+    },
+
+    _remove_monster: function (uid) {
+        this.monsters[uid].node.destroy()
+        this.monsters[uid] = null
+        delete (this.monsters[uid])
+    },
+
+    _get_monster: function (uid) {
+        return this.monsters[uid]
     },
 });

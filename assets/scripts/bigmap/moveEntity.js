@@ -72,47 +72,10 @@ cc.Class({
         var anim_node = this.node.getChildByName("anim");
         this.anim_com_ = anim_node.getComponent(cc.Animation);
         this.moving_ = false
-    },
 
-    _change_move_anim: function (moving, dir) {
-        //播放动画
-        if (!moving) {
-            //stand
-            switch (dir) {
-                case global.DIR_L:
-                    this.anim_com_.play('left_stand');
-                    break;
-                case global.DIR_U:
-                    this.anim_com_.play('up_stand');
-                    break;
-                case global.DIR_R:
-                    this.anim_com_.play('right_stand');
-                    break;
-                case global.DIR_D:
-                    this.anim_com_.play('down_stand');
-                    break;
-                default:
-            }
-        }
-        else {
-            //run
-            //stand
-            switch (dir) {
-                case global.DIR_L:
-                    this.anim_com_.play('left_run');
-                    break;
-                case global.DIR_U:
-                    this.anim_com_.play('up_run');
-                    break;
-                case global.DIR_R:
-                    this.anim_com_.play('right_run');
-                    break;
-                case global.DIR_D:
-                    this.anim_com_.play('down_run');
-                    break;
-                default:
-            }
-        }
+        let new_monster_script = this.node.getComponent('newMonsterScript')
+        if (new_monster_script)
+            new_monster_script._move_entity_init_over()
     },
 
     update(dt) {
@@ -127,6 +90,12 @@ cc.Class({
                 if (this.moving_) {
                     this._change_move_anim(false, this.dir_)
                     this.moving_ = false
+
+                    //到达 执行 回调callback
+                    if(this.arrive_call_back_)
+                    {
+                        this.arrive_call_back_()
+                    }
                 }
                 return
             }
@@ -196,6 +165,21 @@ cc.Class({
         return false
     },
 
+    _move_to_pos: function (x, y, callback = null) {
+        let points = global._findPath(this, x, y)
+        if (points == null)
+        {
+            console.log('_move_to_pos target can not arrived')
+            return
+        }
+        //等待到达然后接到后面
+        if (this.pathPoints.length > 0) {
+            points.concat(this.pathPoints)
+        }
+        this.pathPoints = points
+        this.arrive_call_back_ = callback
+    },
+
     set_grid(pos) {
 
         //console.log('role x y:' + pos)
@@ -226,8 +210,49 @@ cc.Class({
         }
     },
 
-    play_attack_anim:function()
-    {
+
+    _change_move_anim: function (moving, dir) {
+        //播放动画
+        if (!moving) {
+            //stand
+            switch (dir) {
+                case global.DIR_L:
+                    this.anim_com_.play('left_stand');
+                    break;
+                case global.DIR_U:
+                    this.anim_com_.play('up_stand');
+                    break;
+                case global.DIR_R:
+                    this.anim_com_.play('right_stand');
+                    break;
+                case global.DIR_D:
+                    this.anim_com_.play('down_stand');
+                    break;
+                default:
+            }
+        }
+        else {
+            //run
+            //stand
+            switch (dir) {
+                case global.DIR_L:
+                    this.anim_com_.play('left_run');
+                    break;
+                case global.DIR_U:
+                    this.anim_com_.play('up_run');
+                    break;
+                case global.DIR_R:
+                    this.anim_com_.play('right_run');
+                    break;
+                case global.DIR_D:
+                    this.anim_com_.play('down_run');
+                    break;
+                default:
+            }
+        }
+    },
+
+    play_attack_anim: function () {
         switch (this.dir_) {
             case global.DIR_L:
                 this.anim_com_.play('left_attack');
@@ -245,8 +270,7 @@ cc.Class({
         }
     },
 
-    play_death_anim:function()
-    {
+    play_death_anim: function () {
         switch (this.dir_) {
             case global.DIR_L:
                 this.anim_com_.play('left_death');
