@@ -30,22 +30,20 @@ cc.Class({
 
     // onLoad () {},
 
-    start () {
+    start() {
         //this.isPlay = false
     },
 
-    update (dt) {
+    update(dt) {
         // if(!this.isPlay)
         //     return
-        if(this.node.y - this.startY < 20)
-        {
-            this.node.y +=2
+        if (this.node.y - this.startY < 70) {
+            this.node.y += 4
             //this.node.scale += 0.05
         }
     },
 
-    playJump(txt, color, fontSize)
-    {
+    playJump(txt, color, fontSize) {
         this.node.color = color//new cc.color(255,0,0)
         this.node.getComponent(cc.Label).string = txt
         this.startY = this.node.y
@@ -55,7 +53,7 @@ cc.Class({
         var interval = 1
         // 重复次数
         var repeat = 1
-        this.schedule(function() {
+        this.schedule(function () {
             this.node.destroy()
         }, interval, repeat, 0)
         this.isPlay = true

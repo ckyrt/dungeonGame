@@ -50,7 +50,7 @@ cc.Class({
             function (t) {
                 let bigmap = cc.find("Canvas/mapNode").getComponent('bigmapScript')
                 let ownRole = bigmap._get_role(global.roleName)
-                ownRole.play_attack_anim()
+                ownRole.node.getComponent('creature').cast_skill()
             }, this)
 
         //death test

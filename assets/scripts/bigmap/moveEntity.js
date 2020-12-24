@@ -80,6 +80,9 @@ cc.Class({
 
     update(dt) {
 
+        if (this.node.getComponent('creature').getAttr('hp') <= 0)
+            return
+
         let n = this.getNextPoint()
         //global.updateWalAnim(this, dt)
 
@@ -92,8 +95,7 @@ cc.Class({
                     this.moving_ = false
 
                     //到达 执行 回调callback
-                    if(this.arrive_call_back_)
-                    {
+                    if (this.arrive_call_back_) {
                         this.arrive_call_back_()
                     }
                 }
@@ -167,8 +169,7 @@ cc.Class({
 
     _move_to_pos: function (x, y, callback = null) {
         let points = global._findPath(this, x, y)
-        if (points == null)
-        {
+        if (points == null) {
             console.log('_move_to_pos target can not arrived')
             return
         }
@@ -271,6 +272,7 @@ cc.Class({
     },
 
     play_death_anim: function () {
+        console.log('play_death_anim', this.uid)
         switch (this.dir_) {
             case global.DIR_L:
                 this.anim_com_.play('left_death');
@@ -285,6 +287,7 @@ cc.Class({
                 this.anim_com_.play('down_death');
                 break;
             default:
+                this.anim_com_.play('down_death');
         }
     },
 });

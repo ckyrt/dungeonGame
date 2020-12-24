@@ -4,6 +4,8 @@ var MsgID = require('MsgID')
 var rpc = require('rpc')
 var itemConfig = require('itemConfig')
 
+var Skill = require('Skill')
+
 cc.Class({
     extends: cc.Component,
 
@@ -28,6 +30,11 @@ cc.Class({
             default: null,
         },
         monster_prefab: {
+            type: cc.Prefab,
+            default: null,
+        },
+
+        numberJump_prefab: {
             type: cc.Prefab,
             default: null,
         },
@@ -81,6 +88,11 @@ cc.Class({
             () => {
                 this._update1000()
             })
+        cc.find("Canvas/UI").getComponent('UIRootScript').setInterval(0.3, 300000,
+            () => {
+                this._update300()
+            })
+
 
         //进地图
         var msg = {}
@@ -166,11 +178,13 @@ cc.Class({
         cc.find("Canvas/UI").getComponent('UIRootScript').setInterval(5, 1,
             () => {
                 this._add_monster_pos('土匪1', 2, 10)
-                this._add_monster_pos('土匪2', 4, 10)
-                this._add_monster_pos('土匪3', 6, 10)
-                this._add_monster_pos('土匪4', 8, 10)
-                this._add_monster_pos('土匪5', 10, 10)
+                // this._add_monster_pos('土匪2', 4, 10)
+                // this._add_monster_pos('土匪3', 6, 10)
+                // this._add_monster_pos('土匪4', 8, 10)
+                // this._add_monster_pos('土匪5', 10, 10)
             })
+
+        Skill.bigmap_script = cc.find("Canvas/mapNode").getComponent('bigmapScript')
     },
 
     setCurScene: function (scene_name) {
@@ -209,6 +223,8 @@ cc.Class({
 
             self.node.getComponent('AstarSearch').initMap(mapData)
         });
+
+        this.getComponent('musicScript').onEnterNewDungeon()
     },
 
     _initDefaultMap: function () {
@@ -256,25 +272,13 @@ cc.Class({
         })
     },
 
+    _update300: function () {
+        let now = (new Date()).valueOf()
+        Skill._update_skills(now)
+    },
+
     onTouchEventEnd: function (t) {
         let RoleCamera = cc.find("Canvas/RoleCamera").getComponent(cc.Camera)
-
-        // console.log('map x:' + global.X_OFFSET)
-        // console.log('map y:' + global.Y_OFFSET)
-        // console.log('camera y:' + RoleCamera.x)
-        // console.log('camera y:' + RoleCamera.y)
-
-        //let worldPoint = t.getLocation()
-
-        //console.log('click x:' + worldPoint.y)
-        //console.log('click y:' + worldPoint.y)
-
-        // let mapX = worldPoint.x + RoleCamera.x //- global.X_OFFSET //-359.892 - 16*22
-        // let mapY = worldPoint.y + RoleCamera.y //- global.Y_OFFSET //-534.975 - 29*22
-
-        // let x = Math.floor(mapX / (global.GRID_WIDTH + global.spacing)) - 11
-        // let y = Math.floor(mapY / (global.GRID_HEIGHT + global.spacing)) - 20
-
 
         let screenPoint = t.getLocation()
         let worldPoint = cc.v2(0, 0)
@@ -282,9 +286,6 @@ cc.Class({
         var mapPos = this.node.convertToNodeSpaceAR(worldPoint)
         let x = Math.floor(mapPos.x / (global.GRID_WIDTH + global.spacing))
         let y = Math.floor(mapPos.y / (global.GRID_WIDTH + global.spacing))
-
-
-        //console.log("click: (" + x + "," + y + ")")
 
         let ownRole = this._get_role(global.roleName)
         this._removeTargetGrid()
@@ -320,7 +321,8 @@ cc.Class({
         var moveEntity = prefab.getComponent("moveEntity")
         moveEntity.set_grid({ x, y })
         moveEntity.uid = uid
-
+        prefab.getComponent('creature').initAttr()
+        prefab.getComponent('creature').setAttr('camp', 1)
 
         this.roles[uid] = moveEntity
 
@@ -456,6 +458,8 @@ cc.Class({
         var moveEntity = prefab.getComponent("moveEntity")
         moveEntity.set_grid({ x, y })
         moveEntity.uid = uid
+        prefab.getComponent('creature').initAttr()
+        prefab.getComponent('creature').setAttr('camp', 2)
 
         this.monsters[uid] = moveEntity
 
@@ -470,5 +474,66 @@ cc.Class({
 
     _get_monster: function (uid) {
         return this.monsters[uid]
+    },
+
+    //得到role 或者 monster 的entity
+    _get_entity_by_uid: function (uid) {
+        let ent = this._get_role(uid)
+        if (!ent)
+            ent = this._get_monster(uid)
+        return ent
+    },
+
+    _is_same_line: function (x1, y1, x2, y2) {
+        return x1 == x2 || y1 == y2
+    },
+
+    _distance: function (x1, y1, x2, y2) {
+        return Math.abs(x1 - x2) + Math.abs(y1 - y2)
+    },
+
+    //访问生物
+    _get_pos_radius_entities: function (x, y, r, filter = null) {
+        //console.log('_get_pos_radius_entities', x, y, r, filter)
+        let rets = []
+        for (var k in this.monsters) {
+            let ent = this.monsters[k]
+            if (/*this._is_same_line(x, y, ent.x, ent.y) &&*/ this._distance(x, y, ent.x, ent.y) <= r) {
+                if (filter && filter(ent) || !filter)
+                    rets.push(k)
+            }
+        }
+        for (var k in this.roles) {
+            let ent = this.roles[k]
+            if (/*this._is_same_line(x, y, ent.x, ent.y) &&*/ this._distance(x, y, ent.x, ent.y) <= r) {
+                if (filter && filter(ent) || !filter)
+                    rets.push(k)
+            }
+        }
+        return rets
+    },
+
+
+    //跳数字
+    _playNumberJump: function (txt, x, y, color, fontSize = 40) {
+        var numberJump = cc.instantiate(this.numberJump_prefab)
+
+
+        //世界坐标 转换为 RoleCamera 屏幕位置
+        let screenPos = cc.v2(0, 0)
+        let role_camera = cc.find("Canvas/RoleCamera").getComponent(cc.Camera)
+        role_camera.getWorldToScreenPoint(cc.v2(x, y), screenPos)
+
+        //屏幕位置 转换为 mainCamera 世界坐标
+        let worldPos = cc.v2(0, 0)
+        let main_camera = cc.find("Canvas/Main Camera").getComponent(cc.Camera)
+        main_camera.getScreenToWorldPoint(screenPos, worldPos);
+
+        //转为 父节点的 局部坐标
+        let effect = cc.find("Canvas/UI/effect")
+        var locPos = effect.convertToNodeSpaceAR(cc.v2(worldPos.x, worldPos.y))
+        effect.addChild(numberJump)
+        numberJump.setPosition(locPos.x, locPos.y)
+        numberJump.getComponent('numberJumpScript').playJump(txt, color, fontSize)
     },
 });
