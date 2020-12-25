@@ -68,7 +68,6 @@ cc.Class({
         let head = global.getChildByName(this.node, 'role_name').getComponent(cc.Label)
         head.string = this.uid
 
-
         var anim_node = this.node.getChildByName("anim");
         this.anim_com_ = anim_node.getComponent(cc.Animation);
         this.moving_ = false
@@ -80,8 +79,13 @@ cc.Class({
 
     update(dt) {
 
-        if (this.node.getComponent('creature').getAttr('hp') <= 0)
+        if (this.dead_)
             return
+        if (this.node.getComponent('creature').getAttr('hp') <= 0 && !this.dead_) {
+            this.node.getComponent('moveEntity').play_death_anim()
+            this.dead_ = true
+            return
+        }
 
         let n = this.getNextPoint()
         //global.updateWalAnim(this, dt)

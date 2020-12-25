@@ -231,6 +231,7 @@ var itemConfig = {
         'name': '水晶剑',
         'imgSrc': 'shuijingjian',
         'descript': '用稀有水晶锻造的剑刃，会寻找敌人护甲的脆弱处\n+30攻击力\n致命一击：在攻击中有20%的几率造成1.75倍伤害的致命一击。',
+        part: 'weapon',
         price: 2120,
         attrs: {
             add_attack: 30,

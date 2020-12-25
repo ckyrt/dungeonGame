@@ -76,10 +76,16 @@ cc.Class({
     },
 
     beforeDie: function () {
-        this.node.getComponent('moveEntity').play_death_anim()
+        //复活
+        if (this.node.getComponent('moveEntity').uid == global.roleName) {
+            let deadPanel = cc.find("Canvas/UI/deadPanel")
+            deadPanel.getComponent('deadPanelScript').openDeadPanel()
+        }
     },
 
     cast_skill: function () {
         this.node.getComponent('moveEntity').play_attack_anim()
+        let musicScript = cc.find("Canvas/mapNode").getComponent('musicScript')
+        musicScript.playEffect('hit')
     },
 });

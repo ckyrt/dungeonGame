@@ -131,13 +131,12 @@ cc.Class({
     },
 
     takeoffEquipItemToBag: function (part) {
-
         let equipItem = this.allItems[part]
         if (equipItem == null) {
             //不存在
             return 0
         }
-
+        console.log('takeoffEquipItemToBag', part, equipItem)
         //背包创建一个
         // let bagScript = cc.find("Canvas/UI/bag").getComponent('bagScript')
         // bagScript.addItem(itemConfig.copyItemEntity(equipItem))
@@ -151,7 +150,6 @@ cc.Class({
 
         //删除item属性
         global.role_.removeItemAttr(equipItem)
-
         return 1
     },
 

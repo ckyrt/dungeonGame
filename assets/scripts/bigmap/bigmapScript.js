@@ -332,7 +332,7 @@ cc.Class({
         }
     },
 
-    _add_role_pos(uid, x, y) {
+    _add_role_pos(uid, x, y, hp, max_hp) {
         var prefab = cc.instantiate(this.role_prefab)
         cc.find("Canvas").addChild(prefab)
         prefab.zIndex = 1
@@ -341,6 +341,8 @@ cc.Class({
         moveEntity.uid = uid
         prefab.getComponent('creature').initAttr()
         prefab.getComponent('creature').setAttr('camp', 1)
+        prefab.getComponent('creature').setAttr('max_hp', max_hp)
+        prefab.getComponent('creature').setAttr('hp', hp)
 
         this.roles[uid] = moveEntity
 
@@ -382,8 +384,9 @@ cc.Class({
         ntf.map_id
         ntf.x
         ntf.y
-        console.log('role appear:' + ntf.role_id, ntf.x, ntf.y)
-        this._add_role_pos(ntf.role_id, ntf.x, ntf.y)
+        ntf.hp
+        ntf.max_hp
+        this._add_role_pos(ntf.role_id, ntf.x, ntf.y, ntf.hp, ntf.max_hp)
     },
     //消失
     onDisAppear: function (ntf) {

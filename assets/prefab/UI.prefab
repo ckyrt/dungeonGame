@@ -32559,7 +32559,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 300,
-      "height": 600
+      "height": 250
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -32635,7 +32635,7 @@
       "ctor": "Float64Array",
       "array": [
         0,
-        165.387,
+        86.221,
         0,
         0,
         0,
@@ -32746,7 +32746,7 @@
       "ctor": "Float64Array",
       "array": [
         0,
-        -176.559,
+        -80.864,
         0,
         0,
         0,
@@ -32919,8 +32919,8 @@
       }
     ],
     "_useOriginalSize": false,
-    "_string": "再来一次",
-    "_N$string": "再来一次",
+    "_string": "复活",
+    "_N$string": "复活",
     "_fontSize": 20,
     "_lineHeight": 40,
     "_enableWrapText": false,
@@ -33141,7 +33141,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 200,
-      "height": 300
+      "height": 80
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -33191,8 +33191,8 @@
       }
     ],
     "_useOriginalSize": false,
-    "_string": "统计信息blablablablablablablablabla\n统计信息blablablablablablablablabla\n统计信息blablablablablablablablabla\n统计信息blablablablablablablablabla",
-    "_N$string": "统计信息blablablablablablablablabla\n统计信息blablablablablablablablabla\n统计信息blablablablablablablablabla\n统计信息blablablablablablablablabla",
+    "_string": "统计信息blablablablablablablablabla",
+    "_N$string": "统计信息blablablablablablablablabla",
     "_fontSize": 20,
     "_lineHeight": 20,
     "_enableWrapText": true,
