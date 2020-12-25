@@ -3,7 +3,7 @@ var jsClientScript = require('jsClientScript')
 var MsgID = require('MsgID')
 var itemConfig = require('itemConfig')
 var npcConfig = require('npcConfig')
-
+var rpc = require('rpc')
 
 cc.Class({
     extends: cc.Component,
@@ -48,9 +48,7 @@ cc.Class({
         let attackBtn = global.getChildByName(this.node, 'attackBtn')
         attackBtn.on(cc.Node.EventType.TOUCH_START,
             function (t) {
-                let bigmap = cc.find("Canvas/mapNode").getComponent('bigmapScript')
-                let ownRole = bigmap._get_role(global.roleName)
-                ownRole.node.getComponent('creature').cast_skill()
+                rpc._call('cast_skill', [global.roleName])
             }, this)
 
         //death test

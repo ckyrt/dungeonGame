@@ -173,16 +173,15 @@ cc.Class({
             this.setCurScene(scene)
         })
 
-
-        ////////////////////////////////////////// test add monster(20201223) //////////////////////////////////////////
-        cc.find("Canvas/UI").getComponent('UIRootScript').setInterval(5, 1,
-            () => {
-                this._add_monster_pos('土匪1', 2, 10)
-                // this._add_monster_pos('土匪2', 4, 10)
-                // this._add_monster_pos('土匪3', 6, 10)
-                // this._add_monster_pos('土匪4', 8, 10)
-                // this._add_monster_pos('土匪5', 10, 10)
-            })
+        //技能
+        rpc.addRpcFunc('cast_skill', (args) => {
+            let role_id = args[0]
+            let role = this._get_role(role_id)
+            if(role)
+            {
+                role.node.getComponent('creature').cast_skill()
+            }
+        })
 
         Skill.bigmap_script = cc.find("Canvas/mapNode").getComponent('bigmapScript')
     },
@@ -222,6 +221,9 @@ cc.Class({
             console.log(mapData)
 
             self.node.getComponent('AstarSearch').initMap(mapData)
+
+            // test monster
+            self._add_monster_pos('土匪1', 2, 2)
         });
 
         this.getComponent('musicScript').onEnterNewDungeon()
