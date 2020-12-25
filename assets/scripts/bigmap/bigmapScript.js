@@ -177,13 +177,29 @@ cc.Class({
         rpc.addRpcFunc('cast_skill', (args) => {
             let role_id = args[0]
             let role = this._get_role(role_id)
-            if(role)
-            {
+            if (role) {
                 role.node.getComponent('creature').cast_skill()
             }
         })
+        rpc.addRpcFunc('setAttr', (args) => {
+            let role_id = args[0]
+            let att = args[1]
+            let v = args[2]
+            let role = this._get_role(role_id)
+            if (role) {
+                role.node.getComponent('creature').setAttr(att, v)
+            }
+        })
+        rpc.addRpcFunc('_playNumberJump', (args) => {
 
-        Skill.bigmap_script = cc.find("Canvas/mapNode").getComponent('bigmapScript')
+            let txt = args[0]
+            let role_id = args[1]
+            let role = this._get_role(role_id)
+
+            this._playNumberJump(txt, role.x, role.y)
+        })
+
+        //Skill.bigmap_script = cc.find("Canvas/mapNode").getComponent('bigmapScript')
     },
 
     setCurScene: function (scene_name) {
@@ -223,7 +239,7 @@ cc.Class({
             self.node.getComponent('AstarSearch').initMap(mapData)
 
             // test monster
-            self._add_monster_pos('土匪1', 2, 2)
+            //self._add_monster_pos('土匪1', 2, 2)
         });
 
         this.getComponent('musicScript').onEnterNewDungeon()
@@ -275,8 +291,8 @@ cc.Class({
     },
 
     _update300: function () {
-        let now = (new Date()).valueOf()
-        Skill._update_skills(now)
+        //let now = (new Date()).valueOf()
+        //Skill._update_skills(now)
     },
 
     onTouchEventEnd: function (t) {
@@ -517,21 +533,28 @@ cc.Class({
 
 
     //跳数字
-    _playNumberJump: function (txt, x, y, color, fontSize = 40) {
+    _playNumberJump: function (txt, x, y) {
+
+        let color = new cc.color(255, 0, 0)
+        let fontSize = 30
+        console.log('_playNumberJump', txt, x, y)
+        //地图位置
+        let map_pos = global.getRealMapPos(x, y)
+        //生物的父节点是canvas 得到世界坐标
+        var absolutePos = cc.find("Canvas").convertToWorldSpaceAR(cc.v2(map_pos.x, map_pos.y + 40))
+
         var numberJump = cc.instantiate(this.numberJump_prefab)
-
-
         //世界坐标 转换为 RoleCamera 屏幕位置
         let screenPos = cc.v2(0, 0)
         let role_camera = cc.find("Canvas/RoleCamera").getComponent(cc.Camera)
-        role_camera.getWorldToScreenPoint(cc.v2(x, y), screenPos)
+        role_camera.getWorldToScreenPoint(cc.v2(absolutePos.x, absolutePos.y), screenPos)
 
         //屏幕位置 转换为 mainCamera 世界坐标
         let worldPos = cc.v2(0, 0)
         let main_camera = cc.find("Canvas/Main Camera").getComponent(cc.Camera)
         main_camera.getScreenToWorldPoint(screenPos, worldPos);
 
-        //转为 父节点的 局部坐标
+        //转为 父节点effect的 局部坐标
         let effect = cc.find("Canvas/UI/effect")
         var locPos = effect.convertToNodeSpaceAR(cc.v2(worldPos.x, worldPos.y))
         effect.addChild(numberJump)

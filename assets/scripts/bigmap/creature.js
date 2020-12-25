@@ -80,10 +80,6 @@ cc.Class({
     },
 
     cast_skill: function () {
-        if (this.getAttr('hp') <= 0)
-            return
-        let ent = this.node.getComponent('moveEntity')
-        Skill.generate_skill(ent.x, ent.y, this)
         this.node.getComponent('moveEntity').play_attack_anim()
     },
 });
