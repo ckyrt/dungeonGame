@@ -36,17 +36,19 @@ cc.Class({
         let sellButton = global.getChildByName(this.node, "sellButton")
         sellButton.on(cc.Node.EventType.TOUCH_START, () => {
 
-            let backScript = cc.find("Canvas/back").getComponent('backScript')
-            let price = Math.ceil(itemConfig[this.itemEntity.name].price * this.itemEntity.count / 2)
+            // let backScript = cc.find("Canvas/back").getComponent('backScript')
+            // let price = Math.ceil(itemConfig[this.itemEntity.name].price * this.itemEntity.count / 2)
 
-            cc.find("Canvas/UI").getComponent('UIRootScript')._addTextInfo('获得 ' + price + '金币')
-            cc.find("Canvas/UI").getComponent('UIRootScript')._addTextInfo('扣除 ' + this.itemEntity.name)
+            // cc.find("Canvas/UI").getComponent('UIRootScript')._addTextInfo('获得 ' + price + '金币')
+            // cc.find("Canvas/UI").getComponent('UIRootScript')._addTextInfo('扣除 ' + this.itemEntity.name)
 
-            global.role_.addAttr('coin', price)
+            // global.role_.addAttr('coin', price)
 
-            let bagScript = cc.find("Canvas/UI/bag").getComponent('bagScript')
-            bagScript._discardItemByUUid(this.itemEntity.uuid)
-            bagScript._refreshShow()
+            // let bagScript = cc.find("Canvas/UI/bag").getComponent('bagScript')
+            // bagScript._discardItemByUUid(this.itemEntity.uuid)
+            // bagScript._refreshShow()
+
+            rpc._call('sellItem_s', [global.roleName, this.entity_.uuid])
 
             this.closePanel()
         }, this)
@@ -123,7 +125,7 @@ cc.Class({
             let stren_lv = global.getChildByName(this.node, "stren_lv")
             stren_lv.getComponent(cc.Label).string = item.stren_lv > 0 ? '+' + item.stren_lv : ''
         }, this)
-        
+
     },
 
     // update (dt) {},
@@ -204,25 +206,29 @@ cc.Class({
         let itemCfg = itemConfig[this.itemEntity.name]
         let times = this.itemEntity.use_times
         let cd = this.itemEntity.cd_time
-        let backScript = cc.find("Canvas/back").getComponent('backScript')
+        //let backScript = cc.find("Canvas/back").getComponent('backScript')
         if (cd > 0) {
             //还没有冷却好
             cc.find("Canvas/UI").getComponent('UIRootScript')._addTextInfo('冷却中: ' + cd.toFixed(1) + 's')
             return
         }
 
-        if (itemCfg.use_func != null) {
-            if (itemCfg.has_target == true) {
-                //有目标，需要再点击一下目标
-                cc.find("Canvas/UI").getComponent('UIRootScript')._addTextInfo('请选择目标单位')
-                backScript.setChooseTargetFunc(
-                    (target) => {
-                        this.useItemOver(target)
-                    })
-            }
-        }
-
+        console.log('useItem_s', global.roleName, this.itemEntity.uuid)
+        rpc._call('useItem_s', [global.roleName, this.itemEntity.uuid])
         this.closePanel()
+        // if (itemCfg.use_func != null) {
+        //     if (itemCfg.has_target == true) {
+        //         //有目标，需要再点击一下目标
+        //         cc.find("Canvas/UI").getComponent('UIRootScript')._addTextInfo('请选择目标单位')
+        //         backScript.setChooseTargetFunc(
+        //             (target) => {
+        //                 this.useItemOver(target)
+        //             })
+        //     }
+        //     else {
+        //         this.useItemOver()
+        //     }
+        // }
     },
 
     useItemOver: function (target) {

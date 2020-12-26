@@ -126,6 +126,7 @@ cc.Class({
         rpc.addRpcFunc('listAllBagItems_c', (args) => {
             let bagScript = cc.find("Canvas/UI/bag").getComponent('bagScript')
             let items = args[0]
+            let coin = args[1]
             console.log('items:', items)
             for (var k in items) {
                 let item = items[k]
@@ -137,7 +138,14 @@ cc.Class({
                     bagScript._addItemToPos(item, item.pos)
                 }
             }
+            bagScript.setCoin(coin)
             bagScript._refreshShow()
+        })
+
+        rpc.addRpcFunc('refreshCoin_c', (args) => {
+            let bagScript = cc.find("Canvas/UI/bag").getComponent('bagScript')
+            let coin = args[0]
+            bagScript.setCoin(coin)
         })
 
         rpc.addRpcFunc('listAllEquipItems_c', (args) => {
@@ -170,39 +178,48 @@ cc.Class({
         rpc.addRpcFunc('getAOI_c', (args) => {
             let map_id = args[0]
             let scene = global.mapIdToScene(map_id)
+            cc.find("Canvas/UI/title/dungeonName").getComponent(cc.Label).string = args[1]
             this.setCurScene(scene)
         })
 
         //技能
         rpc.addRpcFunc('cast_skill', (args) => {
-            let role_id = args[0]
-            let role = this._get_role(role_id)
-            if (role) {
-                role.node.getComponent('creature').cast_skill()
+            let uuid = args[0]
+            let creture = this._get_entity_by_uid(uuid)
+            if (creture) {
+                creture.node.getComponent('creature').cast_skill()
             }
         })
         rpc.addRpcFunc('setAttr', (args) => {
-            let role_id = args[0]
+            let uuid = args[0]// TODO creature uuid
             let att = args[1]
             let v = args[2]
-            let role = this._get_role(role_id)
-            if (role) {
-                role.node.getComponent('creature').setAttr(att, v)
+            let creture = this._get_entity_by_uid(uuid)
+            if (creture) {
+                creture.node.getComponent('creature').setAttr(att, v)
             }
         })
         rpc.addRpcFunc('_playNumberJump', (args) => {
 
             let txt = args[0]
-            let role_id = args[1]
-            let role = this._get_role(role_id)
-
-            this._playNumberJump(txt, role.x, role.y)
+            let uuid = args[1]// TODO creature uuid
+            let creture = this._get_entity_by_uid(uuid)
+            if (creture) {
+                this._playNumberJump(txt, creture.x, creture.y)
+            }
         })
 
-        //Skill.bigmap_script = cc.find("Canvas/mapNode").getComponent('bigmapScript')
+        //怪物
+        rpc.addRpcFunc('monster_appear', (args) => {
+            this._add_monster_pos(args[0], args[1], args[2], args[3], args[4], args[5])
+        })
+        rpc.addRpcFunc('monster_disappear', (args) => {
+            this._remove_monster(args[0])
+        })
     },
 
     setCurScene: function (scene_name) {
+
         this._initDefaultMap()
         //tiled
         var url = 'tmx/' + scene_name
@@ -237,9 +254,6 @@ cc.Class({
             console.log(mapData)
 
             self.node.getComponent('AstarSearch').initMap(mapData)
-
-            // test monster
-            //self._add_monster_pos('土匪1', 2, 2)
         });
 
         this.getComponent('musicScript').onEnterNewDungeon()
@@ -332,33 +346,41 @@ cc.Class({
         }
     },
 
-    _add_role_pos(uid, x, y, hp, max_hp) {
+    _add_role_pos(name, x, y, hp, max_hp, creature_uuid) {
         var prefab = cc.instantiate(this.role_prefab)
         cc.find("Canvas").addChild(prefab)
         prefab.zIndex = 1
         var moveEntity = prefab.getComponent("moveEntity")
         moveEntity.set_grid({ x, y })
-        moveEntity.uid = uid
+        moveEntity.uid = name
         prefab.getComponent('creature').initAttr()
         prefab.getComponent('creature').setAttr('camp', 1)
         prefab.getComponent('creature').setAttr('max_hp', max_hp)
         prefab.getComponent('creature').setAttr('hp', hp)
+        prefab.getComponent('creature').creature_uuid = creature_uuid
 
-        this.roles[uid] = moveEntity
+        this.roles[name] = moveEntity
 
         return moveEntity
     },
 
-    _remove_role: function (uid) {
-        this.roles[uid].node.destroy()
-        this.roles[uid] = null
-        delete (this.roles[uid])
+    _remove_role: function (name) {
+        this.roles[name].node.destroy()
+        this.roles[name] = null
+        delete (this.roles[name])
     },
 
-    _get_role: function (uid) {
-        return this.roles[uid]
+    _get_role: function (name) {
+        return this.roles[name]
     },
 
+    _get_role_by_uid: function (uid) {
+        for (var k in this.roles) {
+            if (this.roles[k].node.getComponent('creature').creature_uuid == uid)
+                return this.roles[k]
+        }
+        return null
+    },
 
 
     //来自服务器的消息
@@ -371,12 +393,16 @@ cc.Class({
         ntf.to_x
         ntf.to_y
 
-        let role = this._get_role(ntf.role_id)
-        if (role == null) {
+        let ent = this._get_role(ntf.role_id)
+        if (ent == null) {
+            ent = this._get_monster(ntf.role_id)
+        }
+        if (!ent) {
             console.error(ntf.role_id + ' not found for move')
             return
         }
-        role.pathPoints.unshift({ x: ntf.to_x, y: ntf.to_y })
+
+        ent.pathPoints.unshift({ x: ntf.to_x, y: ntf.to_y })
     },
     //出现
     onAppear: function (ntf) {
@@ -386,7 +412,7 @@ cc.Class({
         ntf.y
         ntf.hp
         ntf.max_hp
-        this._add_role_pos(ntf.role_id, ntf.x, ntf.y, ntf.hp, ntf.max_hp)
+        this._add_role_pos(ntf.role_id, ntf.x, ntf.y, ntf.hp, ntf.max_hp, ntf.creature_uuid)
     },
     //消失
     onDisAppear: function (ntf) {
@@ -472,15 +498,19 @@ cc.Class({
 
 
     //monster
-    _add_monster_pos(uid, x, y) {
+    _add_monster_pos(uid, name, max_hp, hp, x, y) {
+        console.log('_add_monster_pos', uid, name, max_hp, hp, x, y)
         var prefab = cc.instantiate(this.monster_prefab)
         cc.find("Canvas").addChild(prefab)
         prefab.zIndex = 1
         var moveEntity = prefab.getComponent("moveEntity")
         moveEntity.set_grid({ x, y })
+        moveEntity.show_name = name
         moveEntity.uid = uid
         prefab.getComponent('creature').initAttr()
         prefab.getComponent('creature').setAttr('camp', 2)
+        prefab.getComponent('creature').setAttr('max_hp', max_hp)
+        prefab.getComponent('creature').setAttr('hp', hp)
 
         this.monsters[uid] = moveEntity
 
@@ -499,7 +529,7 @@ cc.Class({
 
     //得到role 或者 monster 的entity
     _get_entity_by_uid: function (uid) {
-        let ent = this._get_role(uid)
+        let ent = this._get_role_by_uid(uid)
         if (!ent)
             ent = this._get_monster(uid)
         return ent

@@ -1,5 +1,6 @@
 var global = require('global')
 var itemConfig = require('itemConfig')
+var rpc = require('rpc')
 
 cc.Class({
     extends: cc.Component,
@@ -129,24 +130,26 @@ cc.Class({
     buyShopItem: function () {
         if (this.curCfg_) {
 
-            let backScript = cc.find("Canvas/back").getComponent('backScript')
-            let hasCoin = global.role_.getAttr('coin')
+            rpc._call('buyItem_s', [global.roleName, this.curCfg_.name])
+            return
 
-            let bagScript = cc.find("Canvas/UI/bag").getComponent('bagScript')
-            if (hasCoin < this.curCfg_.price) {
-                cc.find("Canvas/UI").getComponent('UIRootScript')._addTextInfo('金币不够')
-                return
-            }
-            if (bagScript.isFull()) {
-                cc.find("Canvas/UI").getComponent('UIRootScript')._addTextInfo('背包已满')
-                return
-            }
-            //enouth money and inventory is not full
-            global.role_.setAttr('coin', hasCoin - this.curCfg_.price)
-            bagScript.addItem(itemConfig.createItemEntity(this.curCfg_.name))
+            // let hasCoin = global.role_.getAttr('coin')
 
-            cc.find("Canvas/UI").getComponent('UIRootScript')._addTextInfo('扣除 ' + this.curCfg_.price + '金币')
-            cc.find("Canvas/UI").getComponent('UIRootScript')._addTextInfo('获得 ' + this.curCfg_.name)
+            // let bagScript = cc.find("Canvas/UI/bag").getComponent('bagScript')
+            // if (hasCoin < this.curCfg_.price) {
+            //     cc.find("Canvas/UI").getComponent('UIRootScript')._addTextInfo('金币不够')
+            //     return
+            // }
+            // if (bagScript.isFull()) {
+            //     cc.find("Canvas/UI").getComponent('UIRootScript')._addTextInfo('背包已满')
+            //     return
+            // }
+            // //enouth money and inventory is not full
+            // global.role_.setAttr('coin', hasCoin - this.curCfg_.price)
+            // bagScript.addItem(itemConfig.createItemEntity(this.curCfg_.name))
+
+            // cc.find("Canvas/UI").getComponent('UIRootScript')._addTextInfo('扣除 ' + this.curCfg_.price + '金币')
+            // cc.find("Canvas/UI").getComponent('UIRootScript')._addTextInfo('获得 ' + this.curCfg_.name)
         }
     },
 });

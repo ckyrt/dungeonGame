@@ -249,6 +249,18 @@ cc.Class({
     },
 
     _canNotPass: function (x, y) {
+
+        //越界
+        let min_x = 0
+        let min_y = 0
+        let max_x = this._map[0].length - 1
+        let max_y = this._map.length - 1
+
+        if (x > max_x || x < min_x)
+            return true
+        if (y > max_y || y < min_y)
+            return true
+
         let v = this._map[y][x]
         return (v & 2) > 0 || (v & 1) == 0
     },

@@ -175,7 +175,7 @@ cc.Class({
         if (att == 'coin') {
             //背包里面coin变动
             let bagScript = cc.find("Canvas/UI/bag").getComponent('bagScript')
-            bagScript.setCoin(v)
+            //bagScript.setCoin(v)
         }
         if (att == 'level') {
             let level_node = global.getChildByName(this.node, 'level')

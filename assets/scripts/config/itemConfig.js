@@ -34,7 +34,7 @@ var itemConfig = {
             //     })
         },
         use_times: 1,    //可使用次数
-        has_target: true,           //目标
+        has_target: false,           //目标
         stackable: true,
     },
     '敏捷便鞋': {

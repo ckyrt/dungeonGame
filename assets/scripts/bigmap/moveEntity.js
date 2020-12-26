@@ -66,15 +66,11 @@ cc.Class({
         // })
 
         let head = global.getChildByName(this.node, 'role_name').getComponent(cc.Label)
-        head.string = this.uid
+        head.string = this.show_name ? this.show_name : this.uid
 
         var anim_node = this.node.getChildByName("anim");
         this.anim_com_ = anim_node.getComponent(cc.Animation);
         this.moving_ = false
-
-        let new_monster_script = this.node.getComponent('newMonsterScript')
-        if (new_monster_script)
-            new_monster_script._move_entity_init_over()
     },
 
     update(dt) {
@@ -176,10 +172,6 @@ cc.Class({
         if (points == null) {
             console.log('_move_to_pos target can not arrived')
             return
-        }
-        //等待到达然后接到后面
-        if (this.pathPoints.length > 0) {
-            points.concat(this.pathPoints)
         }
         this.pathPoints = points
         this.arrive_call_back_ = callback
