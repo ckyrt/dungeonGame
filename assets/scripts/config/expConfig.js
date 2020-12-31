@@ -240,8 +240,21 @@ var expConfig = {
     },
 
     getLevelExp: function (level) {
-        console.log('getLevelExp', level)
         return expData[level - 1][1]
     },
+
+    getExpAndLevelFromAllExp: function (exp) {
+        for (var i = 0; i < expData.length; ++i) {
+
+            if (exp >= expData[i][1]) {
+                exp -= expData[i][1]
+            }
+            else {
+                return { 'level': expData[i][0], 'exp': exp }
+            }
+        }
+    },
+
+
 }
 module.exports = expConfig

@@ -1,4 +1,5 @@
 var global = require('global')
+var expConfig = require('expConfig')
 
 cc.Class({
     extends: cc.Component,
@@ -39,10 +40,11 @@ cc.Class({
         let exp = global.getChildByName(this.node, "exp")
         let coin = global.getChildByName(this.node, "coin")
 
+        let l_e = expConfig.getExpAndLevelFromAllExp(c.exp)
         index.getComponent(cc.Label).string = c.index
         name.getComponent(cc.Label).string = c.name
-        level.getComponent(cc.Label).string = c.level
-        exp.getComponent(cc.Label).string = c.exp
+        level.getComponent(cc.Label).string =  l_e.level //c.level 计算得到等级
+        exp.getComponent(cc.Label).string = l_e.exp
         coin.getComponent(cc.Label).string = c.coin
     }
 });
