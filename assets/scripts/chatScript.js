@@ -30,7 +30,11 @@ cc.Class({
 
         this.chat_bt.node.on('click', function (e) {
             var str = this.chat_input.string
+            if (str.trim() == '')
+                return
+            str = str.trim()
 
+            str = str.slice(0, 20)
             var msg = {}
             msg.msg_id = MsgID.ChatReq
             msg.text = str

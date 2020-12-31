@@ -114,19 +114,19 @@ cc.Class({
         let result = msg.results[0]
         this.errorTip.string = msg.tip
         if (msg.tip == 'login ok') {
-            this.loadGameScene(result.name, JSON.parse(result.datas), result.map_id, result.pos_x, result.pos_y)
+            this.loadGameScene(result.name, JSON.parse(result.datas), result.coin, result.exp)
         }
         else {
             //login error
         }
     },
 
-    loadGameScene: function (name, params, map_id, x, y) {
+    loadGameScene: function (name, params, coin, exp) {
         global.roleName = name
         global.loginData = params
-        global.map_id = map_id
-        global.pos_x = x
-        global.pos_y = y
+        global.loginData.coin = coin
+        global.loginData.exp = exp
+        console.log('loginData:', global.loginData)
         this.node.x = -10000
         //dungeon bigmap
         cc.director.loadScene("bigmap", () => {

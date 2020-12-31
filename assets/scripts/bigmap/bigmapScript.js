@@ -99,10 +99,13 @@ cc.Class({
         msg.msg_id = MsgID.CM_GET_AOI
         msg.role_id = global.roleName
         jsClientScript.send(JSON.stringify(msg))
-        //rpc._call('login_enterMap_s', [global.roleName, global.map_id, global.pos_x, global.pos_y])
 
 
         //所有注册的让服务器远程调用的消息
+        rpc.addRpcFunc('itemPicked_ack', (args) => {
+            let itemName = args[0]
+            cc.find("Canvas/UI").getComponent('UIRootScript')._addTextInfo('获得 ' + itemName)
+        })
         rpc.addRpcFunc('addBagItem_c', (args) => {
             let item = args[0]
             let itemName = item.name
@@ -143,9 +146,26 @@ cc.Class({
         })
 
         rpc.addRpcFunc('refreshCoin_c', (args) => {
+            console.log('refreshCoin_c')
             let bagScript = cc.find("Canvas/UI/bag").getComponent('bagScript')
             let coin = args[0]
             bagScript.setCoin(coin)
+
+            let c = args[1]
+            let str = c > 0 ? '获得' : '失去'
+            c = c > 0 ? c : -1 * c
+            cc.find("Canvas/UI").getComponent('UIRootScript')._addTextInfo(str + ' 铜钱 ' + c)
+        })
+        rpc.addRpcFunc('refreshExp_c', (args) => {
+            console.log('refreshExp_c')
+            let exp = args[0]
+            //更新经验 ui
+            let c = args[1]
+            global.role_.addExp(c)
+
+            let str = c > 0 ? '获得' : '失去'
+            c = c > 0 ? c : -1 * c
+            cc.find("Canvas/UI").getComponent('UIRootScript')._addTextInfo(str + ' 经验 ' + c)
         })
 
         rpc.addRpcFunc('listAllEquipItems_c', (args) => {

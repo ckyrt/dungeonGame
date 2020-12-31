@@ -1,0 +1,36 @@
+{
+  "ver": "2.3.4",
+  "uuid": "11998909-18d3-4cc9-aaf0-018ebbe9ef90",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 256,
+  "height": 704,
+  "platformSettings": {},
+  "subMetas": {
+    "019-DesertTown01": {
+      "ver": "1.0.4",
+      "uuid": "629cfbae-92b3-43e3-99ff-0f4b14854356",
+      "rawTextureUuid": "11998909-18d3-4cc9-aaf0-018ebbe9ef90",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 256,
+      "height": 704,
+      "rawWidth": 256,
+      "rawHeight": 704,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

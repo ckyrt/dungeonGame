@@ -2432,8 +2432,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 220.11,
-      "height": 25.2
+      "width": 171,
+      "height": 45.2
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -2445,7 +2445,7 @@
       "ctor": "Float64Array",
       "array": [
         -0.825,
-        -100.278,
+        -97.278,
         0,
         0,
         0,
@@ -2483,9 +2483,9 @@
       }
     ],
     "_useOriginalSize": false,
-    "_string": "开发交流群：979761439",
-    "_N$string": "开发交流群：979761439",
-    "_fontSize": 20,
+    "_string": "欢迎加入开发交流群\n979761439",
+    "_N$string": "欢迎加入开发交流群\n979761439",
+    "_fontSize": 19,
     "_lineHeight": 20,
     "_enableWrapText": true,
     "_N$file": null,

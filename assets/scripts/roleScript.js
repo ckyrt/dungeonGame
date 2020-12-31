@@ -78,34 +78,36 @@ cc.Class({
         this.setAttr('max_energy', roleData != null ? roleData.max_energy : configAttr.max_energy)
         this.setAttr('energy', roleData != null ? roleData.energy : configAttr.energy)
 
-        this.setAttr('level', roleData != null ? roleData.level : 1)
-        this.setAttr('exp', roleData != null ? roleData.exp : 0)
+        this.setAttr('level', 1)
+        this.setAttr('exp', 0)
+        let add_exp = roleData != null ? roleData.exp : 0
+        this.addExp(add_exp)
         this.setAttr('coin', roleData != null ? roleData.coin : 10000)
     },
 
     getRoleSaveData: function (msg) {
 
-        //等级
-        msg.level = this.getAttr('level')
-        //经验
-        msg.exp = this.getAttr('exp')
-        //金钱
-        msg.coin = this.getAttr('coin')
-        //血量
-        msg.hp = this.getAttr('hp')
-        msg.max_hp = this.getAttr('max_hp')
-        //蓝量
-        msg.mp = this.getAttr('mp')
-        msg.max_mp = this.getAttr('max_mp')
-        //能量
-        msg.energy = this.getAttr('energy')
-        msg.max_energy = this.getAttr('max_energy')
-        //职业
-        msg.job = this.getAttr('job')
+        // //等级
+        // msg.level = this.getAttr('level')
+        // //经验
+        // msg.exp = this.getAttr('exp')
+        // //金钱
+        // msg.coin = this.getAttr('coin')
+        // //血量
+        // msg.hp = this.getAttr('hp')
+        // msg.max_hp = this.getAttr('max_hp')
+        // //蓝量
+        // msg.mp = this.getAttr('mp')
+        // msg.max_mp = this.getAttr('max_mp')
+        // //能量
+        // msg.energy = this.getAttr('energy')
+        // msg.max_energy = this.getAttr('max_energy')
+        // //职业
+        // msg.job = this.getAttr('job')
 
-        msg.min_attack = this.getAttr('min_attack')
-        msg.max_attack = this.getAttr('max_attack')
-        msg.defend = this.getAttr('defend')
+        // msg.min_attack = this.getAttr('min_attack')
+        // msg.max_attack = this.getAttr('max_attack')
+        // msg.defend = this.getAttr('defend')
     },
 
     isRole: function () {
@@ -240,16 +242,24 @@ cc.Class({
 
 
     addExp: function (add) {
+        //不支持 减经验
         let curExp = this.getAttr('exp')
         let curLv = this.getAttr('level')
         let maxExp = expConfig.getLevelExp(curLv)
+
+        console.log('---------------- before exp-level-add', curExp, curLv, add)
+
         curExp += add
-        if (curExp > maxExp) {
+        while (curExp > maxExp) {
             curExp -= maxExp
             curLv += 1
-            this.setAttr('level', curLv)
+            maxExp = expConfig.getLevelExp(curLv)
         }
+        
+        this.setAttr('level', curLv)
         this.setAttr('exp', curExp)
+
+        console.log('++++++++++++++++ after exp-level-add', curExp, curLv)
     },
 
     addAttr: function (att, val) {

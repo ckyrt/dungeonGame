@@ -44,20 +44,19 @@ cc.Class({
 
         this._initRole(global.loginData)
 
+        this.last_attack_time_ = 1
         //attack test
         let attackBtn = global.getChildByName(this.node, 'attackBtn')
         attackBtn.on(cc.Node.EventType.TOUCH_START,
             function (t) {
+                //1s cd
+                let now = global.getNowTimeStamp()
+                if (this.last_attack_time_ > 0 && now - this.last_attack_time_ < 1000) {
+                    this._addTextInfo('技能cd中...')
+                    return
+                }
                 rpc._call('cast_skill', [global.roleName])
-            }, this)
-
-        //death test
-        let deathBtn = global.getChildByName(this.node, 'deathBtn')
-        deathBtn.on(cc.Node.EventType.TOUCH_START,
-            function (t) {
-                let bigmap = cc.find("Canvas/mapNode").getComponent('bigmapScript')
-                let ownRole = bigmap._get_role(global.roleName)
-                ownRole.play_death_anim()
+                this.last_attack_time_ = now
             }, this)
 
         //创建npc
@@ -83,7 +82,7 @@ cc.Class({
         let saveBtn = global.getChildByName(this.node, 'saveBtn')
         saveBtn.on(cc.Node.EventType.TOUCH_START,
             function (t) {
-                this.saveDataToServer()
+                //this.saveDataToServer()
             }, this)
         //排行榜
         let rankBtn = global.getChildByName(this.node, 'rankBtn')
@@ -133,10 +132,10 @@ cc.Class({
         this._initEquips(global.loginData == null ? [] : global.loginData.equips)
 
         //三秒后给用户自动存一下
-        this.setInterval(3, 1,
-            () => {
-                this.saveDataToServer()
-            })
+        // this.setInterval(3, 1,
+        //     () => {
+        //         this.saveDataToServer()
+        //     })
 
         jsClientScript.registerMsg(MsgID.SAVE_DATA_ACK, (msg) => {
             this.onSaveDataAck(msg)
