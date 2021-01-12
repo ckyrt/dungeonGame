@@ -81,7 +81,7 @@ cc.Class({
         prefab.zIndex = 100
 
         this._initDefaultMap()
-        //this.setCurScene('test2')
+        //this.setCurScene('1003')
 
         //定时器相关
         cc.find("Canvas/UI").getComponent('UIRootScript').setInterval(1, 300000,
@@ -266,7 +266,7 @@ cc.Class({
                 for (let j = 0; j < width; j++) {
                     let n1 = layer1.getTileGIDAt(new cc.Vec2(j, i)) > 0 ? 1 : 0
                     let n2 = layer2.getTileGIDAt(new cc.Vec2(j, i)) > 0 ? 1 << 1 : 0
-                    let n3 = layer3.getTileGIDAt(new cc.Vec2(j, i)) > 0 ? 1 << 2 : 0
+                    let n3 = layer3 ? (layer3.getTileGIDAt(new cc.Vec2(j, i)) > 0 ? 1 << 2 : 0) : 0
 
                     mapData[i][j] = n1 | n2 | n3
                 }
@@ -373,11 +373,7 @@ cc.Class({
         var moveEntity = prefab.getComponent("moveEntity")
         moveEntity.set_grid({ x, y })
         moveEntity.uid = name
-        prefab.getComponent('creature').initAttr()
-        prefab.getComponent('creature').setAttr('camp', 1)
-        prefab.getComponent('creature').setAttr('max_hp', max_hp)
-        prefab.getComponent('creature').setAttr('hp', hp)
-        prefab.getComponent('creature').creature_uuid = creature_uuid
+        prefab.getComponent('creature').initAttr(1, max_hp, hp, creature_uuid)
 
         this.roles[name] = moveEntity
 
@@ -527,10 +523,7 @@ cc.Class({
         moveEntity.set_grid({ x, y })
         moveEntity.show_name = name
         moveEntity.uid = uid
-        prefab.getComponent('creature').initAttr()
-        prefab.getComponent('creature').setAttr('camp', 2)
-        prefab.getComponent('creature').setAttr('max_hp', max_hp)
-        prefab.getComponent('creature').setAttr('hp', hp)
+        prefab.getComponent('creature').initAttr(2, max_hp, hp, uid)
 
         this.monsters[uid] = moveEntity
 

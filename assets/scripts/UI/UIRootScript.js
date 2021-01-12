@@ -126,6 +126,15 @@ cc.Class({
                 bagScript.openBag()
             }, this)
 
+        //gm页面
+        //排行榜
+        let gmBtn = global.getChildByName(this.node, 'gmBtn')
+        gmBtn.on(cc.Node.EventType.TOUCH_START,
+            function (t) {
+                let gmPanelScript = global.getChildByName(this.node, 'gmPanel').getComponent('gmPanelScript')
+                gmPanelScript.openPanel()
+            }, this)
+
         //this._initInventory(global.loginData == null ? [] : global.loginData.items)
         this._initBag(global.loginData == null ? [] : global.loginData.items)
         //init equips
@@ -148,6 +157,15 @@ cc.Class({
                     this._addTextInfo('与服务器断开连接..请刷新')
                 }
             })
+
+        //在线人数
+        rpc.addRpcFunc('online_nums_update_c', (args) => {
+            let num = parseInt(args[0])
+            global.getChildByName(this.node, 'online_nums').getComponent(cc.Label).string = '当前在线: ' + num + ' 人'
+        })
+
+        //请求一下
+        rpc._call('get_online_num', [global.roleName])
     },
 
     // update (dt) {},

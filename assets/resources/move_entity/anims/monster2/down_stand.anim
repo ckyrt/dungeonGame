@@ -1,0 +1,55 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "down_stand",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 1.2,
+  "sample": 5,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "8aaf20ee-8903-4315-9deb-56b222b577d5"
+            }
+          },
+          {
+            "frame": 0.2,
+            "value": {
+              "__uuid__": "e5f02c44-84b4-4235-9402-7edcde51c67b"
+            }
+          },
+          {
+            "frame": 0.4,
+            "value": {
+              "__uuid__": "fc8d0c11-0896-4e0e-8f19-9661402c1c6d"
+            }
+          },
+          {
+            "frame": 0.6,
+            "value": {
+              "__uuid__": "0826de4e-65b2-4034-a7ed-c7d724275360"
+            }
+          },
+          {
+            "frame": 0.8,
+            "value": {
+              "__uuid__": "d961ed35-4463-4ed7-84f7-873b13ebcbf2"
+            }
+          },
+          {
+            "frame": 1,
+            "value": {
+              "__uuid__": "da430bc4-6d86-49d9-b133-19445a99561a"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

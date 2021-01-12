@@ -1,0 +1,36 @@
+{
+  "ver": "2.3.4",
+  "uuid": "42056916-4ea4-4508-a963-82f0d5e587c2",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 1000,
+  "height": 760,
+  "platformSettings": {},
+  "subMetas": {
+    "真彩地图素材 (114)": {
+      "ver": "1.0.4",
+      "uuid": "c57108d5-fe6f-452e-a29d-999d8e3190d2",
+      "rawTextureUuid": "42056916-4ea4-4508-a963-82f0d5e587c2",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 1000,
+      "height": 760,
+      "rawWidth": 1000,
+      "rawHeight": 760,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

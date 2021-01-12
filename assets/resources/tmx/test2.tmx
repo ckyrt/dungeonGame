@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="40" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="11" nextobjectid="50">
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="40" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="11" nextobjectid="52">
  <tileset firstgid="1" source="001-Grassland01.tsx"/>
  <tileset firstgid="145" source="tmw_desert_spacing.tsx"/>
  <tileset firstgid="193" source="desert_town.tsx"/>
+ <tileset firstgid="369" name="map_arrow" tilewidth="177" tileheight="49" tilecount="1" columns="1">
+  <image source="map_arrow.png" width="177" height="49"/>
+ </tileset>
  <layer id="1" name="layer1" width="40" height="30">
   <properties>
    <property name="layerFlag" value="1"/>
+   <property name="target_y" type="int" value="4"/>
   </properties>
   <data encoding="csv">
 1,1,1,1,1,1,1,1,1,1,1,1,233,234,234,234,234,234,234,234,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
@@ -67,7 +71,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,369,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -158,9 +162,9 @@
   </object>
   <object id="46" x="300.25" y="777.833" width="11.5" height="7">
    <properties>
-    <property name="target_map" value="1002"/>
-    <property name="target_x" value="8"/>
-    <property name="target_y" value="1"/>
+    <property name="target_map" value="1003"/>
+    <property name="target_x" value="6"/>
+    <property name="target_y" type="int" value="3"/>
    </properties>
   </object>
   <object id="47" x="203.583" y="265.833" width="11.5" height="7">

@@ -286,33 +286,33 @@ cc.Class({
 
     updateAttackShow: function () {
 
-        let min_attack = this.getAttr('min_attack')
-        let max_attack = this.getAttr('max_attack')
-        let main_attr_attack = this._getGrowAttack()
+        // let min_attack = this.getAttr('min_attack')
+        // let max_attack = this.getAttr('max_attack')
+        // let main_attr_attack = this._getGrowAttack()
 
-        console.log('main_attr_attack', main_attr_attack)
-        console.log('min_attack', min_attack)
-        console.log('max_attack', max_attack)
+        // console.log('main_attr_attack', main_attr_attack)
+        // console.log('min_attack', min_attack)
+        // console.log('max_attack', max_attack)
 
-        min_attack += Math.floor(main_attr_attack)
-        max_attack += Math.floor(main_attr_attack)
+        // min_attack += Math.floor(main_attr_attack)
+        // max_attack += Math.floor(main_attr_attack)
 
-        let attack_node = global.getChildByName(this.node, 'base_attack')
-        attack_node.getComponent(cc.Label).string = min_attack + '-' + max_attack
+        // let attack_node = global.getChildByName(this.node, 'base_attack')
+        // attack_node.getComponent(cc.Label).string = min_attack + '-' + max_attack
     },
 
     _getGrowAttack: function () {
-        let main_attr_attack = 0
-        if (this.cfg_.main_attr == 'str') {
-            main_attr_attack = this.cfg_.str_lv * (this.getAttr('level') - 1)
-        }
-        else if (this.cfg_.main_attr == 'int') {
-            main_attr_attack = this.cfg_.int_lv * (this.getAttr('level') - 1)
-        }
-        else if (this.cfg_.main_attr == 'agi') {
-            main_attr_attack = this.cfg_.agi_lv * (this.getAttr('level') - 1)
-        }
-        return main_attr_attack
+        // let main_attr_attack = 0
+        // if (this.cfg_.main_attr == 'str') {
+        //     main_attr_attack = this.cfg_.str_lv * (this.getAttr('level') - 1)
+        // }
+        // else if (this.cfg_.main_attr == 'int') {
+        //     main_attr_attack = this.cfg_.int_lv * (this.getAttr('level') - 1)
+        // }
+        // else if (this.cfg_.main_attr == 'agi') {
+        //     main_attr_attack = this.cfg_.agi_lv * (this.getAttr('level') - 1)
+        // }
+        // return main_attr_attack
     },
 
     //添加item属性

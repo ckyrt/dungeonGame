@@ -262,6 +262,7 @@ var global = {
             return 'test2'
         if (id == 1002)
             return 'indoor'
+        return id
     },
 }
 

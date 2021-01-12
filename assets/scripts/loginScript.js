@@ -114,16 +114,18 @@ cc.Class({
         let result = msg.results[0]
         this.errorTip.string = msg.tip
         if (msg.tip == 'login ok') {
+            console.log('result:', result.name, result.datas, result.coin, result.exp)
             this.loadGameScene(result.name, JSON.parse(result.datas), result.coin, result.exp)
         }
         else {
             //login error
+            this.errorTip.string = msg.error.code
         }
     },
 
     loadGameScene: function (name, params, coin, exp) {
         global.roleName = name
-        global.loginData = params
+        global.loginData = params || {}
         global.loginData.coin = coin
         global.loginData.exp = exp
         console.log('loginData:', global.loginData)

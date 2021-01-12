@@ -17,7 +17,7 @@ cc.Class({
 
     // update (dt) {},
 
-    initAttr: function () {
+    initAttr: function (camp, max_hp, hp, creature_uuid) {
         this.allAttrs = {
             'hp': 100,
             'max_hp': 100,
@@ -37,9 +37,12 @@ cc.Class({
             'suck_percent': 10,
         }
 
-        this.setAttr('name', this.node.getComponent('moveEntity').uid)
-        this.setAttr('max_hp', 100)
-        this.setAttr('hp', 100)
+        this.allAttrs['name'] = this.node.getComponent('moveEntity').uid
+        this.allAttrs['camp'] = 1
+        this.allAttrs['max_hp'] = max_hp
+        this.setAttr('hp', hp)
+
+        this.creature_uuid = creature_uuid
     },
 
 
@@ -48,15 +51,15 @@ cc.Class({
         let v1 = this.getAttr(att)
         if (v == v1)
             return
-        if (att == 'hp') {
+        this.allAttrs[att] = v
+        if (att == 'hp' || att == 'max_hp') {
 
-            global.getChildByName(this.node, 'hp').getChildByName('cur').getComponent(cc.Sprite).fillRange = v / this.getAttr('max_hp')
+            global.getChildByName(this.node, 'hp').getChildByName('cur').getComponent(cc.Sprite).fillRange = this.getAttr('hp') / this.getAttr('max_hp')
 
             if (v <= 0) {
                 this.beforeDie()
             }
         }
-        this.allAttrs[att] = v
     },
 
     getAttr: function (att) {
@@ -76,11 +79,13 @@ cc.Class({
     },
 
     beforeDie: function () {
-        //复活
+        //复活面板
         if (this.node.getComponent('moveEntity').uid == global.roleName) {
             let deadPanel = cc.find("Canvas/UI/deadPanel")
             deadPanel.getComponent('deadPanelScript').openDeadPanel()
         }
+        let musicScript = cc.find("Canvas/mapNode").getComponent('musicScript')
+        musicScript.playEffect('PeonDeath')
     },
 
     cast_skill: function () {
